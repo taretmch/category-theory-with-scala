@@ -1,0 +1,519 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>3章 いろいろな圏 · HonKit</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 3.6.17">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="04_Kleisli_category.html" />
+    
+    
+    <link rel="prev" href="02_Types_and_functions.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Scala で始める圏論入門
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="01_Category.html">
+            
+                <a href="01_Category.html">
+            
+                    
+                    1章 圏とは
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="02_Types_and_functions.html">
+            
+                <a href="02_Types_and_functions.html">
+            
+                    
+                    2章 型と関数の圏
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4" data-path="03_Categories_great_and_small.html">
+            
+                <a href="03_Categories_great_and_small.html">
+            
+                    
+                    3章 いろいろな圏
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="04_Kleisli_category.html">
+            
+                <a href="04_Kleisli_category.html">
+            
+                    
+                    4章 Kleisli圏
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="05_Products_and_Coproducts.html">
+            
+                <a href="05_Products_and_Coproducts.html">
+            
+                    
+                    5章 積と余積
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="07_Functor.html">
+            
+                <a href="07_Functor.html">
+            
+                    
+                    7章 関手
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="08_Functoriality.html">
+            
+                <a href="08_Functoriality.html">
+            
+                    
+                    8章 関手性
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="09_Function_types.html">
+            
+                <a href="09_Function_types.html">
+            
+                    
+                    9章 関数型
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="10_Natural_transformations.html">
+            
+                <a href="10_Natural_transformations.html">
+            
+                    
+                    10章 自然変換
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >3章 いろいろな圏</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <!-- omit in toc -->
+<h1 id="3-いろいろな圏">3. いろいろな圏</h1>
+<p>ここまで、圏とは何かについて述べ、Scala の型と関数を圏として捉えることができることを述べました。</p>
+<p>しかし、まだ圏のイメージがつかない方が少なくないはず。本章では、具体的な圏の例を通して、圏への理解を深めていきます。</p>
+<!-- omit in toc -->
+<h1 id="目次">目次</h1>
+<ul>
+<li><a href="#31-空圏">3.1 空圏</a></li>
+<li><a href="#32-単純なグラフ">3.2 単純なグラフ</a></li>
+<li><a href="#33-順序集合">3.3 順序集合</a></li>
+<li><a href="#34-集合としてのモノイド">3.4 集合としてのモノイド</a></li>
+<li><a href="#35-圏としてのモノイド">3.5 圏としてのモノイド</a></li>
+<li><a href="#まとめ">まとめ</a></li>
+</ul>
+<h2 id="31-空圏">3.1 空圏</h2>
+<p>空圏は、対象が1つもない圏のことです。つまり、対象がないということは射もありません。</p>
+<p>なぜ対象が1つもないものが圏と言えるのかについて、考えてみましょう。</p>
+<p>まず、圏は対象の集まりと射の集まりからなります。この「集まり」は集合と捉えることもできますが、集合でない場合もあります。</p>
+<p>対象が1つもない場合、対象の集まりは集合と捉えることができて、それは空集合になります。また、射の集まりも空集合です。</p>
+<p>射の合成は任意の射について定義されていればよく、射が存在しない場合では射の結合律は満たされていると言えます。</p>
+<p>そして、恒等射は任意の対象に対して存在していればよく、対象が存在しない場合では単位律が満たされていると言えます。</p>
+<p>したがって、空圏は圏と言えます。</p>
+<h2 id="32-単純なグラフ">3.2 単純なグラフ</h2>
+<p>状態遷移図のように単純なグラフは、圏とみなすことができます。</p>
+<p>一般に、そのような単純なグラフは頂点の集合 N と辺の集合 E とのペア (N, E) からなります。</p>
+<p>グラフを圏と解釈すると、頂点を対象として、辺を射として捉えることができます。</p>
+<div align="center">
+
+![有向グラフ](./images/03_direct_graph.png)
+
+</div>
+
+<h2 id="33-順序集合">3.3 順序集合</h2>
+<p>ある集合 <code>A</code> とその集合上の関係 <code>R</code> とのペア <code>(A, R)</code> である順序集合もまた、圏の例です。</p>
+<p>例えば、自然数全体の集合 <code>N = { 0, 1, ..., n, ... }</code> と関係 <code>&lt;=</code> (〇〇以下である) の順序集合 <code>(N, &lt;=)</code> は、圏として以下のように図式化されます。</p>
+<div align="center">
+
+![圏としての順序集合の例](./images/natural_number_and_less_than_or_equals_to.png)
+
+</div>
+
+<p>自然数全体の集合と関係 <code>&lt;=</code> の順序集合では、自然数が対象、自然数間の関係、例えば <code>0 &lt;= 1</code> <code>1 &lt;= 3</code> などが射になります。</p>
+<h2 id="34-集合としてのモノイド">3.4 集合としてのモノイド</h2>
+<p><strong>モノイド</strong> (Monoid) は、単純な構造ではありますが、非常に強力な概念です。</p>
+<p>加算と乗算のどちらの計算にも、このモノイドという概念が密接に関わっています。</p>
+<p>モノイドは群論における概念ですが、圏の一例でもあります。コンピュータサイエンスでは、情報理論の分野にも現れることがあると思います。</p>
+<p>プログラミングにおいても、文字列やリスト、畳み込み可能なデータ構造、Future などとして現れます。</p>
+<p>さて、モノイドの定義についてですが、モノイドは、二項演算を備えた集合として定義されます。この二項演算が満たすべき性質は、結合律と、単位元が存在することのみです。</p>
+<p>単位元は、加算における 0、乗算における 1 のことを表します。結合律は、加算の場合だと</p>
+<pre><code>(a + b) + c = a + (b + c)
+</code></pre><p>が満たされることです。</p>
+<div align="center">
+
+![加算モノイド](./images/03_monoid.png)
+
+</div>
+
+<p>結合律と単位元を備えた型クラス <code>Monoid</code> は、以下のように定義されます。</p>
+<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Monoid</span>[<span class="hljs-type">A</span>] </span>{
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">combine</span></span>(v1: <span class="hljs-type">A</span>, v2: <span class="hljs-type">A</span>): <span class="hljs-type">A</span>
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">empty</span></span>: <span class="hljs-type">A</span>
+}
+</code></pre>
+<p><code>combine</code> が結合律を満たす二項演算で、<code>empty</code> がその二項演算の単位元を表します。</p>
+<p>ここで注意することは、この型クラスの定義だけでは二項演算の結合律と単位元の存在を保証できないことです。したがって、二項演算がモノイドの性質を満たすかどうかは、その実装によります。</p>
+<p><code>Int</code> の加算に関するモノイドのインスタンス <code>IntMonoid</code> は、以下のように定義できます。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">implicit</span> <span class="hljs-keyword">val</span> <span class="hljs-type">IntMonoid</span>: <span class="hljs-type">Monoid</span>[<span class="hljs-type">Int</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">Monoid</span>[<span class="hljs-type">Int</span>] {
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">combine</span></span>(a: <span class="hljs-type">Int</span>, b: <span class="hljs-type">Int</span>): <span class="hljs-type">Int</span> = a + b
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">empty</span></span>: <span class="hljs-type">Int</span> = <span class="hljs-number">0</span>
+}
+</code></pre>
+<pre><code class="lang-scala"><span class="hljs-keyword">import</span> hamcat.<span class="hljs-type">Implicits</span>._
+
+<span class="hljs-type">IntMonoid</span>.combine(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>)
+<span class="hljs-comment">// res0: Int = 4</span>
+<span class="hljs-type">IntMonoid</span>.empty
+<span class="hljs-comment">// res1: Int = 0</span>
+<span class="hljs-type">IntMonoid</span>.combine(<span class="hljs-number">2</span>, <span class="hljs-type">IntMonoid</span>.empty)
+<span class="hljs-comment">// res2: Int = 2</span>
+</code></pre>
+<h2 id="35-圏としてのモノイド">3.5 圏としてのモノイド</h2>
+<p>前節では、モノイドを集合と二項演算のペアとして考えました。</p>
+<p>しかし、モノイドには圏論においてもう少し重要な側面があります。それは、対象がただ1つの圏をモノイドと言えることです。</p>
+<p>先ほど見たモノイドの性質 - 二項演算の結合律と単位元の存在 - は、まさに圏の公理における射の結合律と単位律です。そして、モノイドは二項演算をただ1つの集合に対して定義しています。これは、ただ1つの対象からそれ自身への射を定義していることと同義です。</p>
+<p>圏の特別な場合がモノイドであることから、モノイドの重要性が見えてきましたね。そして、モノイドが満たすなんらかの性質や構造を見ることができれば、それを一般化して圏が満たすなんらかの性質や構造として議論できることがわかります。</p>
+<p>では、加算のモノイドを圏として捉えるとどのようになるか、考えてみましょう。</p>
+<p>加算は二項演算なので、2つの入力があります。ここで、1つだけ入力 <code>n</code> を与えれば、<code>n</code> を足す演算 n-adder なるものを考えることができます。</p>
+<p>この演算にもう一つの入力 <code>m</code> を与えれば、<code>m + n</code> が出力として得られます。これは <code>m</code> と <code>n</code> の加算です。</p>
+<p>n-adder は、数を対象とする圏における射であるとみなせます。この射 n-adder は結合律を満たすでしょうか？</p>
+<p>加算に関する結合律は</p>
+<pre><code>(a + b) + c = a + (b + c)
+</code></pre><p>とかけます。これを n-adder で書くと</p>
+<pre><code>c-adder (b-adder (a)) = a-adder (c-adder (b))
+</code></pre><p>関数をカリー化させることでもう少しわかりやすく書くと</p>
+<pre><code>add (c) (add (b) (a)) = add (a) (add (c) (b))
+</code></pre><p>となります。これは満たされそうですね。</p>
+<p>次に単位律です。圏における単位律は、任意の対象について恒等射が存在する、というものでした。</p>
+<p>任意の数 <code>n</code> に対する恒等射は 0-adder です。<code>n + 0 = n</code> であるからです。</p>
+<p>以上のことから、モノイドは圏の公理における結合律と単位律を満たします。</p>
+<div align="center">
+
+![圏としてのモノイド](./images/03_monoid_as_category.png)
+
+</div>
+
+<h2 id="まとめ">まとめ</h2>
+<ul>
+<li>対象が1つもない圏も、また圏である。</li>
+<li>単純なグラフは、圏とみなせる。</li>
+<li>順序集合は圏の例である。</li>
+<li>モノイドとは、ある集合における関数の合成が結合律を満たし、関数に対する単位元が存在するような系のことである。<ul>
+<li>例<ul>
+<li>モノイド (Int, add)</li>
+<li>加算 add(n1, n2) は結合律を満たす</li>
+<li>加算 add の単位元は 0</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>対象がただ1つの圏をモノイドという。<ul>
+<li>例<ul>
+<li>対象: Int</li>
+<li>射: add: Int =&gt; Int =&gt; Int</li>
+<li>add (n) は結合律を満たす</li>
+<li>恒等射: add (0)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="02_Types_and_functions.html" class="navigation navigation-prev " aria-label="Previous page: 2章 型と関数の圏">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="04_Kleisli_category.html" class="navigation navigation-next " aria-label="Next page: 4章 Kleisli圏">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"3章 いろいろな圏","level":"1.4","depth":1,"next":{"title":"4章 Kleisli圏","level":"1.5","depth":1,"path":"04_Kleisli_category.md","ref":"04_Kleisli_category.md","articles":[]},"previous":{"title":"2章 型と関数の圏","level":"1.3","depth":1,"path":"02_Types_and_functions.md","ref":"02_Types_and_functions.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"03_Categories_great_and_small.md","mtime":"2021-03-06T11:17:46.723Z","type":"markdown"},"gitbook":{"version":"3.6.17","time":"2021-03-06T11:19:42.376Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

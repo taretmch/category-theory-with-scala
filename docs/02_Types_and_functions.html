@@ -1,0 +1,557 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>2章 型と関数の圏 · HonKit</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 3.6.17">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="03_Categories_great_and_small.html" />
+    
+    
+    <link rel="prev" href="01_Category.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Scala で始める圏論入門
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="01_Category.html">
+            
+                <a href="01_Category.html">
+            
+                    
+                    1章 圏とは
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3" data-path="02_Types_and_functions.html">
+            
+                <a href="02_Types_and_functions.html">
+            
+                    
+                    2章 型と関数の圏
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="03_Categories_great_and_small.html">
+            
+                <a href="03_Categories_great_and_small.html">
+            
+                    
+                    3章 いろいろな圏
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="04_Kleisli_category.html">
+            
+                <a href="04_Kleisli_category.html">
+            
+                    
+                    4章 Kleisli圏
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="05_Products_and_Coproducts.html">
+            
+                <a href="05_Products_and_Coproducts.html">
+            
+                    
+                    5章 積と余積
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="07_Functor.html">
+            
+                <a href="07_Functor.html">
+            
+                    
+                    7章 関手
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="08_Functoriality.html">
+            
+                <a href="08_Functoriality.html">
+            
+                    
+                    8章 関手性
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="09_Function_types.html">
+            
+                <a href="09_Function_types.html">
+            
+                    
+                    9章 関数型
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="10_Natural_transformations.html">
+            
+                <a href="10_Natural_transformations.html">
+            
+                    
+                    10章 自然変換
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >2章 型と関数の圏</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <!-- omit in toc -->
+<h1 id="2-型と関数">2. 型と関数</h1>
+<p>本章では、Scala を構成する型と関数の圏である Scala 圏について紹介します。まず、なぜ型が必要なのかについて述べ、型と関数を圏として考えていきます。</p>
+<div align="center">
+
+![型と関数からなる圏](./images/category_hask.png)
+
+</div>
+
+<!-- omit in toc -->
+<h1 id="目次">目次</h1>
+<ul>
+<li><a href="#21-なぜ型が必要なのか">2.1 なぜ型が必要なのか</a></li>
+<li><a href="#22-型を集合として解釈する">2.2 型を集合として解釈する</a><ul>
+<li><a href="#tips1-ラッセルのパラドックス">Tips1: ラッセルのパラドックス</a></li>
+<li><a href="#tips2-停止問題">Tips2: 停止問題</a></li>
+</ul>
+</li>
+<li><a href="#23-純粋関数">2.3 純粋関数</a></li>
+<li><a href="#24-型の例">2.4 型の例</a><ul>
+<li><a href="#241-空集合と-nothing-型">2.4.1 空集合と Nothing 型</a></li>
+<li><a href="#242-シングルトン集合と-unit-型">2.4.2 シングルトン集合と Unit 型</a></li>
+<li><a href="#243-2要素集合と-boolean-型">2.4.3 2要素集合と Boolean 型</a></li>
+</ul>
+</li>
+<li><a href="#まとめ">まとめ</a></li>
+</ul>
+<h2 id="21-なぜ型が必要なのか">2.1 なぜ型が必要なのか</h2>
+<p>型付けには、静的な型付けと動的な型付けがあります。静的型付けは、変数や関数の引数、返り値などの型がコンパイル時のような実行前に定められるシステムです。一方で、動的型付けは、実行時の実際の値によって型が定められるシステムです。</p>
+<p>動的型付け言語では、型のミスマッチは実行時に発見されます。一方で、静的型付け言語では型のミスマッチはコンパイル時に発見され、実行前にプログラムが文法的に正しいかどうかチェックすることができます。</p>
+<p>Scala や Haskell、C++ のような言語は静的型付け言語です。静的型付け言語を採用することによって、文法エラーや型ミスマッチに対応しやすくなります。</p>
+<h2 id="22-型を集合として解釈する">2.2 型を集合として解釈する</h2>
+<p>最も直感的な型の解釈は、型が値の集合であることです。例えば、型 <code>Boolean</code> は値 <code>true</code> と <code>false</code> の集合です。型 <code>Char</code> はすべての Unicode の文字の集合です。</p>
+<p>変数 <code>x</code> が <code>Int</code> 型であることを宣言するとき</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> x: <span class="hljs-type">Int</span>
+</code></pre>
+<p>と書きますが、型を集合として解釈すると、これは  <code>x</code> は整数集合の要素であると解釈できます。</p>
+<div align="center">
+
+![型を集合として解釈する](./images/02_type_as_set.png)
+
+</div>
+
+<p>しかし、型を集合として解釈するには微妙な点が少々あります。一般に、集合全体の集合を定義することはできません (Tips 1 参照)。そのため、循環定義を含む多相関数 (polymorphic function) を集合で表すことは難しくなります。</p>
+<p>そこで、代わりに集合の圏 <code>Set</code> を用いて型を表現します。 <code>Set</code>  は、集合を対象とし、関数を射とする圏です。 <code>Set</code> を用いて型を表現すると、関数型プログラミングにおける関数は（数学的な）集合間の関数とみなせます。</p>
+<div align="center">
+
+![関数を数学的な関数として解釈する](./images/02_function_as_set.png)
+
+</div>
+
+<p>とすると、またまた問題が生じます。集合間の関数は入力に対して値を出力するだけで、なんらかの処理を実行するわけではありません。一方で、プログラミングの関数は入力に対して出力値を計算するので、その内部で処理を実行します。出力を有限ステップで計算できるのであれば良いのですが、再帰を含む関数では実行が終了しない場合があります。したがって、関数の実行が終了しない場合の出力の型が未定義となってしまいます。</p>
+<p>ある関数の実行が終了するかどうかは判定することができない (Tips 2 参照) ので、実行が終了しない場合の型をボトム型 (bottom type) <code>⊥</code> として定義します。scala では <code>???</code> で代替して表現できます。ボトム型の値は終了しない計算です。すなわちち、以下のように定義されている関数</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f</span></span>: <span class="hljs-type">Boolean</span> =&gt; <span class="hljs-type">Boolean</span>
+</code></pre>
+<p>は <code>true</code>、 <code>false</code> を返すか、実行が終わらない場合は ⊥ を返します。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> f: <span class="hljs-type">Boolean</span> =&gt; <span class="hljs-type">Boolean</span> = x =&gt; ???
+<span class="hljs-comment">// f: Boolean =&gt; Boolean = &lt;function1&gt;</span>
+<span class="hljs-keyword">val</span> fTrue: <span class="hljs-type">Boolean</span> =&gt; <span class="hljs-type">Boolean</span> = x =&gt; <span class="hljs-literal">true</span>
+<span class="hljs-comment">// fTrue: Boolean =&gt; Boolean = &lt;function1&gt;</span>
+<span class="hljs-keyword">val</span> fFalse: <span class="hljs-type">Boolean</span> =&gt; <span class="hljs-type">Boolean</span> = x =&gt; <span class="hljs-literal">false</span>
+<span class="hljs-comment">// fFalse: Boolean =&gt; Boolean = &lt;function1&gt;</span>
+</code></pre>
+<p>ボトム型を返す関数は<strong>部分関数</strong> (partial function) と呼ばれます。scala だと <a href="https://github.com/scala/scala/blob/2.13.x/src/library/scala/PartialFunction.scala" target="_blank">PartialFunction</a> として定義されています。</p>
+<hr>
+<h3 id="tips1-ラッセルのパラドックス">Tips1: ラッセルのパラドックス</h3>
+<p>集合全体の集合を定義できるとすると、ラッセル (Russell) のパラドックスという現象が生じます。</p>
+<p>ラッセルのパラドックスでは「自分自身を持たない集合全体の集合」を考えます。そのような集合を <code>A</code> と置くことにしましょう。このとき、 <code>A</code> は <code>A</code> 自身を要素として持つでしょうか？</p>
+<p>場合分けして考えてみます。</p>
+<ol>
+<li><code>A</code> が <code>A</code> 自身を要素として持つ場合：<code>A</code> の定義より、 <code>A</code> は自分自身を持たない集合です。一方で、<code>A</code> は <code>A</code> 自身を持っています。これは矛盾です。</li>
+<li><code>A</code> が <code>A</code> 自身を要素として持たない場合：<code>A</code> は <code>A</code> 自身を要素として持たないので、 <code>A</code> は <code>A</code> の要素です。これは矛盾です。</li>
+</ol>
+<p>以上の通り、「自分自身を持たない集合全体の集合」というものを考えると矛盾が生じてしまいます。つまり、集合全体の集合というのは、 <code>A</code> のような集合を集合とみなす枠組みにおいて定義することができません。</p>
+<p>循環定義の罠ですね。そのような集合は集合とみなさないようにルールを定めた公理的集合論というものが、今の集合論の主流になっています。</p>
+<h3 id="tips2-停止問題">Tips2: 停止問題</h3>
+<p>計算可能性理論において、停止問題 (halting problem) というものがあります。計算には、実行を終了する計算と実行が終了しない計算があります。停止問題は「理想的な計算機 (Turing 機械など) において、有限時間で計算が終了するかどうかを判定するアルゴリズムを構築できるか」という問題です。</p>
+<p>結論から言えば、計算が有限時間で終了するかどうかを判定するアルゴリズムは構築できません。実際に考えてみましょう。</p>
+<p>計算が有限時間で終了するかどうかを判定する仮想的な関数 <code>halt: Function =&gt; Boolean</code> を定義できるとします。ここで <code>Function</code> は任意の関数を表す仮想的な型です。なお、<code>halt</code> に渡す関数の引数も本来考える必要はありますが、ここでは省略します。</p>
+<p><code>halt</code> のような関数を定義できるとき、次のような関数 <code>m</code> を考えることができます。</p>
+<pre><code>m は、入力 f に対して halt(f) == true であれば終了しない。
+m は、入力 f に対して halt(f) == false であれば 0 を出力して終了する。
+</code></pre><p>このとき、 <code>m</code> に対して <code>m</code> を入力するとどうなるでしょうか？場合分けして考えてみます。</p>
+<ol>
+<li><code>m</code> が終了する場合：<code>halt(m) == true</code> です。このとき <code>m</code> は終了しないので、矛盾します。</li>
+<li><code>m</code> が終了しない場合：<code>halt(m) == false</code> です。このとき <code>m</code> は 0 を出力して終了するので、矛盾します。</li>
+</ol>
+<p><code>halt</code> のような関数を定義できると矛盾が生じることから、 <code>halt</code>  は定義できないことがわかります。</p>
+<p>ここでは仮想的な関数を考えているので、上記は厳密な証明ではありません。厳密な証明には Turing 機械の概念が必要なのでここでは省略しますが、証明の方法は大体同じです。</p>
+<hr>
+<h2 id="23-純粋関数">2.3 純粋関数</h2>
+<p>一般的に、プログラミング言語における関数と数学的な関数は異なる意味を持ちます。プログラミング言語における関数は、入力に対して計算を実行し結果を出力しますが、データベースへの保存やグローバル変数の変更など、副作用を持つ場合があります。一方で、数学的な関数は、ただ値から値をマッピングするもので副作用は考慮されません。</p>
+<p>プログラミング言語において、副作用を持たず、同じ入力に対して同じ出力を返す関数を<strong>純粋関数</strong> (pure function) と言います。このように同じ入力に対して必ず同じ出力を返す性質は、<strong>参照透過性</strong> (referential transparency) と呼ばれます。</p>
+<div align="center">
+
+![純粋関数と参照透過性](./images/referential_transparency.png)
+</div>
+
+<p>例えば、与えられた整数に +1 した値を返す関数</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> inc = (n: <span class="hljs-type">Int</span>) =&gt; n + <span class="hljs-number">1</span>
+<span class="hljs-comment">// inc: Int =&gt; Int = &lt;function1&gt;</span>
+</code></pre>
+<p>は、どんな整数 <code>n</code> に対しても <code>n+1</code> を返すので、純粋関数です。</p>
+<p>Haskell の関数は全てが純粋関数です。そのため、Haskell は純粋関数型言語とも呼ばれます。純粋関数型言語であれば、言語の表示的意味論も与えやすくなり、圏論を使ってモデル化することもたやすくなります。</p>
+<p>他の言語についても、純粋関数に制限して副作用を個別に推論することによって、純粋関数型言語と同様のものにできます。先ほども述べましたが、後の章で、純粋関数のみを使って全ての副作用をモデル化するモナドという概念を導入します。つまり、言語の関数を数学的な関数に制限しても、できなくなることはありません！ :)</p>
+<h2 id="24-型の例">2.4 型の例</h2>
+<p>型と集合の対応関係について、ここでは見ていきます。</p>
+<h3 id="241-空集合と-nothing-型">2.4.1 空集合と Nothing 型</h3>
+<p>まずは空集合についてです。空集合は要素を1つも持たない集合のことですが、これは何の型に対応するのでしょうか？要素、つまり値を1つも持たない型は、Haskell においては <code>Void</code> 型、Scala においては <code>Nothing</code> 型にあたります。これらの型は値を持たないので、<code>Void</code> 型や <code>Nothing</code> 型を引数とする関数を呼び出すことはできません。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">g</span></span>: <span class="hljs-type">Nothing</span> =&gt; <span class="hljs-type">Int</span> = _ =&gt; <span class="hljs-number">1</span>
+</code></pre>
+<div align="center">
+
+![空集合とNothing型](./images/nothing_and_empty_set.png)
+</div>
+
+<h3 id="242-シングルトン集合と-unit-型">2.4.2 シングルトン集合と Unit 型</h3>
+<p>次に、シングルトン集合についてです。シングルトン集合は、値を1つだけ持った集合です。値を1つだけ持つような型は、Haskell では <code>()</code> 型、Scala では <code>Unit</code> 型にあたります。<code>()</code> 型や <code>Unit</code> 型を引数として持つ関数は、引数としてダミーの値を受け取ります。つまり、<code>Void</code>、<code>Nothing</code> と異なり引数なしでいつでも呼び出すことができます。そのような関数が純粋関数である場合は、常に同じ値を出力します。</p>
+<div align="center">
+
+![シングルトン集合とUnit型](./images/unit_and_singleton_set.png)
+</div>
+
+
+<p>次のような関数 <code>f44</code> は、任意の入力に対して必ず <code>Int</code> 型の  <code>44</code> を返します。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> f44: <span class="hljs-type">Unit</span> =&gt; <span class="hljs-type">Int</span> = _ =&gt; <span class="hljs-number">44</span>
+<span class="hljs-comment">// f44: Unit =&gt; Int = &lt;function1&gt;</span>
+
+f44(())
+<span class="hljs-comment">// res0: Int = 44</span>
+</code></pre>
+<div align="center">
+
+![関数f44](./images/f44.png)
+</div>
+
+<p><code>Unit</code> 型を返り値の型に指定すると、その関数は <code>Unit</code> 値を返します。純粋関数である場合は出力値を得られないので、引数をただ廃棄する関数になります。例えば、以下の関数はいかなる <code>Int</code> 型の値を受け取っても <code>Unit</code> を返します。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> fInt: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Unit</span> = x =&gt; ()
+
+fInt(<span class="hljs-number">1</span>)
+
+fInt(<span class="hljs-number">100</span>)
+</code></pre>
+<div align="center">
+
+![関数fInt](./images/fint.png)
+</div>
+
+<p>任意の型に対して同じ式で実装できる関数は、パラメータ多相 (parametrically polymorphic) であるといいます。パラメータ多相な関数は、型変数をあらゆる具象型によって置換できるので、非常に便利です。</p>
+<h3 id="243-2要素集合と-boolean-型">2.4.3 2要素集合と Boolean 型</h3>
+<p>最後は、2要素集合についてです。2要素集合は、値を2つだけ持った集合です。2要素集合は、Haskell では <code>Bool</code> 型に、Scala では <code>Boolean</code> 型にあたります。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">sealed</span> <span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Boolean</span></span>
+
+<span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">True</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Boolean</span></span>
+<span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">False</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Boolean</span></span>
+</code></pre>
+<h2 id="まとめ">まとめ</h2>
+<ul>
+<li>ボトム型を導入することによって、型を対象とし、関数を射とみなす圏を考えることができる。</li>
+<li>純粋関数は、副作用を持たず、同じ入力に対して同じ出力を返す関数のことである。</li>
+<li>純粋関数が持つ、同じ入力に対して同じ出力を返すような性質のことを参照透過性と呼ぶ。</li>
+<li>集合と型の対応<ul>
+<li>空集合は <code>Nothing</code> 型に対応する。</li>
+<li>シングルトン集合は <code>Unit</code> 型に対応する。</li>
+<li>2要素集合は <code>Boolean</code> 型に対応する。</li>
+</ul>
+</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="01_Category.html" class="navigation navigation-prev " aria-label="Previous page: 1章 圏とは">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="03_Categories_great_and_small.html" class="navigation navigation-next " aria-label="Next page: 3章 いろいろな圏">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"2章 型と関数の圏","level":"1.3","depth":1,"next":{"title":"3章 いろいろな圏","level":"1.4","depth":1,"path":"03_Categories_great_and_small.md","ref":"03_Categories_great_and_small.md","articles":[]},"previous":{"title":"1章 圏とは","level":"1.2","depth":1,"path":"01_Category.md","ref":"01_Category.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"02_Types_and_functions.md","mtime":"2021-03-06T11:17:46.723Z","type":"markdown"},"gitbook":{"version":"3.6.17","time":"2021-03-06T11:19:42.376Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
