@@ -1,0 +1,637 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <title>4章 Kleisli圏 · HonKit</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 3.6.17">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="05_Products_and_Coproducts.html" />
+    
+    
+    <link rel="prev" href="03_Categories_great_and_small.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Scala で始める圏論入門
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="01_Category.html">
+            
+                <a href="01_Category.html">
+            
+                    
+                    1章 圏とは
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="02_Types_and_functions.html">
+            
+                <a href="02_Types_and_functions.html">
+            
+                    
+                    2章 型と関数の圏
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="03_Categories_great_and_small.html">
+            
+                <a href="03_Categories_great_and_small.html">
+            
+                    
+                    3章 いろいろな圏
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5" data-path="04_Kleisli_category.html">
+            
+                <a href="04_Kleisli_category.html">
+            
+                    
+                    4章 Kleisli圏
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="05_Products_and_Coproducts.html">
+            
+                <a href="05_Products_and_Coproducts.html">
+            
+                    
+                    5章 積と余積
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="07_Functor.html">
+            
+                <a href="07_Functor.html">
+            
+                    
+                    7章 関手
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="08_Functoriality.html">
+            
+                <a href="08_Functoriality.html">
+            
+                    
+                    8章 関手性
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="09_Function_types.html">
+            
+                <a href="09_Function_types.html">
+            
+                    
+                    9章 関数型
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="10_Natural_transformations.html">
+            
+                <a href="10_Natural_transformations.html">
+            
+                    
+                    10章 自然変換
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >4章 Kleisli圏</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <!-- omit in toc -->
+<h1 id="4-kleisli-圏">4. Kleisli 圏</h1>
+<p>ここまでで、型と純粋関数を圏としてモデル化する方法をみてきました。その際に計算効果を持つ非純粋な関数をモデル化するための概念として、モナドが出てきましたね。</p>
+<p>ここでは、計算効果についてイメージを深めるため、計算効果の例をモナドの概念を出さない程度に考えていきます。</p>
+<!-- omit in toc -->
+<h1 id="目次">目次</h1>
+<ul>
+<li><a href="#41-ロギング関数の合成">4.1 ロギング関数の合成</a></li>
+<li><a href="#42-writer-圏">4.2 Writer 圏</a><ul>
+<li><a href="#421-writer-圏の対象と射">4.2.1 Writer 圏の対象と射</a></li>
+<li><a href="#422-writer-圏における射の合成">4.2.2 Writer 圏における射の合成</a></li>
+<li><a href="#423-writer-圏は圏の公理を満たすか">4.2.3 Writer 圏は圏の公理を満たすか</a></li>
+<li><a href="#424-writer-圏のより一般的な定義">4.2.4 Writer 圏のより一般的な定義</a></li>
+</ul>
+</li>
+<li><a href="#43-kleisli-圏">4.3 Kleisli 圏</a></li>
+<li><a href="#44-cats-における-writer-と-kleisli">4.4 Cats における Writer と Kleisli</a><ul>
+<li><a href="#441-cats-のインストール">4.4.1 Cats のインストール</a></li>
+<li><a href="#442-writer">4.4.2 Writer</a></li>
+<li><a href="#443-kleisli">4.4.3 Kleisli</a></li>
+</ul>
+</li>
+<li><a href="#まとめ">まとめ</a></li>
+</ul>
+<h2 id="41-ロギング関数の合成">4.1 ロギング関数の合成</h2>
+<p>計算効果の例として、プログラムの実行をロギングする関数について考えます。</p>
+<p>例えば、論理値の否定を返す関数 <code>negate</code> の実行と、整数が偶数であるかを判別する関数 <code>isEven</code> の実行のログをとりたいとします。 <code>negate</code> の処理自体は論理値を論理値に変換するものなので、型は <code>Boolean =&gt; Boolean</code> になりそうです。しかし、ここではログも一緒に出力したいので、返り値の型を <code>(String, Boolean)</code> として定義してみます。 <code>isEven</code> 関数も同様です。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">negate</span></span>: <span class="hljs-type">Boolean</span> =&gt; (<span class="hljs-type">String</span>, <span class="hljs-type">Boolean</span>) = n =&gt; (<span class="hljs-string">&quot;negate &quot;</span>, !n)
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isEven</span></span>: <span class="hljs-type">Int</span> =&gt; (<span class="hljs-type">String</span>, <span class="hljs-type">Boolean</span>) = n =&gt; (<span class="hljs-string">&quot;isEven &quot;</span>, n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>)
+</code></pre>
+<p>ここで、 <code>negate</code> と <code>isEven</code> を合成して、整数が奇数であるかを判別する関数 <code>isOdd</code> を作ることを考えます。2つの関数 <code>f: A =&gt; B</code> と <code>g: B =&gt; C</code> を合成するには、一方の出力の型、つまり <code>f</code> の出力 <code>B</code>、ともう一方の入力の型、つまり <code>g</code> の入力 <code>B</code> が一致する必要がありました。ところが、 <code>negate</code> と <code>isEven</code> は型が一致せず、通常の方法では合成できません。代わりに、以下のように定義するとうまくいきそうです：</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isOdd</span></span>: <span class="hljs-type">Int</span> =&gt; (<span class="hljs-type">String</span>, <span class="hljs-type">Boolean</span>) = n =&gt; {
+  <span class="hljs-keyword">val</span> (log1, res1) = isEven(n)
+  <span class="hljs-keyword">val</span> (log2, res2) = negate(res1)
+  (log1 + log2, res2)
+}
+</code></pre>
+<p>実は、今考えたような構造は Writer 圏と呼ばれます。次の節では Writer 圏を定式化していきます。</p>
+<h2 id="42-writer-圏">4.2 Writer 圏</h2>
+<p>先ほど見たロギング関数の合成の例を圏論の言葉に落とし込むと、Writer 圏というものを考えることができます。</p>
+<h3 id="421-writer-圏の対象と射">4.2.1 Writer 圏の対象と射</h3>
+<p>Writer 圏では、次のようなデータ型 <code>Writer</code> を導入します。</p>
+<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">Writer</span>[<span class="hljs-type">A</span>] </span>= (<span class="hljs-type">String</span>, <span class="hljs-type">A</span>)
+</code></pre>
+<p>すなわち、型 <code>Writer[A]</code> はログを表現する型 <code>String</code> と計算の出力 <code>A</code> のタプルです。</p>
+<p>この圏では、対象として型を採用し、対象 <code>A</code> から <code>B</code> への射として以下のようにラップされた関数を採用します：</p>
+<pre><code class="lang-scala">f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">B</span>]
+</code></pre>
+<p><img src="images/morphism_in_writer_category.png" alt="Writer圏における射"></p>
+<p>2つの関数 <code>negate: Boolean =&gt; (String, Boolean)</code> と <code>isEven: Int =&gt; (String, Boolean)</code> は、以下のように書き換えれば Writer 圏における射とみなせます。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">negate</span></span>: <span class="hljs-type">Boolean</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">Boolean</span>] = n =&gt; (<span class="hljs-string">&quot;negate &quot;</span>, !n)
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isEven</span></span>: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">Boolean</span>] = n =&gt; (<span class="hljs-string">&quot;isEven &quot;</span>, n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>)
+</code></pre>
+<p><img src="images/morphism_example_in_writer_category.png" alt="Writer圏における射の例"></p>
+<h3 id="422-writer-圏における射の合成">4.2.2 Writer 圏における射の合成</h3>
+<p>Writer 圏における射の合成は、 <code>isOdd</code> 関数の定義を抽象化したものと考えることができます。関数 <code>f: A =&gt; Writer[B]</code>、関数 <code>g: B =&gt; Writer[C]</code> を合成した関数 <code>f &gt;=&gt; g: A =&gt; Writer[C]</code> を定義してみましょう。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">implicit</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WriterOps</span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](<span class="hljs-params">f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">B</span>]</span>) </span>{
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">&gt;=&gt;</span></span>[<span class="hljs-type">C</span>](g: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">C</span>]): <span class="hljs-type">A</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">C</span>] =
+    a =&gt; {
+      <span class="hljs-keyword">val</span> (log1, b) = f(a)
+      <span class="hljs-keyword">val</span> (log2, c) = g(b)
+      (log1 + log2, c)
+    }
+}
+</code></pre>
+<p><code>&gt;=&gt;</code> 演算は fish 演算子と呼ばれるもので、引数で受け取った2つの関数を合成した関数を返します。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> isOdd = isEven &gt;=&gt; negate
+<span class="hljs-comment">// isOdd: Int =&gt; (String, Boolean) = &lt;function1&gt;</span>
+
+isOdd(<span class="hljs-number">3</span>)
+<span class="hljs-comment">// res0: (String, Boolean) = (&quot;isEven negate &quot;, true)</span>
+</code></pre>
+<p><img src="images/morphism_composition_example_in_writer_category.png" alt="Writer圏における射の合成"></p>
+<p>これで、Writer 圏における関数合成は定義できました！</p>
+<p>しかし、<code>&gt;=&gt;</code> はただ関数の合成を定義したものです。実際に Writer 型のインスタンスがあったときには <code>&gt;=&gt;</code> を使うことができず、不便です。つまり、関数 <code>f: A =&gt; Writer[B]</code> を型 <code>Writer[A]</code> に対して実行する方法は、別途定義する必要があります。</p>
+<p>そのような方法を、Scala プログラマにはおなじみの <code>flatMap</code> として定義することができます。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">implicit</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WriterOps2</span>[<span class="hljs-type">A</span>](<span class="hljs-params">v: <span class="hljs-type">Writer</span>[<span class="hljs-type">A</span>]</span>) </span>{
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flatMap</span></span>[<span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">B</span>]): <span class="hljs-type">Writer</span>[<span class="hljs-type">B</span>] = {
+    <span class="hljs-keyword">val</span> (log1, a) = v
+    <span class="hljs-keyword">val</span> (log2, b) = f(a)
+    (log1 + log2, b)
+  }
+}
+</code></pre>
+<p>この <code>flatMap</code> メソッドを使うことによって、<code>isEven</code> メソッドを適用したあとに <code>negate</code> メソッドを適用する、のような書き方ができるようになります。これは <code>isOdd</code> メソッドと同じ結果を返します。</p>
+<pre><code class="lang-scala">isEven(<span class="hljs-number">3</span>).flatMap(negate(_))
+<span class="hljs-comment">// res1: (String, Boolean) = (&quot;isEven negate &quot;, true)</span>
+isOdd(<span class="hljs-number">3</span>)
+<span class="hljs-comment">// res2: (String, Boolean) = (&quot;isEven negate &quot;, true)</span>
+</code></pre>
+<h3 id="423-writer-圏は圏の公理を満たすか">4.2.3 Writer 圏は圏の公理を満たすか</h3>
+<p>ここで一度、圏が満たすべき性質に立ち戻ってみましょう。1つ目は関数の合成が結合律を満たすこと、2つ目は任意の対象に対して恒等射が存在することでした。</p>
+<p>この合成 <code>&gt;=&gt;</code> は、結合律を満たすでしょうか？</p>
+<p>タプルの各要素に分解して考えてみましょう。1つ目の要素の合成は、 <code>String</code> の連結です。これは自明に結合律を満たしますね。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// str1, str2, str3 はいずれも String 型とする</span>
+str1 ++ str2 ++ str3 == (str1 ++ str2) ++ str3 == str1 ++ (str2 ++ str3)
+</code></pre>
+<p>2つ目の要素の合成は、標準的な関数合成です。これも結合律を満たしますね。</p>
+<pre><code class="lang-scala">h compose g compose f == (h compose g) compose f == h compose (g compose f)
+</code></pre>
+<p><code>&gt;=&gt;</code> の内部では文字列の連結と標準的な関数合成をしているだけなので、<code>&gt;=&gt;</code> は結合律を満たします！</p>
+<p>次に、恒等射の存在について考えてみましょう。これまでの議論に恒等射は出ていないので、新しく定義します。</p>
+<p>Writer 圏における恒等射の性質として、1つ目の要素であるログ文字列をそのまま返し、2つ目の要素である計算結果もそのまま返す必要があります。すなわち、1つ目の要素に空文字列を渡し、2つ目の要素には引数と同じ値を渡せば良いです。したがって、恒等射 <code>pure</code> は以下のように定義できます。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">pure</span></span>[<span class="hljs-type">A</span>](a: <span class="hljs-type">A</span>): <span class="hljs-type">Writer</span>[<span class="hljs-type">A</span>] = (<span class="hljs-string">&quot;&quot;</span>, a)
+</code></pre>
+<p><code>Writer</code> 型の値 <code>(&quot;apply &quot;, 3)</code> に <code>pure[Int]: Int =&gt; Writer[Int]</code> を適用すると元の値が返ってくるかどうか、確認します。</p>
+<p><code>Writer</code> 型の値に <code>pure</code> をそのまま適用することはできないので、<code>flatMap</code> メソッドを用います。</p>
+<pre><code class="lang-scala">(<span class="hljs-string">&quot;apply &quot;</span>, <span class="hljs-number">3</span>).flatMap(pure(_))
+<span class="hljs-comment">// res3: (String, Int) = (&quot;apply &quot;, 3)</span>
+</code></pre>
+<p>元の値が返ってくることを確認できました。<code>pure</code> は任意の型 <code>A</code> に対して存在するので、<code>pure</code> は恒等射です。したがって、Writer 圏は単位律を満たします。</p>
+<p>以上のことから、ここで定義した Writer 圏は圏であるといえます。Writer 圏についてまとめると、次の図のようになります。</p>
+<p><img src="images/04_example_of_writer_category.png" alt="Writer圏についてのまとめ"></p>
+<h3 id="424-writer-圏のより一般的な定義">4.2.4 Writer 圏のより一般的な定義</h3>
+<p>ここで定義した Writer 圏はもう少し抽象的にすることができます。Writer 圏が結合律と単位律を満たすためには、文字列の連結が結合律を満たし、文字列の連結に関する単位元 <code>&quot;&quot;</code> が定義されている必要がありました。つまり、ログを表現する型がモノイド的な性質を満たしていれば、Writer 圏は圏として定義できるはずです。</p>
+<p>したがって、型 <code>Writer</code> は、以下のように定義していたものを</p>
+<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">Writer</span>[<span class="hljs-type">A</span>] </span>= (<span class="hljs-type">String</span>, <span class="hljs-type">A</span>)
+</code></pre>
+<p>以下のようにパラメータ化して定義できます。</p>
+<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">A</span>] </span>= (<span class="hljs-type">L</span>, <span class="hljs-type">A</span>)
+</code></pre>
+<p>ただし、型 <code>L</code> はモノイドであることが条件です。</p>
+<p>これまでの議論を元に、<a href="https://github.com/taretmch/hamcat/blob/master/src/main/scala/data/Writer.scala" target="_blank">Writer</a> というデータ型を以下のように定義できます。<code>Writer</code> のデータそのものはタプル <code>(L, A)</code> です。<code>Writer</code> 圏において関数を適用するための <code>flatMap</code> メソッド、関数合成のための <code>&gt;=&gt;</code> メソッド、恒等射の <code>pure</code> メソッドが定義されています。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">A</span>](<span class="hljs-params">run: (<span class="hljs-type">L</span>, <span class="hljs-type">A</span></span>)) </span>{
+
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flatMap</span></span>[<span class="hljs-type">B</span>](m2: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">B</span>])(<span class="hljs-keyword">implicit</span> logSemigroup: <span class="hljs-type">Semigroup</span>[<span class="hljs-type">L</span>]): <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">B</span>] = {
+    <span class="hljs-keyword">val</span> (log1, a) = run
+    <span class="hljs-keyword">val</span> (log2, b) = m2(a).run
+    <span class="hljs-type">Writer</span>((log1 |+| log2, b))
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">Writer</span> </span>{
+
+  <span class="hljs-comment">/** Identity */</span>
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">pure</span></span>[<span class="hljs-type">L</span>, <span class="hljs-type">A</span>](a: <span class="hljs-type">A</span>)(<span class="hljs-keyword">implicit</span> logMonoid: <span class="hljs-type">Monoid</span>[<span class="hljs-type">L</span>]): <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">A</span>] = <span class="hljs-type">Writer</span>((logMonoid.empty, a))
+
+  <span class="hljs-comment">/** Morphism */</span>
+  <span class="hljs-keyword">implicit</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WriterOps</span>[<span class="hljs-type">L</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](<span class="hljs-params">m1: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">B</span>]</span>)(<span class="hljs-params">implicit logGroup: <span class="hljs-type">Semigroup</span>[<span class="hljs-type">L</span>]</span>) </span>{
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">&gt;=&gt;</span></span>[<span class="hljs-type">C</span>](m2: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">C</span>]): <span class="hljs-type">A</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">C</span>] =
+      a =&gt; m1(a).flatMap(m2(_))
+  }
+}
+</code></pre>
+<h2 id="43-kleisli-圏">4.3 Kleisli 圏</h2>
+<p>前節で議論した Writer 圏は、実は Kleisli 圏 (Kleisli category) と呼ばれるものの例です。Kleisli 圏はモナドに基づく圏ですので、厳密な定義はモナドを学んでから見ていきます。</p>
+<p>Kleisli 圏では、対象を型、型 <code>A</code> から型 <code>B</code> への射を型 <code>F</code> に対して <code>A =&gt; F[B]</code> である関数とします。ここで <code>F</code> は自己関手という概念に対応することを後の章で見ていきます。<code>F</code> の例としては <code>List</code> や <code>Option</code> などがあります。それぞれの Kleisli 圏において、射の合成は独自の方法で実装されます。これはまさに1つの自由度であり、ロギングやエラーなどの計算効果に対して表示的意味論を与えることができます。</p>
+<h2 id="44-cats-における-writer-と-kleisli">4.4 Cats における Writer と Kleisli</h2>
+<p>Scala で関数型プログラミングを行うためのライブラリとして <a href="https://github.com/typelevel/cats" target="_blank">Cats</a> というライブラリがあります。</p>
+<p>Cats の有名なデータ型として <code>EitherT</code> や <code>Semigroup</code> などがありますが、 <code>Writer</code> や <code>Kleisli</code> についても定義されています。本節では、Cats の Writer と Kleiseli に触れて、Writer 圏と Kleisli 圏へのイメージを深めていきます。</p>
+<h3 id="441-cats-のインストール">4.4.1 Cats のインストール</h3>
+<p>2020年10月23日現在、Cats の最新バージョンは 2.2.0 です。sbt を用いて Cats を使えるようにするには、 <code>build.sbt</code> の libraryDependencies に以下を追加します。</p>
+<pre><code class="lang-scala">libraryDependencies ++= <span class="hljs-type">Seq</span>(
+  <span class="hljs-string">&quot;org.typelevel&quot;</span> %% <span class="hljs-string">&quot;cats-kernel&quot;</span> % <span class="hljs-string">&quot;2.2.0&quot;</span>,
+  <span class="hljs-string">&quot;org.typelevel&quot;</span> %% <span class="hljs-string">&quot;cats-core&quot;</span>   % <span class="hljs-string">&quot;2.2.0&quot;</span>
+)
+</code></pre>
+<h3 id="442-writer">4.4.2 Writer</h3>
+<p>Cats において、<a href="https://github.com/typelevel/cats/blob/v2.2.0/core/src/main/scala/cats/data/package.scala#L34" target="_blank">Writer</a> は以下のように定義されています。</p>
+<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">V</span>] </span>= <span class="hljs-type">WriterT</span>[<span class="hljs-type">Id</span>, <span class="hljs-type">L</span>, <span class="hljs-type">V</span>]
+<span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">Writer</span> </span>{
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">L</span>, <span class="hljs-type">V</span>](l: <span class="hljs-type">L</span>, v: <span class="hljs-type">V</span>): <span class="hljs-type">WriterT</span>[<span class="hljs-type">Id</span>, <span class="hljs-type">L</span>, <span class="hljs-type">V</span>] = <span class="hljs-type">WriterT</span>[<span class="hljs-type">Id</span>, <span class="hljs-type">L</span>, <span class="hljs-type">V</span>]((l, v))
+
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">value</span></span>[<span class="hljs-type">L</span>: <span class="hljs-type">Monoid</span>, <span class="hljs-type">V</span>](v: <span class="hljs-type">V</span>): <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">V</span>] = <span class="hljs-type">WriterT</span>.value(v)
+
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">tell</span></span>[<span class="hljs-type">L</span>](l: <span class="hljs-type">L</span>): <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">Unit</span>] = <span class="hljs-type">WriterT</span>.tell(l)
+
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">listen</span></span>[<span class="hljs-type">L</span>, <span class="hljs-type">V</span>](writer: <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">V</span>]): <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, (<span class="hljs-type">V</span>, <span class="hljs-type">L</span>)] =
+    <span class="hljs-type">WriterT</span>.listen(writer)
+}
+</code></pre>
+<p><code>Writer[L, V]</code> の実体は <code>WriterT[Id, L, V]</code> です。<a href="https://github.com/typelevel/cats/blob/v2.2.0/core/src/main/scala/cats/data/WriterT.scala#L7" target="_blank">WriterT</a> のシグネチャは以下のようになっています。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">final</span> <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WriterT</span>[<span class="hljs-type">F</span>[_], <span class="hljs-title">L</span>, <span class="hljs-title">V</span>](<span class="hljs-params">run: <span class="hljs-type">F</span>[(<span class="hljs-type">L</span>, <span class="hljs-type">V</span></span>)])`</span>
+</code></pre>
+<p>ここで、<code>F</code> はタプル <code>(L, V)</code> をラップするような型を表します。例えば <code>List</code> や <code>Option</code> などがあります。 <code>Writer</code> の定義では <code>F</code> に <code>Id</code> を渡していました。 <code>Id[A]</code> は型パラメータ <code>A</code> に対して <code>A</code> そのものを表します。したがって、<code>Writer[L, V]</code> はタプル <code>(L, V)</code> そのものであると言えます。この結論は、前節で見た <code>Writer[L, A]</code> の定義と同じですね。</p>
+<p>まず、<code>Writer</code> のインスタンスを作ってみましょう。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">import</span> cats._, cats.data._, cats.implicits._
+<span class="hljs-comment">// import cats._</span>
+<span class="hljs-comment">// import cats.data._</span>
+<span class="hljs-comment">// import cats.implicits._</span>
+
+<span class="hljs-keyword">val</span> w1 = <span class="hljs-type">Writer</span>(<span class="hljs-string">&quot;w1 &quot;</span>, <span class="hljs-number">1</span>)
+<span class="hljs-comment">// val w1: cats.data.WriterT[cats.Id,String,Int] = WriterT((w1 ,1))</span>
+
+w1.run
+<span class="hljs-comment">// val res1: cats.Id[(String, Int)] = (&quot;w1 &quot;,1)</span>
+</code></pre>
+<p>おお！<code>Writer[String, Int]</code> のインスタンスを作って、そのタプルを取り出すことができました。</p>
+<p>次に、<code>negate: Boolean =&gt; Writer[String, Boolean]</code> と <code>isEven: Int =&gt; Writer[String, Boolean]</code> を定義してみましょうか。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">negate</span></span>(b: <span class="hljs-type">Boolean</span>): <span class="hljs-type">Writer</span>[<span class="hljs-type">String</span>, <span class="hljs-type">Boolean</span>] = <span class="hljs-type">Writer</span>(<span class="hljs-string">&quot;negate &quot;</span>, !b)
+<span class="hljs-comment">// def negate(b: Boolean): cats.data.Writer[String,Boolean]</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isEven</span></span>(n: <span class="hljs-type">Int</span>): <span class="hljs-type">Writer</span>[<span class="hljs-type">String</span>, <span class="hljs-type">Boolean</span>] = <span class="hljs-type">Writer</span>(<span class="hljs-string">&quot;isEven &quot;</span>, n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>)
+<span class="hljs-comment">// def isEven(n: Int): cats.data.Writer[String,Boolean]</span>
+
+isEven(<span class="hljs-number">3</span>)
+<span class="hljs-comment">// val res2: cats.data.Writer[String,Boolean] = WriterT((isEven ,false))</span>
+
+negate(<span class="hljs-literal">false</span>)
+<span class="hljs-comment">// val res3: cats.data.Writer[String,Boolean] = WriterT((negate ,true))</span>
+</code></pre>
+<p><code>Writer</code> を使って、2つの関数 <code>negate</code> と <code>isEven</code> を定義することができましたね！</p>
+<p>では、この2つの関数を合成して、 <code>isOdd</code> 関数を定義します。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isOdd</span></span>(n: <span class="hljs-type">Int</span>): <span class="hljs-type">Writer</span>[<span class="hljs-type">String</span>, <span class="hljs-type">Boolean</span>] = isEven(n).flatMap(negate)
+<span class="hljs-comment">// def isOdd(n: Int): cats.data.Writer[String,Boolean]</span>
+
+isOdd(<span class="hljs-number">3</span>)
+<span class="hljs-comment">// val res6: cats.data.Writer[String,Boolean] = WriterT((isEven negate ,true))</span>
+</code></pre>
+<p>おなじみ flatMap を使うことによって <code>Writer</code> は合成できました。<a href="https://github.com/typelevel/cats/blob/v2.2.0/core/src/main/scala/cats/data/WriterT.scala#L179" target="_blank">flatMap</a> の定義も、前項で定義した <code>&gt;=&gt;</code> 演算子とほとんど変わらないように見えます。興味がある方はぜひ見てみてください。</p>
+<p>以上のように、Cats における <code>Writer</code> 型は本章で議論した Writer 圏を表現していることがわかります。機会があれば使ってみてください。</p>
+<h3 id="443-kleisli">4.4.3 Kleisli</h3>
+<p>Kleisli 圏についても見ておきましょう。Kleisli 圏の定義にはモナドの概念が必要なので定義していませんが、Writer 圏との共通点はあるはずです。Cats の <a href="https://github.com/typelevel/cats/blob/v2.2.0/core/src/main/scala/cats/data/Kleisli.scala" target="_blank">Kleisli</a> を通してその性質を見ます。</p>
+<p><code>Kleisli</code> のシグネチャは以下のようになっています。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">final</span> <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Kleisli</span>[<span class="hljs-type">F</span>[_], <span class="hljs-title">-A</span>, <span class="hljs-title">B</span>](<span class="hljs-params">run: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">F</span>[<span class="hljs-type">B</span>]</span>)</span>
+</code></pre>
+<p>なんとなく <code>Writer</code> と似ているのではないでしょうか。簡単に表現するならば、 <code>Kleisli[F[_], -A, B]</code> は関数 <code>f: A =&gt; F[B]</code> のラッパーです。なぜラップするのかというと、これまで見てきた通り、<code>f: A =&gt; F[B]</code> のようにラップされた関数を合成するには合成の方法を独自で定義する必要があるからです。例えば、関数 <code>f: A =&gt; F[B]</code> と関数 <code>g: B =&gt; F[C]</code> を合成することを考えると、単に <code>g compose f</code> とはできません。型が異なるので、<code>f</code> の出力を <code>g</code> の入力として渡せないからです。</p>
+<p>実際に、<code>Kleisli</code> を使っていくつか関数を実装してみましょう。<code>negate: Boolean =&gt; Writer[String, Boolean]</code>  と <code>isEven: Int ~&gt; Writer[String, Int]</code> は、 関数 <code>f: A =&gt; Writer[String, B]</code> の形をしています。これらを <code>Kleisli</code> を使って定義すると、以下のようになります。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> negate = <span class="hljs-type">Kleisli</span> { (b: <span class="hljs-type">Boolean</span>) =&gt; <span class="hljs-type">Writer</span>(<span class="hljs-string">&quot;negate &quot;</span>, !b) }
+<span class="hljs-comment">// val negate: cats.data.Kleisli[[V]cats.data.WriterT[cats.Id,String,V],Boolean,Boolean] = Kleisli($Lambda$4552/511930924@2db3af55)</span>
+
+<span class="hljs-keyword">val</span> isEven = <span class="hljs-type">Kleisli</span> { (n: <span class="hljs-type">Int</span>) =&gt; <span class="hljs-type">Writer</span>(<span class="hljs-string">&quot;isEven &quot;</span>, n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>) }
+<span class="hljs-comment">// val isEven: cats.data.Kleisli[[V]cats.data.WriterT[cats.Id,String,V],Int,Boolean] = Kleisli($Lambda$4557/1514049729@6542cb5f)</span>
+</code></pre>
+<p>次に、これらの関数を合成して <code>isOdd</code> 関数を定義します。<code>Kleisli</code> の合成には <a href="https://github.com/typelevel/cats/blob/v2.2.0/core/src/main/scala/cats/data/Kleisli.scala#L77" target="_blank">compose</a> メソッドや <a href="https://github.com/typelevel/cats/blob/v2.2.0/core/src/main/scala/cats/data/Kleisli.scala#L60" target="_blank">andThen</a> メソッドを用います。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> isOdd1 = negate.compose(isEven)
+<span class="hljs-comment">// val isOdd1: cats.data.Kleisli[[V]cats.data.WriterT[cats.Id,String,V],Int,Boolean] = Kleisli(cats.data.Kleisli$$$Lambda$4598/167638236@701815d6)</span>
+
+<span class="hljs-keyword">val</span> isOdd2 = isEven.andThen(negate)
+<span class="hljs-comment">// val isOdd2: cats.data.Kleisli[[V]cats.data.WriterT[cats.Id,String,V],Int,Boolean] = Kleisli(cats.data.Kleisli$$$Lambda$4598/167638236@7a81bba1)</span>
+</code></pre>
+<p>さて、<code>Kleisli</code> は関数 <code>f: A =&gt; F[B]</code> に合成の構造を持たせたラッパーなので、関数に引数を適用して出力を得るには <code>run</code> を呼び出してラップしている関数を得る必要があります。</p>
+<pre><code class="lang-scala">isEven.run(<span class="hljs-number">1</span>)
+<span class="hljs-comment">// val res0: cats.data.WriterT[cats.Id,String,Boolean] = WriterT((isEven ,false))</span>
+
+isOdd1.run(<span class="hljs-number">1</span>)
+<span class="hljs-comment">// val res2: cats.data.WriterT[cats.Id,String,Boolean] = WriterT((isEven negate ,true))</span>
+
+isOdd2.run(<span class="hljs-number">1</span>)
+<span class="hljs-comment">// val res3: cats.data.WriterT[cats.Id,String,Boolean] = WriterT((isEven negate ,true))</span>
+</code></pre>
+<p>Kleisli 圏は、Writer 圏が持つ射の合成をより抽象化して定義したものであることがわかりました。後の章で、モナドを使って Kleisli 圏を定義します。そのときにまた、本章で述べたことを思い出してもらえると幸いです。</p>
+<h2 id="まとめ">まとめ</h2>
+<ul>
+<li>関数 <code>f: A =&gt; F[B]</code> が圏の公理を満たすよう、射の合成を定義したものが Kleisli 圏である。</li>
+<li>Writer 圏は Kleisli 圏の例である。</li>
+<li>Writer 圏では、期待する出力 <code>B</code> の他にログ <code>L</code> を出力する関数 <code>f: A =&gt; Writer[L, B]</code> を射として考える。<ul>
+<li><code>L</code> は、その射において結合律を満たし、射に関する単位元を持つ必要がある。すなわち、<code>L</code> はモノイドの性質を満たす必要がある。</li>
+</ul>
+</li>
+<li>Writer 圏における射の合成は <code>&gt;=&gt;</code> 演算子として定義された。なお、Cats の <code>Writer</code> 型に関する射の合成は <code>flatMap</code> として定義されている。</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="03_Categories_great_and_small.html" class="navigation navigation-prev " aria-label="Previous page: 3章 いろいろな圏">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="05_Products_and_Coproducts.html" class="navigation navigation-next " aria-label="Next page: 5章 積と余積">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"4章 Kleisli圏","level":"1.5","depth":1,"next":{"title":"5章 積と余積","level":"1.6","depth":1,"path":"05_Products_and_Coproducts.md","ref":"05_Products_and_Coproducts.md","articles":[]},"previous":{"title":"3章 いろいろな圏","level":"1.4","depth":1,"path":"03_Categories_great_and_small.md","ref":"03_Categories_great_and_small.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"04_Kleisli_category.md","mtime":"2021-03-06T15:01:49.560Z","type":"markdown"},"gitbook":{"version":"3.6.17","time":"2021-03-06T15:01:56.671Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
