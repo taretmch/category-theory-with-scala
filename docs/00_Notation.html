@@ -3,9 +3,9 @@
 <html lang="ja" >
     <head>
         <meta charset="UTF-8">
-        <title>9章 関数型 · Scala で始める圏論入門</title>
+        <title>表記法 · Scala で始める圏論入門</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="description" content="">
+        <meta name="description" content="本サイトにおける表記法の原則です。">
         <meta name="generator" content="HonKit 3.6.17">
         <meta name="author" content="Tomoki Mizogami">
         
@@ -56,10 +56,6 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="10_Natural_transformations.html" />
-    
-    
-    <link rel="prev" href="08_Functoriality.html" />
     
 
     </head>
@@ -93,7 +89,7 @@
                 <a href="./">
             
                     
-                    Scala で始める圏論入門
+                    はじめに
             
                 </a>
             
@@ -101,7 +97,21 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2" data-path="01_Category.html">
+        <li class="chapter " data-level="1.2" >
+            
+                <span>
+            
+                    
+                    第1部
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="01_Category.html">
             
                 <a href="01_Category.html">
             
@@ -114,7 +124,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3" data-path="02_Types_and_functions.html">
+        <li class="chapter " data-level="1.2.2" data-path="02_Types_and_functions.html">
             
                 <a href="02_Types_and_functions.html">
             
@@ -127,7 +137,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="03_Categories_great_and_small.html">
+        <li class="chapter " data-level="1.2.3" data-path="03_Categories_great_and_small.html">
             
                 <a href="03_Categories_great_and_small.html">
             
@@ -140,7 +150,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5" data-path="04_Kleisli_category.html">
+        <li class="chapter " data-level="1.2.4" data-path="04_Kleisli_category.html">
             
                 <a href="04_Kleisli_category.html">
             
@@ -153,7 +163,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.6" data-path="05_Products_and_Coproducts.html">
+        <li class="chapter " data-level="1.2.5" data-path="05_Products_and_Coproducts.html">
             
                 <a href="05_Products_and_Coproducts.html">
             
@@ -166,7 +176,20 @@
             
         </li>
     
-        <li class="chapter " data-level="1.7" data-path="07_Functor.html">
+        <li class="chapter " data-level="1.2.6" >
+            
+                <span>
+            
+                    
+                    6章 代数的データ型（一部は5章に埋め込んでいます）
+            
+                </span>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.7" data-path="07_Functor.html">
             
                 <a href="07_Functor.html">
             
@@ -179,7 +202,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.8" data-path="08_Functoriality.html">
+        <li class="chapter " data-level="1.2.8" data-path="08_Functoriality.html">
             
                 <a href="08_Functoriality.html">
             
@@ -192,20 +215,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.9" data-path="09_Function_types.html">
-            
-                <a href="09_Function_types.html">
-            
-                    
-                    9章 関数型
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.10" data-path="10_Natural_transformations.html">
+        <li class="chapter " data-level="1.2.9" data-path="10_Natural_transformations.html">
             
                 <a href="10_Natural_transformations.html">
             
@@ -215,6 +225,69 @@
                 </a>
             
 
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.10" >
+            
+                <span>
+            
+                    
+                    11章 宣言型プログラミング
+            
+                </span>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.11" >
+            
+                <span>
+            
+                    
+                    12章 極限と余極限（工事中）
+            
+                </span>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" >
+            
+                <span>
+            
+                    
+                    付録
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter active" data-level="1.3.1" data-path="00_Notation.html">
+            
+                <a href="00_Notation.html">
+            
+                    
+                    表記法
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -248,7 +321,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >9章 関数型</a>
+        <a href="." >表記法</a>
     </h1>
 </div>
 
@@ -263,24 +336,48 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="9-関数型">9. 関数型</h1>
-<p>Scala 圏は型を対象としてと関数を射とする圏です。しかしながら、射である関数そのものも <code>Function1</code> などの型であり、対象であることを学びました。</p>
-<p>本章では、関数型 <code>Function1</code> に注目して、一般的な圏における普遍的な構造を定義します。関数オブジェクトは、Scala 圏や集合圏に依存しない対象として定義されます。</p>
-<p>関数適用の評価 (f(x) = y) は、関数オブジェクトと引数の対象から出力の対象への射として定義され、Eval と呼ばれます。</p>
-<p>関数オブジェクトを定義したあとは、関数オブジェクトにおけるカリー化について見ていきます。関数プログラミングにおいて、カリー化は必須のテクニックでしたね。</p>
-<p>そして、関数オブジェクトを要素として持つような Hom 集合の一般化である冪について見ます。圏 C と圏 D の冪 D^C は、C から D への関数オブジェクトの集合です。</p>
-<p>最後に、型と関数の圏や集合圏の一般化であるカルテジアン閉圏について見ます。</p>
-<h2 id="91-関数オブジェクト">9.1 関数オブジェクト</h2>
-<p>TODO: Future works</p>
-<h2 id="92-関数オブジェクトのカリー化">9.2 関数オブジェクトのカリー化</h2>
-<p>TODO: Future works</p>
-<h2 id="93-冪">9.3 冪</h2>
-<p>TODO: Future works</p>
-<h2 id="94-カルテジアン閉圏">9.4 カルテジアン閉圏</h2>
-<p>TODO: Future works</p>
-<h1 id="まとめ">まとめ</h1>
-<p>TODO: Future works</p>
-
+                                <h1 id="表記法">表記法</h1>
+<p>本資料では対象と型、射と関数が混在します。基本的には以下の表記法に基づいて書いていますが、説明の都合上はこの限りではありません。なお、確認漏れの場合もあります。</p>
+<h2 id="圏">圏</h2>
+<p>圏は太字大文字のアルファベットで表記します。</p>
+<p>例） <strong>A</strong>, <strong>B</strong>, <strong>Func(A, B)</strong></p>
+<h3 id="対象">対象</h3>
+<p>対象は小文字のアルファベットで表記します。</p>
+<pre><code>a, b, c
+</code></pre><h3 id="射">射</h3>
+<p>射は対象間の矢印として、キャメルケースで表記します。</p>
+<pre><code>f: a -&gt; b, strLength: b -&gt; c
+</code></pre><p>射の合成は . で表記します。</p>
+<pre><code>g . f
+</code></pre><h3 id="関手">関手</h3>
+<p>関手は圏の間の矢印として、大文字のアルファベットで表記します。</p>
+<pre><code>F: A -&gt; B
+</code></pre><p>関手による射の変換は、カッコをつけて表記します。</p>
+<pre><code>F(a) = F(b), F(f): F(a) -&gt; F(b)
+</code></pre><h3 id="自然変換">自然変換</h3>
+<p>自然変換は <code>~&gt;</code> で表記します。</p>
+<pre><code>α: F ~&gt; G
+</code></pre><h2 id="scala">Scala</h2>
+<p>Scala の型や関数、変数等はコードスニペットで表記します。</p>
+<h3 id="型">型</h3>
+<pre><code class="lang-scala"><span class="hljs-type">A</span>, <span class="hljs-type">B</span>, <span class="hljs-type">C</span>, <span class="hljs-type">Int</span>, <span class="hljs-type">String</span>, <span class="hljs-type">List</span>[<span class="hljs-type">A</span>]
+</code></pre>
+<h3 id="関数">関数</h3>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f</span></span>: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>
+<span class="hljs-keyword">val</span> g: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">C</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">h</span></span>(a: <span class="hljs-type">A</span>): <span class="hljs-type">B</span>
+</code></pre>
+<p>関数の合成は <code>compose</code> を使うことが多いです。</p>
+<pre><code class="lang-scala">g compose f
+</code></pre>
+<h2 id="数学">数学</h2>
+<p>数式についてもスニペットで表記しますが、シンタックスハイライトはありません。</p>
+<h3 id="集合">集合</h3>
+<pre><code>{ a, b, c, d, e }
+A = { 1, 2, 3, 4 }
+</code></pre><h3 id="関数">関数</h3>
+<pre><code>y = f(x)
+</code></pre>
                                 
                                 </section>
                             
@@ -307,14 +404,6 @@
 
             
                 
-                <a href="08_Functoriality.html" class="navigation navigation-prev " aria-label="Previous page: 8章 関手性">
-                    <i class="fa fa-angle-left"></i>
-                </a>
-                
-                
-                <a href="10_Natural_transformations.html" class="navigation navigation-next " aria-label="Next page: 10章 自然変換">
-                    <i class="fa fa-angle-right"></i>
-                </a>
                 
             
         
@@ -323,7 +412,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"9章 関数型","level":"1.9","depth":1,"next":{"title":"10章 自然変換","level":"1.10","depth":1,"path":"10_Natural_transformations.md","ref":"10_Natural_transformations.md","articles":[]},"previous":{"title":"8章 関手性","level":"1.8","depth":1,"path":"08_Functoriality.md","ref":"08_Functoriality.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdocOutput","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Tomoki Mizogami","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"09_Function_types.md","mtime":"2021-03-06T17:54:18.461Z","type":"markdown"},"gitbook":{"version":"3.6.17","time":"2021-03-06T17:54:21.908Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"description":"本サイトにおける表記法の原則です。","title":"表記法","level":"1.3.1","depth":2,"previous":{"title":"付録","level":"1.3","depth":1,"ref":"","articles":[{"title":"表記法","level":"1.3.1","depth":2,"path":"00_Notation.md","ref":"00_Notation.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdocOutput","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Tomoki Mizogami","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"00_Notation.md","mtime":"2021-03-07T02:15:11.566Z","type":"markdown"},"gitbook":{"version":"3.6.17","time":"2021-03-07T02:15:24.757Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
