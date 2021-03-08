@@ -57,8 +57,6 @@
 
     
     
-    <link rel="prev" href="08_Functoriality.html" />
-    
 
     </head>
     <body>
@@ -170,7 +168,7 @@
                 <a href="05_Products_and_Coproducts.html">
             
                     
-                    5章 積と余積
+                    5, 6章 積と余積
             
                 </a>
             
@@ -178,20 +176,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.6" >
-            
-                <span>
-            
-                    
-                    6章 代数的データ型（一部は5章に埋め込んでいます）
-            
-                </span>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.7" data-path="07_Functor.html">
+        <li class="chapter " data-level="1.2.6" data-path="07_Functor.html">
             
                 <a href="07_Functor.html">
             
@@ -204,7 +189,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.8" data-path="08_Functoriality.html">
+        <li class="chapter " data-level="1.2.7" data-path="08_Functoriality.html">
             
                 <a href="08_Functoriality.html">
             
@@ -212,6 +197,19 @@
                     8章 関手性
             
                 </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.8" >
+            
+                <span>
+            
+                    
+                    （工事中）9章 関数型
+            
+                </span>
             
 
             
@@ -230,12 +228,31 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.10" >
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" >
             
                 <span>
             
                     
-                    11章 宣言型プログラミング
+                    第2部
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" >
+            
+                <span>
+            
+                    
+                    （工事中）11章 宣言型プログラミング
             
                 </span>
             
@@ -243,12 +260,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.11" >
+        <li class="chapter " data-level="1.3.2" >
             
                 <span>
             
                     
-                    12章 極限と余極限（工事中）
+                    （工事中）12章 極限と余極限
             
                 </span>
             
@@ -261,7 +278,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3" >
+        <li class="chapter " data-level="1.4" >
             
                 <span>
             
@@ -275,12 +292,25 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.3.1" data-path="00_Notation.html">
+        <li class="chapter " data-level="1.4.1" data-path="00_Notation.html">
             
                 <a href="00_Notation.html">
             
                     
                     表記法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="tips/08_2_Writer_Functor.html">
+            
+                <a href="tips/08_2_Writer_Functor.html">
+            
+                    
+                    Writer 圏における射の合成と、恒等射と、関手について
             
                 </a>
             
@@ -760,10 +790,6 @@ flattenThenHeadOption(<span class="hljs-type">List</span>(<span class="hljs-type
 
             
                 
-                <a href="08_Functoriality.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 8章 関手性">
-                    <i class="fa fa-angle-left"></i>
-                </a>
-                
                 
             
         
@@ -772,7 +798,7 @@ flattenThenHeadOption(<span class="hljs-type">List</span>(<span class="hljs-type
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、関手から関手へのへ変換である自然変換について学びます。まず、自然変換のイメージを掴むために、List 関手から Option 関手への自然変換など、具体例を見ます。次に、自然変換の定義を与え、その定義と具体例とを照らし合わせていきます。","title":"10章 自然変換","level":"1.2.9","depth":2,"next":{"title":"11章 宣言型プログラミング","level":"1.2.10","depth":2,"ref":"","articles":[]},"previous":{"title":"8章 関手性","level":"1.2.8","depth":2,"path":"08_Functoriality.md","ref":"08_Functoriality.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdocOutput","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Tomoki Mizogami","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"10_Natural_transformations.md","mtime":"2021-03-07T02:15:22.892Z","type":"markdown"},"gitbook":{"version":"3.6.17","time":"2021-03-07T02:15:24.757Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、関手から関手へのへ変換である自然変換について学びます。まず、自然変換のイメージを掴むために、List 関手から Option 関手への自然変換など、具体例を見ます。次に、自然変換の定義を与え、その定義と具体例とを照らし合わせていきます。","title":"10章 自然変換","level":"1.2.9","depth":2,"next":{"title":"第2部","level":"1.3","depth":1,"ref":"","articles":[{"title":"（工事中）11章 宣言型プログラミング","level":"1.3.1","depth":2,"ref":"","articles":[]},{"title":"（工事中）12章 極限と余極限","level":"1.3.2","depth":2,"ref":"","articles":[]}]},"previous":{"title":"（工事中）9章 関数型","level":"1.2.8","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdocOutput","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Tomoki Mizogami","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"10_Natural_transformations.md","mtime":"2021-03-08T04:42:50.924Z","type":"markdown"},"gitbook":{"version":"3.6.17","time":"2021-03-08T04:42:52.076Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
