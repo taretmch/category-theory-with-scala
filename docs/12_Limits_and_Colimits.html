@@ -1,0 +1,613 @@
+
+<!DOCTYPE HTML>
+<html lang="ja" >
+    <head>
+        <meta charset="UTF-8">
+        <title>12章 極限と余極限 · Scala で始める圏論入門</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 3.6.17">
+        <meta name="author" content="Tomoki Mizogami">
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="検索ワードを入力" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    はじめに
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" >
+            
+                <span>
+            
+                    
+                    第1部
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="01_Category.html">
+            
+                <a href="01_Category.html">
+            
+                    
+                    1章 圏とは
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="02_Types_and_functions.html">
+            
+                <a href="02_Types_and_functions.html">
+            
+                    
+                    2章 型と関数の圏
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="03_Categories_great_and_small.html">
+            
+                <a href="03_Categories_great_and_small.html">
+            
+                    
+                    3章 いろいろな圏
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="04_Kleisli_category.html">
+            
+                <a href="04_Kleisli_category.html">
+            
+                    
+                    4章 Kleisli圏
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="05_Products_and_Coproducts.html">
+            
+                <a href="05_Products_and_Coproducts.html">
+            
+                    
+                    5, 6章 積と余積
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.6" >
+            
+                <span>
+            
+                    
+                    6章 代数的データ型（一部は5章に）
+            
+                </span>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.7" data-path="07_Functor.html">
+            
+                <a href="07_Functor.html">
+            
+                    
+                    7章 関手
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.8" data-path="08_Functoriality.html">
+            
+                <a href="08_Functoriality.html">
+            
+                    
+                    8章 関手性
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.9" >
+            
+                <span>
+            
+                    
+                    （工事中）9章 関数型
+            
+                </span>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.10" data-path="10_Natural_transformations.html">
+            
+                <a href="10_Natural_transformations.html">
+            
+                    
+                    10章 自然変換
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" >
+            
+                <span>
+            
+                    
+                    第2部
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" >
+            
+                <span>
+            
+                    
+                    （工事中）11章 宣言型プログラミング
+            
+                </span>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3.2" data-path="12_Limits_and_Colimits.html">
+            
+                <a href="12_Limits_and_Colimits.html">
+            
+                    
+                    12章 極限と余極限
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" >
+            
+                <span>
+            
+                    
+                    付録
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="00_Notation.html">
+            
+                <a href="00_Notation.html">
+            
+                    
+                    表記法
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="tips/08_2_Writer_Functor.html">
+            
+                <a href="tips/08_2_Writer_Functor.html">
+            
+                    
+                    Writer 圏における射の合成と、恒等射と、関手について
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            HonKitで公開 
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >12章 極限と余極限</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <!-- omit in toc -->
+<h1 id="12-極限と余極限">12. 極限と余極限</h1>
+<p>前章までに、積や関手、自然変換といった圏論における基本概念について学びました。</p>
+<p>本章からは、関手と自然変換を使って得られる諸概念について一つ一つ学んでいきます。まず極限について学び、その次に自由モノイド、表現可能関手について学びます。最後に圏論における最初の登竜門と呼ばれている米田の補題を学びます。</p>
+<p>本章では、普遍性の一つである極限と余極限について、学んでいきます。一言で説明すると、極限は積の一般化、余極限は余積の一般化になります。5章で、2つの対象 A と B の積 AxB と余積 A+B を定義しました。積 AxB の候補となるような対象 C を考えて、C から A および B への射影 projA と projB を前提としていましたね。実はこの「対象を選択する」という操作は、関手によって表現できます。そして、C から A および B への射影を選択するという操作は、自然変換によって表現されます。具体的には本章で見ていきましょう！</p>
+<p>まず、極限を定義するために必要な準備をします。具体的には、定関手を定義して、積を関手と自然変換を使って表現し直します。定関手は、全ての対象をある1つの対象に対応させ、全ての射をその対象の恒等射に対応させるものです。そのあと、極限とは何か定義します。最後に、余極限を定義します。</p>
+<!-- omit in toc -->
+<h2 id="目次">目次</h2>
+<ul>
+<li><a href="#121-準備">12.1 準備</a><ul>
+<li><a href="#1211-定関手">12.1.1 定関手</a></li>
+<li><a href="#1212-関手と自然変換を使って積を定義する">12.1.2 関手と自然変換を使って積を定義する</a></li>
+</ul>
+</li>
+<li><a href="#122-極限">12.2 極限</a><ul>
+<li><a href="#1221-錐とは">12.2.1 錐とは</a></li>
+<li><a href="#1222-極限の定義">12.2.2 極限の定義</a></li>
+</ul>
+</li>
+<li><a href="#123-余極限">12.3 余極限</a></li>
+</ul>
+<h2 id="121-準備">12.1 準備</h2>
+<p>本節では、極限を定義するために必要な概念を導入します。</p>
+<h3 id="1211-定関手">12.1.1 定関手</h3>
+<p>定関手は、これまで何度か出てきましたね。</p>
+<p>自然変換の章では、List の長さを取得する関数 <code>length</code> が List 関手から Const 関手への自然変換であることを学びました:</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">length</span> </span>= <span class="hljs-type">Lambda</span>[<span class="hljs-type">List</span> ~&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, ?]](fa =&gt; <span class="hljs-type">Const</span>(fa.length))
+</code></pre>
+<p><code>Const</code> というデータ構造そのものが関手になっているのではなく、<code>Const[Int, ?]</code> のように定数の型 <code>Int</code> を与えると関手になるのでした。例えば</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">import</span> hamcat.<span class="hljs-type">Implicits</span>._
+<span class="hljs-keyword">import</span> hamcat.data.<span class="hljs-type">Const</span>
+
+<span class="hljs-keyword">val</span> const1 = <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">String</span>](<span class="hljs-number">3</span>)
+<span class="hljs-comment">// const1: Const[Int, String] = Const(v = 3)</span>
+<span class="hljs-keyword">val</span> const2 = const1.fmap(str =&gt; str.startsWith(<span class="hljs-string">&quot;a&quot;</span>))
+<span class="hljs-comment">// const2: Const[Int, Boolean] = Const(v = 3)</span>
+</code></pre>
+<p>のように、定数 <code>3</code> を保持しながら型の変換 <code>String =&gt; Boolean</code> をするような処理を書くことができます。</p>
+<p>定関手は一般的に、以下のように定義されます：</p>
+<hr>
+<p>2つの任意の圏を A と B とします。圏 <strong>B</strong> の任意の対象 c に対して、圏 <strong>A</strong> から c への <strong>定関手</strong> (constant functor) とは、<strong>A</strong> の任意の対象を c に写し、<strong>A</strong> の任意の射を c の恒等射に写すもののことをいいます。</p>
+<p>また、<strong>B</strong> の対象 c に対して c への定関手を対応させるものを<strong>対角関手</strong> (diagonal functor) Δ と呼びます。</p>
+<hr>
+<p>圏 <strong>A</strong> から圏 <strong>B</strong> の対象 c への定関手 Δc は <strong>A</strong> から <strong>B</strong> への関手です。一方で、対角関手 Δ は、圏 <strong>B</strong> から関手圏 <strong>Func(A, B)</strong> への関手です。</p>
+<p><img src="images/12_constant_functor.png" alt="定関手">
+<img src="images/12_diagonal_functor.png" alt="対角関手"></p>
+<p>定関手を使うと何が嬉しいかと言いますと、任意の圏から対象を1つだけとってくるような操作を表現することができます。上記画像の例だと、c という対象そのものを表現する関手であるとみなすこともできます。<code>Const[Int, String]</code> が <code>Int</code> 型の定数を表すことができるように、定関手は関手でありながら1つの対象そのものを表すことができるのです。</p>
+<h3 id="1212-関手と自然変換を使って積を定義する">12.1.2 関手と自然変換を使って積を定義する</h3>
+<p>次に、関手と自然変換の概念を使って、積の定義を言い換えていきます。</p>
+<p>早速ですが、圏 <strong>C</strong> における対象 A と B の積 AxB を定義するとき、まず対象 A と B を選択するという操作が行われます。この2つの対象を選択するという操作は、シンプルな圏 <strong>2</strong> を用いることによって表現できます。圏 <strong>2</strong> は、対象を2つだけ持ち、射を恒等射しか持たないような圏とします：</p>
+<p><img src="images/12_2_category.png" alt="圏2"></p>
+<p>この圏 <strong>2</strong> から圏 <strong>C</strong> への関手 D を考えてみましょう。圏 <strong>2</strong> における対象 1 と 2 が、関手 D によって圏 <strong>C</strong> の対象 A と B に写されるとすると</p>
+<pre><code>D(1) = A
+D(2) = B
+</code></pre><p>となります。</p>
+<p><img src="images/12_functor_from_category_2.png" alt="圏の2つの対象の選択: 積をとりたい対象"></p>
+<p>この関手 D によって、積をとりたい対象 A と B を選択できるようになりました。</p>
+<p>では次に、A と B の積 AxB の候補となる対象 C を選択することを考えます。1つの対象を選択するには定関手を使えばいいので、対象 C への定関手 Δc を考えます。Δc は任意の対象を対象 C に写し、任意の射を C の恒等射に写します。</p>
+<pre><code>Δc 1 = C
+Δc 2 = C
+</code></pre><p><img src="images/12_const_functor_from_category_2.png" alt="圏の1つの対象の選択: 積の候補となる対象"></p>
+<p>これで、2つの関手 D と Δc を得られました。これら2つはどちらも圏 <strong>2</strong> から圏 <strong>C</strong> への関手なので、自然変換を考えることができます。定関手 Δc から関手 D への自然変換 α を考えると、これは圏 <strong>C</strong> における射になります。</p>
+<p>すなわち、α の 1 成分は C (Δc(1)) を A (D(1)) に写し、2 成分は C (Δc(2)) を B (D(2)) に写します：</p>
+<pre><code>α1: Δc (1) -&gt; D (1) すなわち α1: C -&gt; A
+α2: Δc (2) -&gt; D (2) すなわち α2: C -&gt; B
+</code></pre><p>圏 <strong>2</strong> における射は恒等射のみなので、この変換が自然性を満たすことは自明です。</p>
+<p><img src="images/12_natural_transformation_projection.png" alt="定関手から関手 D への自然変換"></p>
+<p>さて、自然変換とは、ただの射でした。よく見てみると、この自然変換は C から A への (圏 <strong>C</strong> における) 射と、C から B への (圏 <strong>C</strong> における) 射を選ぶことに等しいです。すなわち、積における A と B への射影を表します。</p>
+<p>ここで積の定義を振り返ってみましょう。</p>
+<blockquote>
+<p>圏の2つの対象 <code>A</code> と <code>B</code> に対して、対象 <code>C</code> とその射 <code>projA: C =&gt; A</code>、<code>projB: C =&gt; B</code> の三つ組 <code>&lt;C, projA, projB&gt;</code> が <code>A</code> と <code>B</code> の<strong>積</strong> (product) であるとは、任意の対象 <code>X</code> とその射 <code>xA: X =&gt; A</code>、<code>xB: X =&gt; B</code> の三つ組 <code>&lt;X, xA, xB&gt;</code> に対して <code>X</code> から <code>C</code> への一意の射 <code>m</code> が存在して</p>
+<pre><code>projA compose m == xA
+projB compose m == xB
+</code></pre><p>が成り立つことを言います。このとき対象 <code>C</code> を <code>A x B</code> と書きます。</p>
+</blockquote>
+<p>今、2つの関手 D、Δc とその間の自然変換を定義することによって、圏の対象 A、B、C と C から A、B への射影が得られました。上記の定義でいうと、三つ組  <code>&lt;C, projA, projB&gt;</code> が得られました。C が定関手による像であり、projA と projB が自然変換 α1 と α2 に対応します。そして、そのような三つ組の圏 (重要な部分ではないので、射の定義は省きます) における終対象が積なのでした。</p>
+<p>実は、この三つ組を一般化すると、錐と呼ばれる構造が考えられ、錐の圏における終対象が極限であると定義されます。三つ組の一般化とは、2つの対象のみからなる圏 <strong>2</strong> を恒等射以外の射を持つ一般的な圏に置き換えることです。恒等射以外の射があると、関手 Δc から関手 D への変換 (つまり射影) が自然性を満たすことは自明ではありません。自然性が満たされるとき、その自然変換は錐のような形を形成します。</p>
+<p>次の節では、錐の構造について深掘りし、錐の圏について考えていきます。</p>
+<h2 id="122-極限">12.2 極限</h2>
+<p>積の定義における三つ組を一般化すると、錐という構造が作られます。ここでは、錐の構造を定義し、その普遍構造である極限について定義します。</p>
+<h3 id="1221-錐とは">12.2.1 錐とは</h3>
+<p>では、圏 <strong>2</strong> を一般化して、恒等射以外の射を持ち、対象も2つとは限らないようなパターンの圏 <strong>I</strong> を考えます。<strong>I</strong> は小さく (つまり、対象の集まりや Hom 集合が集合として表される)、有限な圏とします。例として、以下のような集合を考えます:</p>
+<pre><code>I = { 1, 2, 3, 4 }
+</code></pre><p>圏 <strong>2</strong> から任意の圏 <strong>C</strong> への関手 D と Δc を考えたように、圏 <strong>I</strong> から圏 <strong>C</strong> への2つの関手を考えます。</p>
+<p>まず、関手 D は、圏 <strong>I</strong> から圏 <strong>C</strong> への関手です。この関手 (あるいはその像) を図式 (diagram) と呼びます。</p>
+<pre><code>例)
+D (1) = a
+D (2) = b
+D (3) = c
+D (4) = d
+</code></pre><p><img src="images/12_functor_from_category_i.png" alt="パターンの圏 I から圏 C への関手 D (図式)"></p>
+<p>次に、錐の頂点として <strong>C</strong> の対象 c を選びます。この c への定関手 Δc を考えましょう。定関手の定義より、この関手は圏 <strong>I</strong> の任意の対象を c に写し、任意の射を c の恒等射に写します。</p>
+<pre><code>例)
+Δc (1) = c
+Δc (2) = c
+Δc (3) = c
+Δc (4) = c
+</code></pre><p><img src="images/12_const_functor_from_category_i.png" alt="パターンの圏 I から圏 C への定関手 Δc"></p>
+<p>そして、圏 <strong>I</strong> から圏 <strong>C</strong> への関手 D と Δc の間の自然変換 α を考えます。Δc から D への自然変換の各成分は、圏 <strong>C</strong> における射になります。</p>
+<pre><code>例)
+α1: c -&gt; a
+α2: c -&gt; b
+α3: c -&gt; c
+α4: c -&gt; d
+</code></pre><p><img src="images/12_natural_transformation.png" alt="Δc から D への自然変換 α"></p>
+<p>α が自然性を満たすのであれば、上図の図式は可換図式になります。自然変換αは、対象 c を図式 (D による <strong>I</strong> の像) に繋げる射の束になります。これはまさに、c を頂点とするような錐を形成しています。</p>
+<p><img src="images/12_natural_transformation_diagram.png" alt="対象 c を頂点とするような錐"></p>
+<p>積を定義したときのように、この錐についても普遍的な錐を考えることができます。次に普遍的な錐である極限について、定義していきます。</p>
+<h3 id="1222-極限の定義">12.2.2 極限の定義</h3>
+<p>普遍的な錐を得るには、錐の間の対応を定義する必要があります。すなわち、錐を対象として錐の間の射をもつ圏を定義する必要があります。錐は2つの関手Δc と D によって導かれたものでした。関手 D は圏の図式を定義したものなので固定でありたいです。したがって、錐の間の射は、錐の頂点すなわち定関手による像 c 間の対応 f: c&apos; -&gt; c によって決定されます。なお、この射は次の可換性を満たす必要があります:</p>
+<pre><code>β === α . f
+</code></pre><p>ただし、α は定関手 Δc から関手 D への自然変換であり、β は定関手 Δc&apos; から関手 D への自然変換であるとします。</p>
+<p><img src="images/12_category_of_corn.png" alt="錐の可換性を保つ射"></p>
+<p>このような射 f は合成ができ、恒等射も存在します。したがって、この射によって錐は圏を構成します。</p>
+<p>さて、このような錐の圏における終対象が図式 D の<strong>極限</strong> (limit) と呼ばれ、しばしば <code>LimD</code> と書かれます。短縮形として、この錐における頂点を極限（あるいは極限対象）と呼ぶことがあります。</p>
+<p>終対象の定義は、任意の対象からその射への一意の射が存在することでした。この場合においては、任意の錐の頂点から極限の頂点に対して、図式の構造を保持する一意の射が存在することを意味します。</p>
+<h2 id="123-余極限">12.3 余極限</h2>
+<p>Coming soon</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"12章 極限と余極限","level":"1.3.2","depth":2,"next":{"title":"付録","level":"1.4","depth":1,"ref":"","articles":[{"title":"表記法","level":"1.4.1","depth":2,"path":"00_Notation.md","ref":"00_Notation.md","articles":[]},{"title":"Writer 圏における射の合成と、恒等射と、関手について","level":"1.4.2","depth":2,"path":"tips/08_2_Writer_Functor.md","ref":"tips/08_2_Writer_Functor.md","articles":[]}]},"previous":{"title":"（工事中）11章 宣言型プログラミング","level":"1.3.1","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdocOutput","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Tomoki Mizogami","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"12_Limits_and_Colimits.md","mtime":"2021-03-09T16:51:28.799Z","type":"markdown"},"gitbook":{"version":"3.6.17","time":"2021-03-09T16:51:30.318Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
