@@ -6,8 +6,8 @@
         <title>8章 関手性 · Scala で始める圏論入門</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="圏論の勉強記録です。本章では、関手についてさらに深掘ります。Writer 関手や双関手、Reader 関手、反変関手、Profunctor、Hom 関手について学びます。">
-        <meta name="generator" content="HonKit 3.6.17">
-        <meta name="author" content="Tomoki Mizogami">
+        <meta name="generator" content="HonKit 5.1.4">
+        <meta name="author" content="taretmch">
         
         
     
@@ -16,7 +16,7 @@
     
             
                 
-                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                <link rel="stylesheet" href="gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
                 
@@ -467,7 +467,7 @@
 <p>対象は、2つの Scala 圏の対象、すなわち型 <code>A</code> と型 <code>B</code> のタプルです。例として、<code>A</code> を <code>Int</code> とし、<code>B</code> を <code>Long</code> としておきます。</p>
 <pre><code class="lang-scala"><span class="hljs-comment">/** Object declaration */</span>
 <span class="hljs-keyword">val</span> obj = (<span class="hljs-number">3</span>, <span class="hljs-number">4</span>L)
-<span class="hljs-comment">// obj: (Int, Long) = (3, 4L)</span>
+<span class="hljs-comment">// obj: Tuple2[Int, Long] = (3, 4L)</span>
 </code></pre>
 <p>直積圏における射 <code>func1</code> と <code>func2</code> は、Scala 圏の2つの射、すなわち関数 <code>A =&gt; C</code> 関数 <code>B =&gt; D</code> のタプルです。<code>func1</code> は第1引数として <code>Int</code> 型のインクリメント関数 <code>increment</code> を持ち、第2引数として <code>Long</code> 型の数を2倍する関数 <code>doubleL</code> を持ちます。<code>func2</code> は第1引数として <code>Int</code> 型の数が偶数かどうか判定する関数 <code>isEven</code> を持ち、第2引数として <code>Long</code> 型の数が奇数かどうか判定する関数 <code>isOddL</code> を持ちます。</p>
 <pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">increment</span></span>: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Int</span> = _ + <span class="hljs-number">1</span>
@@ -480,32 +480,38 @@
 <span class="hljs-comment">/** Morphism declaration */</span>
 <span class="hljs-keyword">val</span> func1 = <span class="hljs-type">ProductFunction</span>((increment, doubleL))
 <span class="hljs-comment">// func1: ProductFunction[Int, Long, Int, Long] = ProductFunction(</span>
-<span class="hljs-comment">//   run = (&lt;function1&gt;, &lt;function1&gt;)</span>
+<span class="hljs-comment">//   run = (</span>
+<span class="hljs-comment">//     repl.MdocSession$MdocApp$$Lambda/0x00007feaae278758@69b606c0,</span>
+<span class="hljs-comment">//     repl.MdocSession$MdocApp$$Lambda/0x00007feaae278b38@5cc89921</span>
+<span class="hljs-comment">//   )</span>
 <span class="hljs-comment">// )</span>
 <span class="hljs-keyword">val</span> func2 = <span class="hljs-type">ProductFunction</span>((isEven, isOddL))
 <span class="hljs-comment">// func2: ProductFunction[Int, Long, Boolean, Boolean] = ProductFunction(</span>
-<span class="hljs-comment">//   run = (&lt;function1&gt;, &lt;function1&gt;)</span>
+<span class="hljs-comment">//   run = (</span>
+<span class="hljs-comment">//     repl.MdocSession$MdocApp$$Lambda/0x00007feaae279218@60bd945a,</span>
+<span class="hljs-comment">//     repl.MdocSession$MdocApp$$Lambda/0x00007feaae2795f8@1ae49f32</span>
+<span class="hljs-comment">//   )</span>
 <span class="hljs-comment">// )</span>
 </code></pre>
 <p>それぞれの関数の定義は以下のようになっています。</p>
 <p><code>ProductFunction</code> クラスには関数適用のために <code>apply</code> メソッドをはやしているので、以下のように関数適用の結果を出力できます。</p>
 <pre><code class="lang-scala"><span class="hljs-comment">/** Apply morphism to object */</span>
 <span class="hljs-keyword">val</span> func1Apply: (<span class="hljs-type">Int</span>, <span class="hljs-type">Long</span>)        = func1(obj)
-<span class="hljs-comment">// func1Apply: (Int, Long) = (4, 8L)</span>
+<span class="hljs-comment">// func1Apply: Tuple2[Int, Long] = (4, 8L)</span>
 <span class="hljs-keyword">val</span> func2Apply: (<span class="hljs-type">Boolean</span>, <span class="hljs-type">Boolean</span>) = func2(obj)
-<span class="hljs-comment">// func2Apply: (Boolean, Boolean) = (false, false)</span>
+<span class="hljs-comment">// func2Apply: Tuple2[Boolean, Boolean] = (false, false)</span>
 </code></pre>
 <p>この直積圏における射の合成は、先ほど定義した <code>andThen</code> メソッドおよび <code>compose</code> メソッドを使って構築できます。この合成関数は、第1引数として <code>Int</code> 型の数が奇数かどうか判定する（インクリメントして偶数かどうか判定するので）関数を持ち、第2引数として常に <code>false</code> を返す（数を2倍したあと奇数かどうかを判定するので）関数を持ちます。</p>
 <pre><code class="lang-scala"><span class="hljs-comment">/** Compose morphism */</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">func2ComposeFunc1</span> </span>= func2 compose func1
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">func1AndThenFunc2</span> </span>= func1 andThen func2
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">func2ComposeFunc1</span> </span>= func2.compose(func1)
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">func1AndThenFunc2</span> </span>= func1.andThen(func2)
 </code></pre>
 <p>これらの関数に <code>(3, 4L)</code> を適用すると以下の結果が返ります。</p>
 <pre><code class="lang-scala"><span class="hljs-comment">/** Apply composition of morphism */</span>
 <span class="hljs-keyword">val</span> result1 = func2ComposeFunc1(obj)
-<span class="hljs-comment">// result1: (Boolean, Boolean) = (true, false)</span>
+<span class="hljs-comment">// result1: Tuple2[Boolean, Boolean] = (true, false)</span>
 <span class="hljs-keyword">val</span> result2 = func1AndThenFunc2(obj)
-<span class="hljs-comment">// result2: (Boolean, Boolean) = (true, false)</span>
+<span class="hljs-comment">// result2: Tuple2[Boolean, Boolean] = (true, false)</span>
 </code></pre>
 <h3 id="813-双関手の一般的な定義">8.1.3 双関手の一般的な定義</h3>
 <p>さて、2つの圏の対象と射、射の合成をそれぞれペアにすることによって、直積圏を定義しました。双関手の話に戻りましょう。</p>
@@ -527,7 +533,7 @@
 <h3 id="814-tuple2-は双関手">8.1.4 Tuple2 は双関手</h3>
 <p>積は、2つの型パラメータから構築されます。</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> tuple: <span class="hljs-type">Tuple2</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">String</span>] = (<span class="hljs-number">33</span>, <span class="hljs-string">&quot;thirty three&quot;</span>)
-<span class="hljs-comment">// tuple: (Int, String) = (33, &quot;thirty three&quot;)</span>
+<span class="hljs-comment">// tuple: Tuple2[Int, String] = (33, &quot;thirty three&quot;)</span>
 </code></pre>
 <p><code>Tuple2</code> は2つの型パラメータを持つため、双関手の候補になります。</p>
 <p>実際、積を構築する<strong>積関手</strong> <code>Tuple2</code> は、双関手の例です。</p>
@@ -564,7 +570,7 @@
 <p>Writer 圏における対象は任意の型 <code>A</code> で、<code>A</code> から <code>A</code> への射は <code>A =&gt; Writer[L, A]</code> だと定義しました。</p>
 <p>実は、Writer 圏における射の合成をうまく活用することによって、<code>Writer</code> 型についての <code>fmap</code> メソッドを実装することができます。そのため、<code>Writer</code> 型は関手であって、Writer 関手と呼ばれます。</p>
 <pre><code class="lang-scala"><span class="hljs-comment">/** Writer functor */</span>
-<span class="hljs-keyword">implicit</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">WriterFunctor</span></span>[<span class="hljs-type">L</span>](<span class="hljs-keyword">implicit</span> mn: <span class="hljs-type">Monoid</span>[<span class="hljs-type">L</span>]): <span class="hljs-type">Functor</span>[<span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, ?]] = <span class="hljs-keyword">new</span> <span class="hljs-type">Functor</span>[<span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, ?]] {
+<span class="hljs-keyword">implicit</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">WriterFunctor</span></span>[<span class="hljs-type">L</span>](<span class="hljs-keyword">implicit</span> mn: <span class="hljs-type">Monoid</span>[<span class="hljs-type">L</span>]): <span class="hljs-type">Functor</span>[<span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, *]] = <span class="hljs-keyword">new</span> <span class="hljs-type">Functor</span>[<span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, *]] {
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>)(fa: <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">A</span>]): <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">B</span>] =
     (identity[<span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">A</span>]] &gt;=&gt; (a =&gt; <span class="hljs-type">Writer</span>.pure[<span class="hljs-type">L</span>, <span class="hljs-type">B</span>](f(a))))(fa)
 }
@@ -573,7 +579,7 @@
 <h2 id="83-reader-関手">8.3 Reader 関手</h2>
 <p>前章では型 <code>A</code> を <code>R =&gt; A</code> に対応させ、関数 <code>A =&gt; B</code> を <code>R =&gt; B</code> に引き上げる Reader 関手を考えました。</p>
 <pre><code class="lang-scala"><span class="hljs-comment">/** Reader functor */</span>
-<span class="hljs-keyword">implicit</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Function1Functor</span></span>[<span class="hljs-type">R</span>]: <span class="hljs-type">Functor</span>[<span class="hljs-type">Function1</span>[<span class="hljs-type">R</span>, ?]] = <span class="hljs-keyword">new</span> <span class="hljs-type">Functor</span>[<span class="hljs-type">Function1</span>[<span class="hljs-type">R</span>, ?]] {
+<span class="hljs-keyword">implicit</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Function1Functor</span></span>[<span class="hljs-type">R</span>]: <span class="hljs-type">Functor</span>[<span class="hljs-type">Function1</span>[<span class="hljs-type">R</span>, *]] = <span class="hljs-keyword">new</span> <span class="hljs-type">Functor</span>[<span class="hljs-type">Function1</span>[<span class="hljs-type">R</span>, *]] {
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>)(fa: <span class="hljs-type">R</span> =&gt; <span class="hljs-type">A</span>): (<span class="hljs-type">R</span> =&gt; <span class="hljs-type">B</span>) =
     f compose fa
 }
@@ -624,7 +630,7 @@
 </code></pre>
 <p><code>Function1</code> の第1引数に対して <code>Contravariant</code> のインスタンスを以下のように実装できます。型の変数は違うものの、先ほどの見た <code>first</code> メソッドと同じ実装になっているはずです。</p>
 <pre><code class="lang-scala"><span class="hljs-comment">/** Reader contravariant functor */</span>
-<span class="hljs-keyword">implicit</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Function1Contravariant</span></span>[<span class="hljs-type">R</span>]: <span class="hljs-type">Contravariant</span>[<span class="hljs-type">Function1</span>[?, <span class="hljs-type">R</span>]] = <span class="hljs-keyword">new</span> <span class="hljs-type">Contravariant</span>[<span class="hljs-type">Function1</span>[?, <span class="hljs-type">R</span>]] {
+<span class="hljs-keyword">implicit</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Function1Contravariant</span></span>[<span class="hljs-type">R</span>]: <span class="hljs-type">Contravariant</span>[<span class="hljs-type">Function1</span>[*, <span class="hljs-type">R</span>]] = <span class="hljs-keyword">new</span> <span class="hljs-type">Contravariant</span>[<span class="hljs-type">Function1</span>[*, <span class="hljs-type">R</span>]] {
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">contramap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">A</span>)(fa: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">R</span>): (<span class="hljs-type">B</span> =&gt; <span class="hljs-type">R</span>) =
     fa compose f
 }
@@ -728,7 +734,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、関手についてさらに深掘ります。Writer 関手や双関手、Reader 関手、反変関手、Profunctor、Hom 関手について学びます。","title":"8章 関手性","level":"1.2.8","depth":2,"next":{"title":"（工事中）9章 関数型","level":"1.2.9","depth":2,"ref":"","articles":[]},"previous":{"title":"7章 関手","level":"1.2.7","depth":2,"path":"07_Functor.md","ref":"07_Functor.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdocOutput","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Tomoki Mizogami","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"08_Functoriality.md","mtime":"2021-03-09T16:51:27.390Z","type":"markdown"},"gitbook":{"version":"3.6.17","time":"2021-03-09T16:51:30.318Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、関手についてさらに深掘ります。Writer 関手や双関手、Reader 関手、反変関手、Profunctor、Hom 関手について学びます。","title":"8章 関手性","level":"1.2.8","depth":2,"next":{"title":"（工事中）9章 関数型","level":"1.2.9","depth":2,"ref":"","articles":[]},"previous":{"title":"7章 関手","level":"1.2.7","depth":2,"path":"07_Functor.md","ref":"07_Functor.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"08_Functoriality.md","mtime":"2024-06-22T15:10:07.184Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-22T15:10:09.796Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

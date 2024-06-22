@@ -6,8 +6,8 @@
         <title>3章 いろいろな圏 · Scala で始める圏論入門</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="圏論の勉強記録です。本章では、具体的な圏の例を通して、圏の理解を深めていきます。">
-        <meta name="generator" content="HonKit 3.6.17">
-        <meta name="author" content="Tomoki Mizogami">
+        <meta name="generator" content="HonKit 5.1.4">
+        <meta name="author" content="taretmch">
         
         
     
@@ -16,7 +16,7 @@
     
             
                 
-                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                <link rel="stylesheet" href="gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
                 
@@ -394,9 +394,9 @@
 <ul>
 <li><a href="#31-空圏">3.1 空圏</a></li>
 <li><a href="#32-単純なグラフ">3.2 単純なグラフ</a></li>
-<li><a href="#33-順序集合">3.3 順序集合</a></li>
-<li><a href="#34-集合としてのモノイド">3.4 集合としてのモノイド</a></li>
-<li><a href="#35-圏としてのモノイド">3.5 圏としてのモノイド</a></li>
+<li><a href="#33-自由圏">3.3 自由圏</a></li>
+<li><a href="#34-順序集合">3.4 順序集合</a></li>
+<li><a href="#35-モノイド">3.5 モノイド</a></li>
 <li><a href="#まとめ">まとめ</a></li>
 </ul>
 <h2 id="31-空圏">3.1 空圏</h2>
@@ -408,68 +408,94 @@
 <p>そして、恒等射は任意の対象に対して存在していればよく、対象が存在しない場合では単位律が満たされていると言えます。</p>
 <p>したがって、空圏は圏と言えます。</p>
 <h2 id="32-単純なグラフ">3.2 単純なグラフ</h2>
-<p>状態遷移図のように単純なグラフは、圏とみなすことができます。</p>
-<p>一般に、そのような単純なグラフは頂点の集合 N と辺の集合 E とのペア (N, E) からなります。</p>
+<p>状態遷移図のように単純なグラフは、圏とみなせます。一般に、そのような単純なグラフは頂点の集合 <code>N</code> と辺の集合 <code>E</code> とのペア <code>(N, E)</code> からなります。</p>
 <p>グラフを圏と解釈すると、頂点を対象として、辺を射として捉えることができます。</p>
 <p><img src="images/03_direct_graph.png" alt="有向グラフ"></p>
-<h2 id="33-順序集合">3.3 順序集合</h2>
+<h2 id="33-自由圏">3.3 自由圏</h2>
+<p>対象を矢で接続するだけで、圏を作ることができます。まず各対象に恒等射を追加します。次に、終点が他の始点と一致するような2つの矢に対して新しい矢を追加し、合成射を追加する。これを繰り返していくことによって、圏を作りあげることができます。</p>
+<p>このプロセスは、グラフ <code>(N, E)</code> を入力に圏を作っていくプロセスのように見えます。一般的に、このように作られる圏は、与えられたグラフによって生成される<strong>自由圏</strong> (free category) と呼ばれます。</p>
+<p>今後、自由モノイド、自由モナドとして、具体的な例を見ていくことになるでしょう。</p>
+<h2 id="34-順序集合">3.4 順序集合</h2>
 <p>ある集合 <code>A</code> とその集合上の関係 <code>R</code> とのペア <code>(A, R)</code> である順序集合もまた、圏の例です。</p>
 <p>例えば、自然数全体の集合 <code>N = { 0, 1, ..., n, ... }</code> と関係 <code>&lt;=</code> (〇〇以下である) の順序集合 <code>(N, &lt;=)</code> は、圏として以下のように図式化されます。</p>
 <p><img src="images/natural_number_and_less_than_or_equals_to.png" alt="圏としての順序集合の例"></p>
 <p>自然数全体の集合と関係 <code>&lt;=</code> の順序集合では、自然数が対象、自然数間の関係、例えば <code>0 &lt;= 1</code> <code>1 &lt;= 3</code> などが射になります。</p>
-<h2 id="34-集合としてのモノイド">3.4 集合としてのモノイド</h2>
+<h2 id="35-モノイド">3.5 モノイド</h2>
 <p><strong>モノイド</strong> (Monoid) は、単純な構造ではありますが、非常に強力な概念です。</p>
 <p>加算と乗算のどちらの計算にも、このモノイドという概念が密接に関わっています。</p>
-<p>モノイドは群論における概念ですが、圏の一例でもあります。コンピュータサイエンスでは、情報理論の分野にも現れることがあると思います。</p>
-<p>プログラミングにおいても、文字列やリスト、畳み込み可能なデータ構造、Future などとして現れます。</p>
+<p>モノイドは群論における概念ですが、圏の一例でもあります。コンピュータサイエンスでは、情報理論の分野にも現れることがあると思います。プログラミングにおいても、文字列やリスト、畳み込み可能なデータ構造、Future などとして現れます。</p>
 <p>さて、モノイドの定義についてですが、モノイドは、二項演算を備えた集合として定義されます。この二項演算が満たすべき性質は、結合律と、単位元が存在することのみです。</p>
 <p>単位元は、加算における 0、乗算における 1 のことを表します。結合律は、加算の場合だと</p>
 <pre><code>(a + b) + c = a + (b + c)
 </code></pre><p>が満たされることです。</p>
 <p><img src="images/03_monoid.png" alt="加算モノイド"></p>
-<p>結合律と単位元を備えた型クラス <code>Monoid</code> は、以下のように定義されます。</p>
-<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Monoid</span>[<span class="hljs-type">A</span>] </span>{
+<p>二項演算とその単位元を備えた型クラス <code>Monoid</code> は、以下のように定義されます。</p>
+<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Monoid</span>[<span class="hljs-type">A</span>]</span>:
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">combine</span></span>(v1: <span class="hljs-type">A</span>, v2: <span class="hljs-type">A</span>): <span class="hljs-type">A</span>
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">empty</span></span>: <span class="hljs-type">A</span>
-}
 </code></pre>
-<p><code>combine</code> が結合律を満たす二項演算で、<code>empty</code> がその二項演算の単位元を表します。</p>
-<p>ここで注意することは、この型クラスの定義だけでは二項演算の結合律と単位元の存在を保証できないことです。したがって、二項演算がモノイドの性質を満たすかどうかは、その実装によります。</p>
-<p><code>Int</code> の加算に関するモノイドのインスタンス <code>IntMonoid</code> は、以下のように定義できます。</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">implicit</span> <span class="hljs-keyword">val</span> <span class="hljs-type">IntMonoid</span>: <span class="hljs-type">Monoid</span>[<span class="hljs-type">Int</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">Monoid</span>[<span class="hljs-type">Int</span>] {
-  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">combine</span></span>(a: <span class="hljs-type">Int</span>, b: <span class="hljs-type">Int</span>): <span class="hljs-type">Int</span> = a + b
+<p><code>combine</code> が二項演算で、<code>empty</code> がその二項演算の単位元を表します。</p>
+<p><code>combine</code> が結合律を満たすかどうか、また単位元の存在の保証は実装によります。したがって、 <code>Monoid</code> のインスタンスを定義するときは、モノイドの性質を満たすように実装しなければなりません。</p>
+<p><code>Int</code> 型に対しての加算に関するモノイドのインスタンスを定義してみると、以下のようになります。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">given</span> <span class="hljs-type">Monoid</span>[<span class="hljs-type">Int</span>] <span class="hljs-keyword">with</span>
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">combine</span></span>(v1: <span class="hljs-type">Int</span>, v2: <span class="hljs-type">Int</span>): <span class="hljs-type">Int</span> = v1 + v2
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">empty</span></span>: <span class="hljs-type">Int</span> = <span class="hljs-number">0</span>
-}
 </code></pre>
-<pre><code class="lang-scala"><span class="hljs-keyword">import</span> hamcat.<span class="hljs-type">Implicits</span>._
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> intMonoid = summon[<span class="hljs-type">Monoid</span>[<span class="hljs-type">Int</span>]]
+<span class="hljs-comment">// intMonoid: given_Monoid_Int = repl.MdocSession$MdocApp$given_Monoid_Int$@4599e2c9</span>
 
-<span class="hljs-type">IntMonoid</span>.combine(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>)
-<span class="hljs-comment">// res0: Int = 4</span>
-<span class="hljs-type">IntMonoid</span>.empty
-<span class="hljs-comment">// res1: Int = 0</span>
-<span class="hljs-type">IntMonoid</span>.combine(<span class="hljs-number">2</span>, <span class="hljs-type">IntMonoid</span>.empty)
-<span class="hljs-comment">// res2: Int = 2</span>
+<span class="hljs-comment">// 結合律の確認</span>
+<span class="hljs-comment">// (1 + 10) + 100</span>
+intMonoid.combine(intMonoid.combine(<span class="hljs-number">1</span>, <span class="hljs-number">10</span>), <span class="hljs-number">100</span>)
+<span class="hljs-comment">// res0: Int = 111</span>
+
+<span class="hljs-comment">// 1 + (10 + 100)</span>
+intMonoid.combine(<span class="hljs-number">1</span>, intMonoid.combine(<span class="hljs-number">10</span>, <span class="hljs-number">100</span>))
+<span class="hljs-comment">// res1: Int = 111</span>
+
+<span class="hljs-comment">// 単位律の確認</span>
+<span class="hljs-comment">// 100 + 0</span>
+intMonoid.combine(<span class="hljs-number">100</span>, intMonoid.empty)
+<span class="hljs-comment">// res2: Int = 100</span>
 </code></pre>
-<h2 id="35-圏としてのモノイド">3.5 圏としてのモノイド</h2>
-<p>前節では、モノイドを集合と二項演算のペアとして考えました。</p>
-<p>しかし、モノイドには圏論においてもう少し重要な側面があります。それは、対象がただ1つの圏をモノイドと言えることです。</p>
-<p>先ほど見たモノイドの性質 - 二項演算の結合律と単位元の存在 - は、まさに圏の公理における射の結合律と単位律です。そして、モノイドは二項演算をただ1つの集合に対して定義しています。これは、ただ1つの対象からそれ自身への射を定義していることと同義です。</p>
-<p>圏の特別な場合がモノイドであることから、モノイドの重要性が見えてきましたね。そして、モノイドが満たすなんらかの性質や構造を見ることができれば、それを一般化して圏が満たすなんらかの性質や構造として議論できることがわかります。</p>
-<p>では、加算のモノイドを圏として捉えるとどのようになるか、考えてみましょう。</p>
-<p>加算は二項演算なので、2つの入力があります。ここで、1つだけ入力 <code>n</code> を与えれば、<code>n</code> を足す演算 n-adder なるものを考えることができます。</p>
-<p>この演算にもう一つの入力 <code>m</code> を与えれば、<code>m + n</code> が出力として得られます。これは <code>m</code> と <code>n</code> の加算です。</p>
-<p>n-adder は、数を対象とする圏における射であるとみなせます。この射 n-adder は結合律を満たすでしょうか？</p>
-<p>加算に関する結合律は</p>
-<pre><code>(a + b) + c = a + (b + c)
-</code></pre><p>とかけます。これを n-adder で書くと</p>
-<pre><code>c-adder (b-adder (a)) = a-adder (c-adder (b))
-</code></pre><p>関数をカリー化させることでもう少しわかりやすく書くと</p>
-<pre><code>add (c) (add (b) (a)) = add (a) (add (c) (b))
-</code></pre><p>となります。これは満たされそうですね。</p>
-<p>次に単位律です。圏における単位律は、任意の対象について恒等射が存在する、というものでした。</p>
-<p>任意の数 <code>n</code> に対する恒等射は 0-adder です。<code>n + 0 = n</code> であるからです。</p>
-<p>以上のことから、モノイドは圏の公理における結合律と単位律を満たします。</p>
-<p><img src="images/03_monoid_as_category.png" alt="圏としてのモノイド"></p>
+<p>余談ですが、以下のように拡張メソッドを定義することにより、モノイドを利用しやすくなります。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">extension</span> [<span class="hljs-type">A</span>](v1: <span class="hljs-type">A</span>)
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">|+|</span></span>(v2: <span class="hljs-type">A</span>)(<span class="hljs-keyword">using</span> <span class="hljs-type">Monoid</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">A</span> =
+    summon[<span class="hljs-type">Monoid</span>[<span class="hljs-type">A</span>]].combine(v1, v2)
+</code></pre>
+<pre><code class="lang-scala">(<span class="hljs-number">1</span> |+| <span class="hljs-number">10</span>) |+| <span class="hljs-number">100</span>
+<span class="hljs-comment">// res3: Int = 111</span>
+
+<span class="hljs-number">1</span> |+| (<span class="hljs-number">10</span> |+| <span class="hljs-number">100</span>)
+<span class="hljs-comment">// res4: Int = 111</span>
+
+<span class="hljs-number">100</span> |+| summon[<span class="hljs-type">Monoid</span>[<span class="hljs-type">Int</span>]].empty
+<span class="hljs-comment">// res5: Int = 100</span>
+</code></pre>
+<p><code>Int</code> 型だと恩恵は薄いですが、<code>Option</code> 型に対してモノイドのインスタンスを定義すると便利に感じられるかもしれません。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">given</span> [<span class="hljs-type">A</span>](<span class="hljs-keyword">using</span> m: <span class="hljs-type">Monoid</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">Monoid</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]] <span class="hljs-keyword">with</span>
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">combine</span></span>(v1: <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>], v2: <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] =
+    (v1, v2) <span class="hljs-keyword">match</span>
+      <span class="hljs-keyword">case</span> (<span class="hljs-type">Some</span>(a), <span class="hljs-type">Some</span>(b)) =&gt; <span class="hljs-type">Some</span>(m.combine(a, b))
+      <span class="hljs-keyword">case</span> (<span class="hljs-type">Some</span>(a), <span class="hljs-type">None</span>) =&gt; <span class="hljs-type">Some</span>(a)
+      <span class="hljs-keyword">case</span> (<span class="hljs-type">None</span>, <span class="hljs-type">Some</span>(b)) =&gt; <span class="hljs-type">Some</span>(b)
+      <span class="hljs-keyword">case</span> (<span class="hljs-type">None</span>, <span class="hljs-type">None</span>) =&gt; <span class="hljs-type">None</span>
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">empty</span></span>: <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = <span class="hljs-type">None</span>
+</code></pre>
+<pre><code class="lang-scala"><span class="hljs-type">Option</span>(<span class="hljs-number">1</span>) |+| <span class="hljs-type">Option</span>(<span class="hljs-number">3</span>)
+<span class="hljs-comment">// res6: Option[Int] = Some(value = 4)</span>
+
+<span class="hljs-type">Option</span>(<span class="hljs-number">1</span>) |+| <span class="hljs-type">None</span>
+<span class="hljs-comment">// res7: Option[Int] = Some(value = 1)</span>
+
+<span class="hljs-type">None</span> |+| <span class="hljs-type">Option</span>(<span class="hljs-number">3</span>)
+<span class="hljs-comment">// res8: Option[Int] = Some(value = 3)</span>
+
+<span class="hljs-keyword">val</span> none: <span class="hljs-type">Option</span>[<span class="hljs-type">Int</span>] = <span class="hljs-type">None</span>
+<span class="hljs-comment">// none: Option[Int] = None</span>
+none |+| none
+<span class="hljs-comment">// res9: Option[Int] = None</span>
+</code></pre>
 <h2 id="まとめ">まとめ</h2>
 <ul>
 <li>対象が1つもない圏も、また圏である。</li>
@@ -480,16 +506,6 @@
 <li>モノイド (Int, add)</li>
 <li>加算 add(n1, n2) は結合律を満たす</li>
 <li>加算 add の単位元は 0</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>対象がただ1つの圏をモノイドという。<ul>
-<li>例<ul>
-<li>対象: Int</li>
-<li>射: add: Int =&gt; Int =&gt; Int</li>
-<li>add (n) は結合律を満たす</li>
-<li>恒等射: add (0)</li>
 </ul>
 </li>
 </ul>
@@ -538,7 +554,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、具体的な圏の例を通して、圏の理解を深めていきます。","title":"3章 いろいろな圏","level":"1.2.3","depth":2,"next":{"title":"4章 Kleisli圏","level":"1.2.4","depth":2,"path":"04_Kleisli_category.md","ref":"04_Kleisli_category.md","articles":[]},"previous":{"title":"2章 型と関数の圏","level":"1.2.2","depth":2,"path":"02_Types_and_functions.md","ref":"02_Types_and_functions.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdocOutput","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Tomoki Mizogami","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"03_Categories_great_and_small.md","mtime":"2021-03-09T16:51:23.710Z","type":"markdown"},"gitbook":{"version":"3.6.17","time":"2021-03-09T16:51:30.318Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、具体的な圏の例を通して、圏の理解を深めていきます。","title":"3章 いろいろな圏","level":"1.2.3","depth":2,"next":{"title":"4章 Kleisli圏","level":"1.2.4","depth":2,"path":"04_Kleisli_category.md","ref":"04_Kleisli_category.md","articles":[]},"previous":{"title":"2章 型と関数の圏","level":"1.2.2","depth":2,"path":"02_Types_and_functions.md","ref":"02_Types_and_functions.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"03_Categories_great_and_small.md","mtime":"2024-06-22T15:10:02.284Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-22T15:10:09.796Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

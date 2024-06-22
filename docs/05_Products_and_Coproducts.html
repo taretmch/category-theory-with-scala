@@ -6,8 +6,8 @@
         <title>5, 6章 積と余積 · Scala で始める圏論入門</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="圏論の勉強記録です。本章では、圏に関するいくつかの普遍的な構造について学んでいきます。始対象、終対象、積、そして余積について学びます。">
-        <meta name="generator" content="HonKit 3.6.17">
-        <meta name="author" content="Tomoki Mizogami">
+        <meta name="generator" content="HonKit 5.1.4">
+        <meta name="author" content="taretmch">
         
         
     
@@ -16,7 +16,7 @@
     
             
                 
-                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                <link rel="stylesheet" href="gitbook/@honkit/honkit-plugin-highlight/website.css">
                 
             
                 
@@ -487,7 +487,7 @@
 <p>さて、もう1つの普遍的な構造として、積 (product) について見ていきましょう。</p>
 <p>簡単に言えば、積は2つの対象のタプルを表します。Scala において、積はタプルやケースクラスとして組み込まれています。</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> intBoolTuple: (<span class="hljs-type">Int</span>, <span class="hljs-type">Boolean</span>) = (<span class="hljs-number">44</span>, <span class="hljs-literal">true</span>)
-<span class="hljs-comment">// intBoolTuple: (Int, Boolean) = (44, true)</span>
+<span class="hljs-comment">// intBoolTuple: Tuple2[Int, Boolean] = (44, true)</span>
 </code></pre>
 <pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Pair</span>(<span class="hljs-params">a: <span class="hljs-type">Int</span>, b: <span class="hljs-type">Boolean</span></span>)</span>
 
@@ -495,7 +495,7 @@
 <span class="hljs-comment">// intBoolPair: Pair = Pair(a = 44, b = true)</span>
 </code></pre>
 <p>Scala には <a href="https://github.com/scala/scala/blob/v2.13.3/src/library/scala/Product.scala" target="_blank">Product</a> というトレイトがあり、これが積を表します。タプルやケースクラスはすべて <code>Product</code> を継承しています。</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">final</span> <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tuple2</span>[@specialized(<span class="hljs-type">Int</span>, <span class="hljs-type">Long</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Char</span>, <span class="hljs-type">Boolean</span>/*, <span class="hljs-type">AnyRef</span>*/) +<span class="hljs-type">T1</span>, @specialized(<span class="hljs-type">Int</span>, <span class="hljs-type">Long</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Char</span>, <span class="hljs-type">Boolean</span>/*, <span class="hljs-type">AnyRef</span>*/) +<span class="hljs-type">T2</span>](<span class="hljs-params">_1: <span class="hljs-type">T1</span>, _2: <span class="hljs-type">T2</span></span>)</span>
+<pre><code class="lang-scala"><span class="hljs-keyword">final</span> <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tuple2</span>[@specialized(<span class="hljs-type">Int</span>, <span class="hljs-type">Long</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Char</span>, <span class="hljs-type">Boolean</span><span class="hljs-comment">/*, AnyRef*/</span>) +<span class="hljs-type">T1</span>, @specialized(<span class="hljs-type">Int</span>, <span class="hljs-type">Long</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Char</span>, <span class="hljs-type">Boolean</span><span class="hljs-comment">/*, AnyRef*/</span>) +<span class="hljs-type">T2</span>](<span class="hljs-params">_1: <span class="hljs-type">T1</span>, _2: <span class="hljs-type">T2</span></span>)</span>
   <span class="hljs-keyword">extends</span> <span class="hljs-type">Product2</span>[<span class="hljs-type">T1</span>, <span class="hljs-type">T2</span>]
 </code></pre>
 <p>ケースクラスは、コンパイル時に自動的に <code>Product</code> をミックスインします [1]。</p>
@@ -522,18 +522,18 @@ projB compose m == xB
 <p>積の例として、<code>A</code> を <code>String</code>、<code>B</code> を <code>Int</code> とし、<code>X</code> を <code>List[Int]</code> とします。</p>
 <p>そして、<code>List[Int]</code> の <code>String</code> への射影と、<code>Int</code> への射影をそれぞれ以下のように定義します：</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> listToString: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>] =&gt; <span class="hljs-type">String</span> = _.toString
-<span class="hljs-comment">// listToString: List[Int] =&gt; String = &lt;function1&gt;</span>
+<span class="hljs-comment">// listToString: Function1[List[Int], String] = repl.MdocSession$MdocApp$$Lambda/0x00007feaae255000@48442f9b</span>
 
 <span class="hljs-keyword">val</span> listToInt: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>] =&gt; <span class="hljs-type">Int</span> = _.length
-<span class="hljs-comment">// listToInt: List[Int] =&gt; Int = &lt;function1&gt;</span>
+<span class="hljs-comment">// listToInt: Function1[List[Int], Int] = repl.MdocSession$MdocApp$$Lambda/0x00007feaae2555e0@58b02510</span>
 </code></pre>
 <p>このとき、<code>List[Int]</code> から積 <code>(A, B)</code> への一意の関数 <code>listToTuple</code> を構成できます：</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> listToTuple: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>] =&gt; ((<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>)) = productFactorizer(listToString)(listToInt)
-<span class="hljs-comment">// listToTuple: List[Int] =&gt; (String, Int) = &lt;function1&gt;</span>
+<span class="hljs-comment">// listToTuple: Function1[List[Int], Tuple2[String, Int]] = repl.MdocSession$MdocApp$$Lambda/0x00007feaae255bc0@79e38658</span>
 </code></pre>
 <p>この関数に対して <code>List(1, 2, 3, 4, 5)</code> を与えると、<code>String</code> への射影 <code>listToString</code> と <code>Int</code> への射影 <code>listToInt</code> をそれぞれ適用したタプルが得られます。</p>
 <pre><code class="lang-scala">listToTuple(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>))
-<span class="hljs-comment">// res0: (String, Int) = (&quot;List(1, 2, 3, 4, 5)&quot;, 5)</span>
+<span class="hljs-comment">// res0: Tuple2[String, Int] = (&quot;List(1, 2, 3, 4, 5)&quot;, 5)</span>
 </code></pre>
 <p>したがって、積 <code>(A, B)</code> には、<code>A</code> の成分と <code>B</code> の成分とで分解して計算できる性質があることがわかります。この性質がまさに、積の定義となっています。</p>
 <p>実際、以下の図式は可換になります。</p>
@@ -541,9 +541,8 @@ projB compose m == xB
 <span class="hljs-comment">// list: List[Int] = List(1, 2, 3, 4, 5)</span>
 
 (fst compose listToTuple)(list) == listToString(list)
-<span class="hljs-comment">// res1: Boolean = true</span>
 (snd compose listToTuple)(list) == listToInt(list)
-<span class="hljs-comment">// res2: Boolean = true</span>
+<span class="hljs-comment">// res1: Boolean = true</span>
 </code></pre>
 <p><img src="images/05_product_example.png" alt="積の例"></p>
 <p>もう一つ、集合圏における積の例を見てみます [2]。集合 <code>A = { 7, 8, 9 }</code>、<code>B = { a, b, c }</code>、<code>X = { 1, 2, 3, 4 }</code> として、<code>X</code> から <code>A</code> および <code>B</code> への射影 <code>xA</code> と <code>xB</code> を以下のようにします。</p>
@@ -556,8 +555,8 @@ xB = { (1, a), (2, b), (3, c), (4, c) }
 <p>積の定義において対象から <code>X</code> から <code>AxB</code> への射 <code>m</code> は、以下のように定義することができます。</p>
 <pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">factorize</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](xA: <span class="hljs-type">X</span> =&gt; <span class="hljs-type">A</span>)(xB: <span class="hljs-type">X</span> =&gt; <span class="hljs-type">B</span>)(x: <span class="hljs-type">X</span>): (<span class="hljs-type">A</span>, <span class="hljs-type">B</span>) = (xA(x), xB(x))
 
-factorize{ s: <span class="hljs-type">String</span> =&gt; s.length }{ s: <span class="hljs-type">String</span> =&gt; s.startsWith(<span class="hljs-string">&quot;a&quot;</span>) }(<span class="hljs-string">&quot;abcdefg&quot;</span>)
-<span class="hljs-comment">// res3: (Int, Boolean) = (7, true)</span>
+factorize{ (s: <span class="hljs-type">String</span>) =&gt; s.length }{ (s: <span class="hljs-type">String</span>) =&gt; s.startsWith(<span class="hljs-string">&quot;a&quot;</span>) }(<span class="hljs-string">&quot;abcdefg&quot;</span>)
+<span class="hljs-comment">// res2: Tuple2[Int, Boolean] = (7, true)</span>
 </code></pre>
 <h3 id="544-モノイダル圏としての-scala-圏">5.4.4 モノイダル圏としての Scala 圏</h3>
 <p>2つの対象 <code>A</code> と <code>B</code> の積 <code>AxB</code> は、見方を変えれば二項演算と考えることができます。</p>
@@ -576,9 +575,9 @@ factorize{ s: <span class="hljs-type">String</span> =&gt; s.length }{ s: <span c
 }
 
 isomorTuple1(((<span class="hljs-number">44</span>, <span class="hljs-string">&quot;hoge&quot;</span>), <span class="hljs-literal">true</span>))
-<span class="hljs-comment">// res4: (Int, (String, Boolean)) = (44, (&quot;hoge&quot;, true))</span>
+<span class="hljs-comment">// res3: Tuple2[Int, Tuple2[String, Boolean]] = (44, (&quot;hoge&quot;, true))</span>
 isomorTuple2((<span class="hljs-number">44</span>, (<span class="hljs-string">&quot;hoge&quot;</span>, <span class="hljs-literal">true</span>)))
-<span class="hljs-comment">// res5: ((Int, String), Boolean) = ((44, &quot;hoge&quot;), true)</span>
+<span class="hljs-comment">// res4: Tuple2[Tuple2[Int, String], Boolean] = ((44, &quot;hoge&quot;), true)</span>
 </code></pre>
 <p>なお、これらと同型である3-タプル <code>(A, B, C)</code> も積です。</p>
 <pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isomorTuple3</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>, <span class="hljs-type">C</span>]: (((<span class="hljs-type">A</span>, <span class="hljs-type">B</span>), <span class="hljs-type">C</span>)) =&gt; ((<span class="hljs-type">A</span>, <span class="hljs-type">B</span>, <span class="hljs-type">C</span>)) = {
@@ -631,19 +630,19 @@ x compose injB == xB
 <p>余積の例として、対象 <code>A</code> を型 <code>String</code> とし、対象 <code>B</code> を型 <code>Int</code> とし、対象 <code>X</code> を型 <code>Boolean</code> とします。</p>
 <p>そして、<code>String</code> から <code>Boolean</code> への入射と、<code>Int</code> からの入射をそれぞれ以下のように定義します：</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> strToBool: <span class="hljs-type">String</span> =&gt; <span class="hljs-type">Boolean</span> = _.contains(<span class="hljs-string">&quot;a&quot;</span>)
-<span class="hljs-comment">// strToBool: String =&gt; Boolean = &lt;function1&gt;</span>
+<span class="hljs-comment">// strToBool: Function1[String, Boolean] = repl.MdocSession$MdocApp$$Lambda/0x00007feaae2585d8@507b9f67</span>
 <span class="hljs-keyword">val</span> isEven: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Boolean</span> = _ % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>
-<span class="hljs-comment">// isEven: Int =&gt; Boolean = &lt;function1&gt;</span>
+<span class="hljs-comment">// isEven: Function1[Int, Boolean] = repl.MdocSession$MdocApp$$Lambda/0x00007feaae258bb8@5f8cbde6</span>
 </code></pre>
 <p>このとき、余積 <code>Either[String, Int]</code> から型 <code>Boolean</code> への一意の関数 <code>eitherToBool</code> を構成できます。この関数は、<code>String</code> については文字列 <code>&quot;a&quot;</code> を含むかどうか判定し、<code>Int</code> が偶数かどうかを判定する関数です。</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> eitherToBool: <span class="hljs-type">Either</span>[<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>] =&gt; <span class="hljs-type">Boolean</span> = coproductFactorizer(strToBool)(isEven)
-<span class="hljs-comment">// eitherToBool: Either[String, Int] =&gt; Boolean = &lt;function1&gt;</span>
+<span class="hljs-comment">// eitherToBool: Function1[Either[String, Int], Boolean] = repl.MdocSession$MdocApp$$Lambda/0x00007feaae2591b8@6f0785ec</span>
 </code></pre>
 <p>この関数に対して <code>String</code> および <code>Int</code> を与えると、それぞれに対して関数が適用されます：</p>
 <pre><code class="lang-scala">eitherToBool(<span class="hljs-type">Left</span>(<span class="hljs-string">&quot;abcdefg&quot;</span>))
-<span class="hljs-comment">// res6: Boolean = true</span>
+<span class="hljs-comment">// res5: Boolean = true</span>
 eitherToBool(<span class="hljs-type">Right</span>(<span class="hljs-number">3</span>))
-<span class="hljs-comment">// res7: Boolean = false</span>
+<span class="hljs-comment">// res6: Boolean = false</span>
 </code></pre>
 <p>Either について、以下の図式は可換になります。</p>
 <p><img src="images/05_coproduct_example.png" alt="余積としての Either"></p>
@@ -658,9 +657,9 @@ eitherToBool(<span class="hljs-type">Right</span>(<span class="hljs-number">3</s
 }
 
 isomorCoproductLeft(<span class="hljs-string">&quot;Oh my god!&quot;</span>)
-<span class="hljs-comment">// res8: Either[String, Nothing] = Left(value = &quot;Oh my god!&quot;)</span>
+<span class="hljs-comment">// res7: Either[String, Nothing] = Left(value = &quot;Oh my god!&quot;)</span>
 isomorCoproductLeftInv(<span class="hljs-type">Left</span>(<span class="hljs-string">&quot;Oh my god!&quot;</span>))
-<span class="hljs-comment">// res9: String = &quot;Oh my god!&quot;</span>
+<span class="hljs-comment">// res8: String = &quot;Oh my god!&quot;</span>
 </code></pre>
 <pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isomorCoproductRight</span></span>[<span class="hljs-type">B</span>]: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">Either</span>[<span class="hljs-type">Nothing</span>, <span class="hljs-type">B</span>] = b =&gt; <span class="hljs-type">Right</span>(b)
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isomorCoproductRightInv</span></span>[<span class="hljs-type">B</span>]: <span class="hljs-type">Either</span>[<span class="hljs-type">Nothing</span>, <span class="hljs-type">B</span>] =&gt; <span class="hljs-type">B</span> = {
@@ -668,9 +667,9 @@ isomorCoproductLeftInv(<span class="hljs-type">Left</span>(<span class="hljs-str
   <span class="hljs-keyword">case</span> <span class="hljs-type">Left</span>(_)  =&gt; ??? <span class="hljs-comment">// Left は Nothing なので来ない</span>
 }
 isomorCoproductRight(<span class="hljs-string">&quot;Good&quot;</span>)
-<span class="hljs-comment">// res10: Either[Nothing, String] = Right(value = &quot;Good&quot;)</span>
+<span class="hljs-comment">// res9: Either[Nothing, String] = Right(value = &quot;Good&quot;)</span>
 isomorCoproductRightInv(<span class="hljs-type">Right</span>(<span class="hljs-string">&quot;Good&quot;</span>))
-<span class="hljs-comment">// res11: String = &quot;Good&quot;</span>
+<span class="hljs-comment">// res10: String = &quot;Good&quot;</span>
 </code></pre>
 <h2 id="まとめ">まとめ</h2>
 <ul>
@@ -741,7 +740,7 @@ isomorCoproductRightInv(<span class="hljs-type">Right</span>(<span class="hljs-s
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、圏に関するいくつかの普遍的な構造について学んでいきます。始対象、終対象、積、そして余積について学びます。","title":"5, 6章 積と余積","level":"1.2.5","depth":2,"next":{"title":"6章 代数的データ型（一部は5章に）","level":"1.2.6","depth":2,"ref":"","articles":[]},"previous":{"title":"4章 Kleisli圏","level":"1.2.4","depth":2,"path":"04_Kleisli_category.md","ref":"04_Kleisli_category.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdocOutput","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Tomoki Mizogami","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"05_Products_and_Coproducts.md","mtime":"2021-03-09T16:51:25.949Z","type":"markdown"},"gitbook":{"version":"3.6.17","time":"2021-03-09T16:51:30.318Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、圏に関するいくつかの普遍的な構造について学んでいきます。始対象、終対象、積、そして余積について学びます。","title":"5, 6章 積と余積","level":"1.2.5","depth":2,"next":{"title":"6章 代数的データ型（一部は5章に）","level":"1.2.6","depth":2,"ref":"","articles":[]},"previous":{"title":"4章 Kleisli圏","level":"1.2.4","depth":2,"path":"04_Kleisli_category.md","ref":"04_Kleisli_category.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"05_Products_and_Coproducts.md","mtime":"2024-06-22T15:10:05.484Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-22T15:10:09.796Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
