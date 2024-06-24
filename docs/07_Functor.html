@@ -446,7 +446,7 @@ objOptFunc(<span class="hljs-string">&quot;Hoge&quot;</span>)
 
 <span class="hljs-comment">// Option 型に対する Functor のインスタンス</span>
 <span class="hljs-keyword">val</span> optionFunctor = summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]]
-<span class="hljs-comment">// optionFunctor: Functor[[A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$20@5d219ada</span>
+<span class="hljs-comment">// optionFunctor: Functor[[A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$20@43100d0b</span>
 
 <span class="hljs-comment">// f: isEven, g: negate とします</span>
 <span class="hljs-comment">// fmap(g compose f)</span>
@@ -458,8 +458,8 @@ objOptFunc(<span class="hljs-string">&quot;Hoge&quot;</span>)
 <span class="hljs-comment">// 射の合成が保存されることの確認</span>
 lifted1 === lifted2
 <span class="hljs-comment">// res4: Eq2[Function1[Option[Int], Option[Boolean]]] = Eq2(</span>
-<span class="hljs-comment">//   lhs = repl.MdocSession$MdocApp$$anon$20$$Lambda/0x00007feaae272000@cb5aff4,</span>
-<span class="hljs-comment">//   rhs = scala.Function1$$Lambda/0x00007feaae127b70@46a7c014</span>
+<span class="hljs-comment">//   lhs = repl.MdocSession$MdocApp$$anon$20$$Lambda/0x00007fcf6e282000@279f96af,</span>
+<span class="hljs-comment">//   rhs = scala.Function1$$Lambda/0x00007fcf6d41b640@23e7e611</span>
 <span class="hljs-comment">// )</span>
 </code></pre>
 <p>例えば、<code>Option(3)</code> に対して以下が成り立ちます。</p>
@@ -476,8 +476,8 @@ lifted1 === lifted2
 
 lifted3 === lifted4
 <span class="hljs-comment">// res6: Eq2[Function1[Option[Int], Option[Int]]] = Eq2(</span>
-<span class="hljs-comment">//   lhs = repl.MdocSession$MdocApp$$anon$20$$Lambda/0x00007feaae272000@75e58eb0,</span>
-<span class="hljs-comment">//   rhs = repl.MdocSession$MdocApp$$Lambda/0x00007feaae272bd8@5872db5</span>
+<span class="hljs-comment">//   lhs = repl.MdocSession$MdocApp$$anon$20$$Lambda/0x00007fcf6e282000@fb4a197,</span>
+<span class="hljs-comment">//   rhs = repl.MdocSession$MdocApp$$Lambda/0x00007fcf6e282bd8@51f0a97c</span>
 <span class="hljs-comment">// )</span>
 </code></pre>
 <p>例えば、<code>Option(3)</code> に対して以下が成り立ちます。</p>
@@ -566,7 +566,7 @@ isEven.fmap(negate) (<span class="hljs-number">3</span>)
 </code></pre>
 <p>次に、射関数は、List 関手の <code>fmap</code> メソッドと Option 関手の <code>fmap</code> メソッドの合成 <code>fmapC</code> と定義します。</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> listFunctor = summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">List</span>]]
-<span class="hljs-comment">// listFunctor: Functor[List] = repl.MdocSession$MdocApp$$anon$22@739d2afa</span>
+<span class="hljs-comment">// listFunctor: Functor[List] = repl.MdocSession$MdocApp$$anon$22@7e4c3f08</span>
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapL</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]: (<span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>) =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">B</span>] = listFunctor.fmap
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapO</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]: (<span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>) =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">B</span>] = optionFunctor.fmap
 
@@ -574,7 +574,7 @@ isEven.fmap(negate) (<span class="hljs-number">3</span>)
 </code></pre>
 <p>この <code>fmapC</code> メソッドを用いると、2つの関手によって包まれた型 <code>Int</code> 上の関数</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> increment: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Int</span> = _ + <span class="hljs-number">1</span>
-<span class="hljs-comment">// increment: Function1[Int, Int] = repl.MdocSession$MdocApp$$Lambda/0x00007feaae274c28@37ca6b08</span>
+<span class="hljs-comment">// increment: Function1[Int, Int] = repl.MdocSession$MdocApp$$Lambda/0x00007fcf6e284c28@45047685</span>
 </code></pre>
 <p>を <code>List[Option[Int]]</code> 上の関数として引き上げることができます。</p>
 <pre><code class="lang-scala">fmapC(increment)(intOptionList)
@@ -660,7 +660,7 @@ fmapC(identity[<span class="hljs-type">Int</span>])(intOptionList) == identity[<
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、圏から圏への対応である関手について定義し、プログラミングにおける関手の例（Option 関手や Reader 関手）を示します。","title":"7章 関手","level":"1.2.7","depth":2,"next":{"title":"8章 関手性","level":"1.2.8","depth":2,"path":"08_Functoriality.md","ref":"08_Functoriality.md","articles":[]},"previous":{"title":"6章 代数的データ型（一部は5章に）","level":"1.2.6","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"07_Functor.md","mtime":"2024-06-22T15:10:06.708Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-22T15:10:09.796Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、圏から圏への対応である関手について定義し、プログラミングにおける関手の例（Option 関手や Reader 関手）を示します。","title":"7章 関手","level":"1.2.7","depth":2,"next":{"title":"8章 関手性","level":"1.2.8","depth":2,"path":"08_Functoriality.md","ref":"08_Functoriality.md","articles":[]},"previous":{"title":"6章 代数的データ型（一部は5章に）","level":"1.2.6","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"07_Functor.md","mtime":"2024-06-24T00:59:38.122Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-24T00:59:41.597Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

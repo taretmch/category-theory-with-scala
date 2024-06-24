@@ -385,11 +385,13 @@
                                 
                                 <!-- omit in toc -->
 <h1 id="5-積と余積">5. 積と余積</h1>
-<p>本章では、圏に関するいくつかの普遍的な構造について学んでいきます。</p>
-<p>普遍的な構造として、順序集合における最小値に対応する始対象、最大値に対応する終対象、始対象と終対象との関連性である双対性、直積集合に対応する積、そして積と対をなす余積について定式化します。</p>
-<p>始対象・終対象や積は、モナドなどのプログラミングにおいて重要な構造を定義するために必要な概念を、定義するために必要です。</p>
+<p>本章では、圏に関するいくつかの普遍的な構造について学んでいきます。圏論には<strong>普遍的構成</strong> (universal construction) と呼ばれる構成がよく現れ、対象をその関係の観点から定義することがあります。</p>
+<p>普遍的構成として、順序集合における最小値に対応する始対象、最大値に対応する終対象、始対象と終対象との関連性である双対性、直積集合に対応する積、そして積と対をなす余積について定式化します。</p>
+<p>始対象・終対象や積は、プログラミングにおいて重要な構造を定義するために必要な概念です。</p>
 <p>積や余積は特に、代数的データ型と呼ばれるタプル、ケースクラス、トレイトの一般化です。</p>
 <p>具体的な例を通して学んでいきましょう！</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">import</span> hamcat.util.<span class="hljs-type">Eq</span>.===
+</code></pre>
 <!-- omit in toc -->
 <h1 id="目次">目次</h1>
 <ul>
@@ -417,7 +419,7 @@
 <li><a href="#参考文献">参考文献</a></li>
 </ul>
 <h2 id="51-始対象">5.1 始対象</h2>
-<p>始対象は、順序集合における最小値に対応する構造です。例えば、自然数の集合 <code>{ 0, 1, 2, ..., n, ... }</code> に対して、順序 <code>&lt;=</code> における最小値は 0 です。自然数の集合の圏において、この 0 を始対象と言えるように始対象を定式化していきます。</p>
+<p>始対象は、順序集合における最小値に対応する構造です。例えば、自然数の集合 <code>{ 0, 1, 2, ..., n, ... }</code> に対して、順序 <code>&lt;=</code> における最小値は 0 です。自然数の集合を対象として、順序 <code>&lt;=</code> を射とする圏において、この 0 を始対象と言えるように始対象を定式化していきます。</p>
 <h3 id="511-始対象の定義">5.1.1 始対象の定義</h3>
 <p>まず、自然数を対象として、射の集まりを以下のように定義してみます。ただし、<code>(a, b)</code> とは「a が b 以下である」を意味し、対象 a から対象 b への射が存在することを表すこととします。</p>
 <pre><code>&lt;= := {
@@ -433,58 +435,102 @@
 <p><strong>始対象</strong> (initial object) とは、圏において任意の対象への射をただ1つ持つような対象のことです。</p>
 <hr>
 <h3 id="512-始対象の例">5.1.2 始対象の例</h3>
-<p>自然数の集合において、0 から任意の自然数 n への射 <code>(0, n)</code> はただ1つ存在します。0 から 0 への射は恒等射 <code>(0, 0)</code> ですし、0 以外の任意の自然数 <code>n</code> についても <code>(0, n)</code> が一意に存在します。</p>
-<p>集合の圏 <code>Set</code> における始対象は、空集合です。任意の集合 <code>A</code> と空集合 <code>φ</code> に対して、 <code>φ</code> から <code>A</code> への射がただ1つ存在します。一般に、集合 <code>A</code> から <code>B</code> への関数は、<code>A</code> の任意の要素 <code>a</code> に対して、その出力 <code>b</code> (<code>B</code> の要素) が一意に定まるような関係の集合として定義されます。例えば、集合 <code>A = { 1, 3 }</code> から集合 <code>B = { 2, 4, 6 }</code> への関数の例として「入力の値に +1 したものを出力する」ような関数 <code>f: A =&gt; B</code> を考えます。この関数は、Scala では</p>
-<pre><code class="lang-scala">f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span> = a =&gt; a + <span class="hljs-number">1</span>
-</code></pre>
-<p>と書くことができますが、集合として書くと</p>
+<p>集合と関数の圏 <code>Set</code> における始対象は、空集合 <code>φ</code> です。すなわち、任意の集合 <code>A</code> と空集合 <code>φ</code> に対して、 <code>φ</code> から <code>A</code> への射、すなわち関数がただ1つ存在します。</p>
+<p>一般に、集合 <code>A</code> から <code>B</code> への関数は、<code>A</code> の任意の要素 <code>a</code> に対して、その出力 <code>b ∈ B</code> が一意に定まるような関係の集合として定義されます。例えば、集合 <code>A = { 1, 3 }</code> から集合 <code>B = { 2, 4, 6 }</code> への関数の例として「入力の値に +1 したものを出力する」ような関数 <code>f: A =&gt; B</code> を考えます。この関数は、以下のような集合として表現されます。</p>
 <pre><code>{ (1, 2), (3, 4) }
-</code></pre><p>と書くことができます。このように考えれば、空集合から任意の集合への関数は空集合であると言うことができ、これは明らかにただ1つだけ存在します。</p>
-<p>では、Scala 圏 (前回までは Hask 圏と言っていました) における始対象は何でしょうか。Scala 圏とは、型を対象とし、型間の関数を射とするような圏です。<code>Set</code> の空集合に対応する型は、<code>Nothing</code> でした。ある1つの型から任意の型 <code>A</code> への射で一意なものは、<code>Nothing</code> から <code>A</code> への関数 <code>absurd</code> です。</p>
+</code></pre><p>空集合 <code>φ</code> から集合 <code>A</code>、<code>B</code> への射はどうなるでしょうか。<code>φ</code> には要素がないので、<code>φ</code> から <code>A</code> への関数は、空集合になるはずです。</p>
+<pre><code>{ }
+</code></pre><p>また、<code>φ</code> から <code>B</code> への関数も空集合になります。</p>
+<pre><code>{ }
+</code></pre><p>これは、 <code>φ</code> から任意の集合への関数 (空集合) がただ1つ存在することを意味します。Scala においては、Nothing 型を引数にとる以下のような関数です。</p>
 <pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">absurd</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">Nothing</span> =&gt; <span class="hljs-type">A</span> = { <span class="hljs-keyword">case</span> _ =&gt; ??? }
 </code></pre>
 <p><img src="images/05_initial_object.png" alt="始対象"></p>
-<p>ちなみに、 <code>Set</code> 圏においてシングルトン集合は始対象ではありません。というのも、<code>{ a }</code> (a は任意の値) から空集合への射は存在しないからです。空集合は、(入力 a に対しての出力が定義されないので) シングルトン集合から空集合への関数ではありません。また、<code>{ a }</code> から <code>{ true, false }</code> への射は1つには限りません。</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f</span></span>: <span class="hljs-type">Unit</span> =&gt; <span class="hljs-type">Boolean</span> = _ =&gt; <span class="hljs-literal">true</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">g</span></span>: <span class="hljs-type">Unit</span> =&gt; <span class="hljs-type">Boolean</span> = _ =&gt; <span class="hljs-literal">false</span>
-</code></pre>
 <h3 id="513-始対象の一意性">5.1.3 始対象の一意性</h3>
-<p>そして、始対象には、存在するなら<strong>同型を除いて一意である</strong> (unique up to isomorphism) という性質があります。これは、ただ始対象が一意に存在するというわけではなく、始対象と同型の対象を除いて一意に存在するという性質です。</p>
-<p>同型については1章で少し話しましたが、一度思い出してみましょう。対象 <code>A</code> から対象 <code>B</code> への射 <code>f</code> に逆射 <code>fInv</code> が存在するとき、またそのときに限って <code>A</code> と <code>B</code> は同型であると言われます。つまり、同型な対象の間は相互に変換可能であることを意味します。</p>
-<p>始対象が同型を除いて一意であるとは、任意の2つの始対象が同型であることを意味します。具体的に、2つの始対象を I1 と I2 として考えてみましょう。I1 は始対象なので、定義より任意の対象への射をただ1つ持っていて、I1 から I2 への一意の射 <code>f</code> が存在します。一方で、I2 は始対象なので、定義より I2 から I1 への一意の射 <code>g</code> が存在します。この2つの射を合成して <code>g compose f</code> を考えます。<code>g compose f</code> は I1 から I1 への射です。しかし、I1 から I1 への射はただ1つであり、圏の公理よりそれは恒等射です。すなわち</p>
-<pre><code>g compose f = id[I1]
-</code></pre><p>が成り立ちます。同様に <code>f compose g</code> を考えると、これは I2 から I2 への射です。I2 から I2 への射もただ1つであって、圏の公理よりそれは恒等射になります。</p>
-<pre><code>f compose g = id[I2]
-</code></pre><p>したがって、2つの始対象 I1 と I2 は同型です。このような性質を同型を除いて一意であると言います。</p>
-<p>始対象が複数存在するような圏をパッと思いつきませんが、始対象が複数存在するのであれば、それらは同型であると示せます。</p>
+<p>始対象には、存在するなら<strong>同型を除いて一意である</strong> (unique up to isomorphism) という性質があります。これは、ただ始対象が一意に存在するというわけではなく、始対象と同型の対象を除いて一意に存在するという性質です。</p>
+<p>同型については1章で少し話しましたが、一度思い出してみましょう。対象 <code>A</code> から対象 <code>B</code> への射 <code>f</code> に逆射 <code>fInv</code> が存在するとき、またそのときに限って <code>A</code> と <code>B</code> は同型であると言われます。つまり、同型な対象の間は相互に変換可能であることを意味します。射 <code>f</code> の逆射 <code>fInv</code> とは、恒等射 <code>I</code> に対して以下が成り立つような射のことでした。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span> = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fInv</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">A</span> = ???
+
+<span class="hljs-comment">// 射 f の逆射 f について、以下が成り立つ</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert1</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>] = fInv[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>].compose(f[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]) === identity[<span class="hljs-type">A</span>]
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert2</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>] = f[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>].compose(fInv[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]) === identity[<span class="hljs-type">B</span>]
+</code></pre>
+<p>始対象が同型を除いて一意であるとは、任意の2つの始対象が同型であることを意味します。</p>
+<p>具体的に、2つの始対象を <code>I1</code> と <code>I2</code> として考えてみましょう。</p>
+<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">InitialObject</span></span>:
+  opaque <span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">I1</span> </span>= <span class="hljs-type">Nothing</span>
+  opaque <span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">I2</span> </span>= <span class="hljs-type">Nothing</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-type">InitialObject</span>.{ <span class="hljs-type">I1</span>, <span class="hljs-type">I2</span> }
+</code></pre>
+<p><code>I1</code> は始対象なので、定義より任意の対象への射をただ1つ持っていて、<code>I1</code> から <code>I2</code> への一意の射 <code>f12</code> が存在します。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// 一意の関数</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f12</span></span>: <span class="hljs-type">I1</span> =&gt; <span class="hljs-type">I2</span> = ???
+</code></pre>
+<p>一方で、<code>I2</code> は始対象なので、定義より <code>I2</code> から <code>I1</code> への一意の射 <code>f21</code> が存在します。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// 一意の関数</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f21</span></span>: <span class="hljs-type">I2</span> =&gt; <span class="hljs-type">I1</span> = ???
+</code></pre>
+<p>この2つの射を合成して <code>f21 compose f12</code> を考えます。<code>f21 compose f12</code> は <code>I1</code> から <code>I1</code> への射です。しかし、<code>I1</code> から <code>I1</code> への射はただ1つであり、圏の公理よりそれは恒等射です。すなわち</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert3</span> </span>= f21.compose(f12) === identity[<span class="hljs-type">I1</span>]
+</code></pre>
+<p>が成り立ちます。同様に <code>f12 compose f21</code> を考えると、これは <code>I2</code> から <code>I2</code> への射です。<code>I2</code> から <code>I2</code> への射もただ1つであって、圏の公理よりそれは恒等射になります。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert4</span> </span>= f12.compose(f21) === identity[<span class="hljs-type">I2</span>]
+</code></pre>
+<p><code>f21</code> は <code>f12</code> の逆射であるため、2つの始対象 <code>I1</code> と <code>I2</code> は同型です。このような性質を、同型を除いて一意であると言います。</p>
+<p>始対象が複数存在するのであれば、それらは同型であると示せます。</p>
 <h2 id="52-終対象">5.2 終対象</h2>
 <p>次に、終対象についてです。</p>
 <p>終対象は始対象と対をなす概念で、順序集合における最大値に対応する構造です。始対象の定義と同じように、終対象は以下のように定義されます。</p>
 <hr>
 <p><strong>終対象</strong> (terminal object) とは、圏において任意の対象からの射がただ1つ存在するような対象のことです。</p>
 <hr>
-<p>集合の圏 <code>Set</code> における終対象は、シングルトン集合です。任意の集合 <code>A</code> とシングルトン集合 <code>{ a }</code> に対して、<code>A</code> から <code>{ a }</code> への射がただ1つ存在します。</p>
-<p>シングルトン集合は <code>Unit</code> 型に対応するので、Scala 圏における終対象は <code>Unit</code> 型です。任意の型 <code>A</code> から <code>Unit</code> への関数 <code>unit</code> がただ1つ存在します。</p>
+<p>集合の圏 <code>Set</code> における終対象は、シングルトン集合です。任意の集合 <code>A</code> とシングルトン集合 <code>{ a }</code> に対して、<code>A</code> から <code>{ a }</code> への射がただ1つ存在します。例えば、<code>A = { 1, 2, 3}</code> のとき、<code>A</code> から <code>{ a }</code> への関数は以下1つだけです。</p>
+<pre><code>{ (1, a), (2, a), (3, a) }
+</code></pre><p>シングルトン集合は <code>Unit</code> 型に対応するので、Scala 圏における終対象は <code>Unit</code> 型です。任意の型 <code>A</code> から <code>Unit</code> への関数 <code>unit</code> がただ1つ存在します。</p>
 <pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">unit</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">Unit</span> = _ =&gt; ()
+
+unit[<span class="hljs-type">Int</span>](<span class="hljs-number">1</span>)
+unit[<span class="hljs-type">Int</span>](<span class="hljs-number">100</span>)
+unit[<span class="hljs-type">String</span>](<span class="hljs-string">&quot;hoge&quot;</span>)
 </code></pre>
 <p><img src="images/05_terminal_object.png" alt="終対象"></p>
-<p>終対象も始対象同様、同型を除いて一意です。</p>
-<p>2つの終対象を T1 と T2 とします。T1 は終対象なので、定義より任意の対象からの射がただ1つ存在して、T2 から T1 への一意の射 <code>f</code> が一意に存在します。一方で、T2 は終対象なので、定義より T1 から T2 への一意の射 <code>g</code> が存在します。この2つの射を合成して <code>g compose f</code> を考えます。<code>g compose f</code> は T2 から T2 への射です。しかし、T2 から T2 への射はただ1つであり、圏の公理よりそれは恒等射です。すなわち</p>
-<pre><code class="lang-scala">g compose f === identity[<span class="hljs-type">T2</span>]
+<p>終対象も始対象同様、同型を除いて一意です。2つの終対象を <code>T1</code> と <code>T2</code> として見てみましょう。</p>
+<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">TerminalObject</span></span>:
+  opaque <span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">T1</span> </span>= <span class="hljs-type">Unit</span>
+  <span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">T1</span></span>:
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>(): <span class="hljs-type">T1</span> = ()
+  opaque <span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">T2</span> </span>= <span class="hljs-type">Unit</span>
+  <span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">T2</span></span>:
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>(): <span class="hljs-type">T2</span> = ()
+
+<span class="hljs-keyword">import</span> <span class="hljs-type">TerminalObject</span>.{ <span class="hljs-type">T1</span>, <span class="hljs-type">T2</span> }
 </code></pre>
-<p>が成り立ちます。同様に <code>f compose g</code> を考えると、これは T1 から T1 への射です。T1 から T1 への射もただ1つであって、圏の公理よりそれは恒等射になります。</p>
-<pre><code class="lang-scala">f compose g === identity[<span class="hljs-type">T1</span>]
+<p><code>T1</code> は終対象なので、定義より任意の対象からの射がただ1つ存在して、<code>T2</code> から <code>T1</code> への一意の射 <code>g21</code> が一意に存在します。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// 一意の関数</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">g21</span></span>: <span class="hljs-type">T2</span> =&gt; <span class="hljs-type">T1</span> = { <span class="hljs-keyword">case</span> t2 =&gt; <span class="hljs-type">T1</span>() }
 </code></pre>
-<p>したがって、2つの終対象 T1 と T2 は同型です。</p>
+<p>一方で、<code>T2</code> は終対象なので、定義より <code>T1</code> から <code>T2</code> への一意の射 <code>g12</code> が存在します。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// 一意の関数</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">g12</span></span>: <span class="hljs-type">T1</span> =&gt; <span class="hljs-type">T2</span> = { <span class="hljs-keyword">case</span> t1 =&gt; <span class="hljs-type">T2</span>() }
+</code></pre>
+<p>この2つの射を合成して <code>g12.compose(g21)</code> を考えます。<code>g12.compose(g21)</code> は <code>T2</code> から <code>T2</code> への射です。しかし、<code>T2</code> から <code>T2</code> への射はただ1つであり、圏の公理よりそれは恒等射です。すなわち</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert5</span> </span>= g12.compose(g21) === identity[<span class="hljs-type">T2</span>]
+</code></pre>
+<p>が成り立ちます。同様に <code>g21.compose(g12)</code> を考えると、これは <code>T1</code> から <code>T1</code> への射です。<code>T1</code> から <code>T1</code> への射もただ1つであって、圏の公理よりそれは恒等射になります。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert6</span> </span>= g21.compose(g12) === identity[<span class="hljs-type">T1</span>]
+</code></pre>
+<p>したがって、2つの終対象 <code>T1</code> と <code>T2</code> の間には同型射が存在して、同型と言えます。</p>
 <h2 id="53-双対性">5.3 双対性</h2>
 <p>終対象について考えるとき、終対象は始対象の対をなす概念であると言いました。</p>
 <p>実際、終対象の定義は、始対象の定義の射の向きを変えたようなものであると思ったのではないでしょうか。</p>
 <p>一般に、任意の圏 <code>C</code> に対して、対象はそのままで、全ての射の矢印を反転させ射の合成を再定義することによって<strong>双対圏</strong> (opposite category) <code>Cop</code> を定義することができます。</p>
-<p>例として、自然数の順序集合を考えます。自然数間の射 <code>&lt;=</code> は a が b 以下であるとき <code>a -&gt; b</code> であるとします。この順序集合の双対圏を考えてみると、全ての矢印が反転するので、射 <code>&lt;=op</code> は a が b 以下であるとき <code>a &lt;- b</code> となります。言い換えると、a が b 以上であるとき <code>a -&gt; b</code> となりますね。</p>
-<p>ある圏の双対圏を考えることによって、圏の普遍的な構造を1つ構成したときその双対の構造も構成することができます。例えば、ある圏における始対象はその双対圏における終対象です。これから見る積の双対は余積です。</p>
+<p>例として、自然数の順序集合を考えます。自然数間の射 <code>&lt;=</code> は、a が b 以下であるとき <code>a -&gt; b</code> であるとします。この順序集合の双対圏を考えてみると、全ての矢印が反転するので、射 <code>&lt;=op</code> は a が b 以下であるとき <code>a &lt;- b</code> となります。言い換えると、a が b 以上であるとき <code>a -&gt; b</code> となりますね。</p>
+<p>ある圏の双対圏を考えることによって、圏の普遍的な構造を1つ構成したときその双対の構造も構成することができます。例えば、<strong>ある圏における始対象はその双対圏における終対象</strong>です。これから見る積の双対は余積です。</p>
 <p>双対圏における構成には接頭辞 &quot;余&quot; (&quot;co&quot;) がつけられることが多いです。積 (product) には余積 (coproduct) があり、モナド (monad) には余モナド (comonad) があり、極限 (limit) には余極限 (colimit) があります。ただし、矢印を2回反転させると元に戻るので、余余モナドなるものはありません。</p>
 <h2 id="54-積">5.4 積</h2>
-<p>さて、もう1つの普遍的な構造として、積 (product) について見ていきましょう。</p>
+<p>さて、もう1つの普遍的構成として、<strong>積</strong> (product) について見ていきましょう。積は、直積とも呼ばれます。</p>
 <p>簡単に言えば、積は2つの対象のタプルを表します。Scala において、積はタプルやケースクラスとして組み込まれています。</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> intBoolTuple: (<span class="hljs-type">Int</span>, <span class="hljs-type">Boolean</span>) = (<span class="hljs-number">44</span>, <span class="hljs-literal">true</span>)
 <span class="hljs-comment">// intBoolTuple: Tuple2[Int, Boolean] = (44, true)</span>
@@ -494,70 +540,100 @@
 <span class="hljs-keyword">val</span> intBoolPair = <span class="hljs-type">Pair</span>(<span class="hljs-number">44</span>, <span class="hljs-literal">true</span>)
 <span class="hljs-comment">// intBoolPair: Pair = Pair(a = 44, b = true)</span>
 </code></pre>
-<p>Scala には <a href="https://github.com/scala/scala/blob/v2.13.3/src/library/scala/Product.scala" target="_blank">Product</a> というトレイトがあり、これが積を表します。タプルやケースクラスはすべて <code>Product</code> を継承しています。</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">final</span> <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tuple2</span>[@specialized(<span class="hljs-type">Int</span>, <span class="hljs-type">Long</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Char</span>, <span class="hljs-type">Boolean</span><span class="hljs-comment">/*, AnyRef*/</span>) +<span class="hljs-type">T1</span>, @specialized(<span class="hljs-type">Int</span>, <span class="hljs-type">Long</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Char</span>, <span class="hljs-type">Boolean</span><span class="hljs-comment">/*, AnyRef*/</span>) +<span class="hljs-type">T2</span>](<span class="hljs-params">_1: <span class="hljs-type">T1</span>, _2: <span class="hljs-type">T2</span></span>)</span>
-  <span class="hljs-keyword">extends</span> <span class="hljs-type">Product2</span>[<span class="hljs-type">T1</span>, <span class="hljs-type">T2</span>]
+<p>Scala には <a href="https://github.com/scala/scala/blob/v2.13.14/src/library/scala/Product.scala" target="_blank">Product</a> というトレイトがあり、これが積を表します。<a href="https://github.com/scala/scala3/blob/3.4.2/library/src/scala/Tuple.scala#L8" target="_blank">Tuple</a> やケースクラスはすべて <code>Product</code> を継承しています。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// github.com/scala/scala より</span>
+
+<span class="hljs-comment">/** Base trait for all products, which in the standard library include at
+ *  least [[scala.Product1]] through [[scala.Product22]] and therefore also
+ *  their subclasses [[scala.Tuple1]] through [[scala.Tuple22]].  In addition,
+ *  all case classes implement `Product` with synthetically generated methods.
+ */</span>
+<span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Product</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Any</span> <span class="hljs-keyword">with</span> <span class="hljs-title">Equals</span></span>
 </code></pre>
-<p>ケースクラスは、コンパイル時に自動的に <code>Product</code> をミックスインします [1]。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// github.com/scala/scala3 より</span>
+
+<span class="hljs-comment">/** Tuple of arbitrary arity */</span>
+<span class="hljs-keyword">sealed</span> <span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Tuple</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Product</span></span>
+</code></pre>
+<p>ケースクラスは、コンパイル時に自動的に <code>Product</code> をミックスインします。</p>
 <h3 id="541-積の定義">5.4.1 積の定義</h3>
 <p>積は、圏論において以下のように定義されます。</p>
 <hr>
-<p>圏の2つの対象 <code>A</code> と <code>B</code> に対して、対象 <code>C</code> とその射 <code>projA: C =&gt; A</code>、<code>projB: C =&gt; B</code> の三つ組 <code>&lt;C, projA, projB&gt;</code> が <code>A</code> と <code>B</code> の<strong>積</strong> (product) であるとは、任意の対象 <code>X</code> とその射 <code>xA: X =&gt; A</code>、<code>xB: X =&gt; B</code> の三つ組 <code>&lt;X, xA, xB&gt;</code> に対して <code>X</code> から <code>C</code> への一意の射 <code>m</code> が存在して</p>
-<pre><code>projA compose m == xA
-projB compose m == xB
-</code></pre><p>が成り立つことを言います。このとき対象 <code>C</code> を <code>A x B</code> と書きます。</p>
+<p>圏の2つの対象 <code>A</code> と <code>B</code> に対して、対象 <code>C</code> とその射 <code>projA: C =&gt; A</code>、<code>projB: C =&gt; B</code> の三つ組 <code>&lt;C, projA, projB&gt;</code> が <code>A</code> と <code>B</code> の<strong>積</strong> (product) であるとは、任意の対象 <code>X</code> とその射 <code>xA: X =&gt; A</code>、<code>xB: X =&gt; B</code> の三つ組 <code>&lt;X, xA, xB&gt;</code> に対して <code>X</code> から <code>C</code> への一意の射 <code>m</code> が存在して <code>projA compose m == xA</code> <code>projB compose m == xB</code> が成り立つことを言います。このとき対象 <code>C</code> を <code>A x B</code> と書きます。</p>
 <p><img src="images/05_product.png" alt="積の定義"></p>
+<p>Scala で書くと以下のように表現できます。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// C with projA, projB: A x B</span>
+<span class="hljs-comment">// 型 A, B, C, X に対して以下のような射が存在して</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">projA</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">C</span>]: <span class="hljs-type">C</span> =&gt; <span class="hljs-type">A</span> = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">projB</span></span>[<span class="hljs-type">B</span>, <span class="hljs-type">C</span>]: <span class="hljs-type">C</span> =&gt; <span class="hljs-type">B</span> = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">xA</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">A</span>]: <span class="hljs-type">X</span> =&gt; <span class="hljs-type">A</span> = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">xB</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">B</span>]: <span class="hljs-type">X</span> =&gt; <span class="hljs-type">B</span> = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">m</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">C</span>]: <span class="hljs-type">X</span> =&gt; <span class="hljs-type">C</span> = ???
+
+<span class="hljs-comment">// 以下が成り立つ</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assertProductA</span> </span>= projA.compose(m) === xA
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assertProductB</span> </span>= projB.compose(m) === xB
+</code></pre>
+<p>また、射 <code>projA</code> と <code>projB</code> は各構成要素への<strong>射影</strong> (projection) と呼ばれます。</p>
 <hr>
 <p>なお、積は存在するなら、同型を除いて一意です。</p>
-<p>型 <code>A</code> と <code>B</code> の積 <code>(A, B)</code> について、射影 <code>fst</code> と <code>snd</code> は以下のように定義されます。</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fst</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]: ((<span class="hljs-type">A</span>, <span class="hljs-type">B</span>)) =&gt; <span class="hljs-type">A</span> = _._1
+<p><code>Product2</code> を例に見ていきましょう。型 <code>A</code> と <code>B</code> のタプル <code>(A, B)</code> について、射影 <code>projA</code> と <code>projB</code> は以下のように定義されます。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">projA</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>, <span class="hljs-type">C</span> &lt;: <span class="hljs-type">Product2</span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]](c: <span class="hljs-type">C</span>): <span class="hljs-type">A</span> = c._1
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">projB</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>, <span class="hljs-type">C</span> &lt;: <span class="hljs-type">Product2</span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]](c: <span class="hljs-type">C</span>): <span class="hljs-type">B</span> = c._2
 
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">snd</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]: ((<span class="hljs-type">A</span>, <span class="hljs-type">B</span>)) =&gt; <span class="hljs-type">B</span> = _._2
+projA((<span class="hljs-string">&quot;tuple&quot;</span>, <span class="hljs-number">1</span>))
+<span class="hljs-comment">// res4: String = &quot;tuple&quot;</span>
+projB((<span class="hljs-string">&quot;tuple&quot;</span>, <span class="hljs-number">2</span>))
+<span class="hljs-comment">// res5: Int = 2</span>
 </code></pre>
-<p>すなわち、積の射影は <code>Tuple2#_1</code> メソッドと <code>Tuple2#_2</code> メソッドです。</p>
-<p>そして、ある型 <code>X</code> に対して、<code>X</code> から <code>(A, B)</code> への一意の関数 <code>productFactorizer</code> が存在します。</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">productFactorizer</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](xA: <span class="hljs-type">X</span> =&gt; <span class="hljs-type">A</span>)(xB: <span class="hljs-type">X</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">X</span> =&gt; ((<span class="hljs-type">A</span>, <span class="hljs-type">B</span>)) = x =&gt; (xA(x), xB(x))
+<p>すなわち、Scala における <code>Product</code> の射影は <code>Tuple2#_1</code> メソッドと <code>Tuple2#_2</code> メソッドです。</p>
+<p>そして、ある型 <code>X</code> とその射 <code>xA: X =&gt; A</code> <code>xB: X =&gt; B</code> に対して、<code>X</code> から <code>(A, B)</code> への一意の関数 <code>m</code> が存在します。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// C: (A, B)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">m1</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](xA: <span class="hljs-type">X</span> =&gt; <span class="hljs-type">A</span>)(xB: <span class="hljs-type">X</span> =&gt; <span class="hljs-type">B</span>)(x: <span class="hljs-type">X</span>): (<span class="hljs-type">A</span>, <span class="hljs-type">B</span>) = (xA(x), xB(x))
+<span class="hljs-comment">// C: Pair(A, B)</span>
+<span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Pair</span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](<span class="hljs-params">a: <span class="hljs-type">A</span>, b: <span class="hljs-type">B</span></span>)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">m2</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](xA: <span class="hljs-type">X</span> =&gt; <span class="hljs-type">A</span>)(xB: <span class="hljs-type">X</span> =&gt; <span class="hljs-type">B</span>)(x: <span class="hljs-type">X</span>): <span class="hljs-type">Pair</span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>] = <span class="hljs-type">Pair</span>(xA(x), xB(x))
+
+<span class="hljs-comment">// C: (Int, String), X: Int</span>
+m1[<span class="hljs-type">Int</span>, <span class="hljs-type">Int</span>, <span class="hljs-type">String</span>](identity[<span class="hljs-type">Int</span>])(n =&gt; <span class="hljs-string">s&quot;The number is <span class="hljs-subst">$n</span>&quot;</span>)(<span class="hljs-number">3</span>)
+<span class="hljs-comment">// res6: Tuple2[Int, String] = (3, &quot;The number is 3&quot;)</span>
+
+<span class="hljs-comment">// C: Pair[Long, Boolean], X: String</span>
+m2[<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>, <span class="hljs-type">Boolean</span>](_.toLongOption.getOrElse(<span class="hljs-number">0</span>))(_.toLongOption.nonEmpty)(<span class="hljs-string">&quot;12345&quot;</span>)
+<span class="hljs-comment">// res7: Pair[Long, Boolean] = Pair(a = 12345L, b = true)</span>
 </code></pre>
 <h3 id="542-積の例">5.4.2 積の例</h3>
 <p>積の例として、<code>A</code> を <code>String</code>、<code>B</code> を <code>Int</code> とし、<code>X</code> を <code>List[Int]</code> とします。</p>
 <p>そして、<code>List[Int]</code> の <code>String</code> への射影と、<code>Int</code> への射影をそれぞれ以下のように定義します：</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">val</span> listToString: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>] =&gt; <span class="hljs-type">String</span> = _.toString
-<span class="hljs-comment">// listToString: Function1[List[Int], String] = repl.MdocSession$MdocApp$$Lambda/0x00007feaae255000@48442f9b</span>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">listToString</span></span>: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>] =&gt; <span class="hljs-type">String</span> = _.toString
 
-<span class="hljs-keyword">val</span> listToInt: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>] =&gt; <span class="hljs-type">Int</span> = _.length
-<span class="hljs-comment">// listToInt: Function1[List[Int], Int] = repl.MdocSession$MdocApp$$Lambda/0x00007feaae2555e0@58b02510</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">listToInt</span></span>: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>] =&gt; <span class="hljs-type">Int</span> = _.length
 </code></pre>
 <p>このとき、<code>List[Int]</code> から積 <code>(A, B)</code> への一意の関数 <code>listToTuple</code> を構成できます：</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">val</span> listToTuple: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>] =&gt; ((<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>)) = productFactorizer(listToString)(listToInt)
-<span class="hljs-comment">// listToTuple: Function1[List[Int], Tuple2[String, Int]] = repl.MdocSession$MdocApp$$Lambda/0x00007feaae255bc0@79e38658</span>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">listToTuple</span></span>: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>] =&gt; ((<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>)) = m1(listToString)(listToInt)
 </code></pre>
 <p>この関数に対して <code>List(1, 2, 3, 4, 5)</code> を与えると、<code>String</code> への射影 <code>listToString</code> と <code>Int</code> への射影 <code>listToInt</code> をそれぞれ適用したタプルが得られます。</p>
 <pre><code class="lang-scala">listToTuple(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>))
-<span class="hljs-comment">// res0: Tuple2[String, Int] = (&quot;List(1, 2, 3, 4, 5)&quot;, 5)</span>
+<span class="hljs-comment">// res8: Tuple2[String, Int] = (&quot;List(1, 2, 3, 4, 5)&quot;, 5)</span>
 </code></pre>
 <p>したがって、積 <code>(A, B)</code> には、<code>A</code> の成分と <code>B</code> の成分とで分解して計算できる性質があることがわかります。この性質がまさに、積の定義となっています。</p>
 <p>実際、以下の図式は可換になります。</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> list = <span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)
 <span class="hljs-comment">// list: List[Int] = List(1, 2, 3, 4, 5)</span>
 
-(fst compose listToTuple)(list) == listToString(list)
-(snd compose listToTuple)(list) == listToInt(list)
-<span class="hljs-comment">// res1: Boolean = true</span>
+projA.compose(listToTuple)(list) == listToString(list)
+<span class="hljs-comment">// res9: Boolean = true</span>
+projB.compose(listToTuple)(list) == listToInt(list)
+<span class="hljs-comment">// res10: Boolean = true</span>
 </code></pre>
 <p><img src="images/05_product_example.png" alt="積の例"></p>
-<p>もう一つ、集合圏における積の例を見てみます [2]。集合 <code>A = { 7, 8, 9 }</code>、<code>B = { a, b, c }</code>、<code>X = { 1, 2, 3, 4 }</code> として、<code>X</code> から <code>A</code> および <code>B</code> への射影 <code>xA</code> と <code>xB</code> を以下のようにします。</p>
+<p>もう一つ、集合圏における積の例を見てみます [1]。集合 <code>A = { 7, 8, 9 }</code>、<code>B = { a, b, c }</code>、<code>X = { 1, 2, 3, 4 }</code> として、<code>X</code> から <code>A</code> および <code>B</code> への射影 <code>xA</code> と <code>xB</code> を以下のようにします。</p>
 <pre><code>xA = { (1, 7), (2, 8), (3, 9), (4, 7) }
 xB = { (1, a), (2, b), (3, c), (4, c) }
 </code></pre><p>そして、積 <code>AxB</code> から <code>A</code> および <code>B</code> への射影 <code>pA</code> と <code>pB</code> をそれぞれ、第1要素を取得する関数と第2要素を取得する関数として考えます。このとき、上の射影 <code>xA</code> と <code>xB</code> のペアは <code>X</code> から <code>AxB</code> への関数 <code>f</code> に一意に読み替えることができます。</p>
 <pre><code>f = { (1, (7, a)), (2, (8, b)), (3, (9, c)), (4, (7, c)) }
 </code></pre><p>この例について、以下の図式は可換になります。</p>
 <p><img src="images/05_product_example2.png" alt="集合圏における積の例"></p>
-<p>積の定義において対象から <code>X</code> から <code>AxB</code> への射 <code>m</code> は、以下のように定義することができます。</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">factorize</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](xA: <span class="hljs-type">X</span> =&gt; <span class="hljs-type">A</span>)(xB: <span class="hljs-type">X</span> =&gt; <span class="hljs-type">B</span>)(x: <span class="hljs-type">X</span>): (<span class="hljs-type">A</span>, <span class="hljs-type">B</span>) = (xA(x), xB(x))
-
-factorize{ (s: <span class="hljs-type">String</span>) =&gt; s.length }{ (s: <span class="hljs-type">String</span>) =&gt; s.startsWith(<span class="hljs-string">&quot;a&quot;</span>) }(<span class="hljs-string">&quot;abcdefg&quot;</span>)
-<span class="hljs-comment">// res2: Tuple2[Int, Boolean] = (7, true)</span>
-</code></pre>
 <h3 id="544-モノイダル圏としての-scala-圏">5.4.4 モノイダル圏としての Scala 圏</h3>
 <p>2つの対象 <code>A</code> と <code>B</code> の積 <code>AxB</code> は、見方を変えれば二項演算と考えることができます。</p>
 <p>Scala 圏における積は二項演算として、数の乗算に対応します。二項演算としての性質を少し見ていきましょう。</p>
@@ -575,9 +651,9 @@ factorize{ (s: <span class="hljs-type">String</span>) =&gt; s.length }{ (s: <spa
 }
 
 isomorTuple1(((<span class="hljs-number">44</span>, <span class="hljs-string">&quot;hoge&quot;</span>), <span class="hljs-literal">true</span>))
-<span class="hljs-comment">// res3: Tuple2[Int, Tuple2[String, Boolean]] = (44, (&quot;hoge&quot;, true))</span>
+<span class="hljs-comment">// res11: Tuple2[Int, Tuple2[String, Boolean]] = (44, (&quot;hoge&quot;, true))</span>
 isomorTuple2((<span class="hljs-number">44</span>, (<span class="hljs-string">&quot;hoge&quot;</span>, <span class="hljs-literal">true</span>)))
-<span class="hljs-comment">// res4: Tuple2[Tuple2[Int, String], Boolean] = ((44, &quot;hoge&quot;), true)</span>
+<span class="hljs-comment">// res12: Tuple2[Tuple2[Int, String], Boolean] = ((44, &quot;hoge&quot;), true)</span>
 </code></pre>
 <p>なお、これらと同型である3-タプル <code>(A, B, C)</code> も積です。</p>
 <pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isomorTuple3</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>, <span class="hljs-type">C</span>]: (((<span class="hljs-type">A</span>, <span class="hljs-type">B</span>), <span class="hljs-type">C</span>)) =&gt; ((<span class="hljs-type">A</span>, <span class="hljs-type">B</span>, <span class="hljs-type">C</span>)) = {
@@ -607,42 +683,55 @@ isomorTuple2((<span class="hljs-number">44</span>, (<span class="hljs-string">&q
 <h2 id="55-余積">5.5 余積</h2>
 <p>最後に、積の双対概念である余積についてです。</p>
 <h3 id="551-余積の定義">5.5.1 余積の定義</h3>
-<p>余積は、積の定義において射を反転させたものです。すなわち、以下のように定義されます。</p>
+<p>余積は、積の定義において射の向きを反転させたものです。すなわち、以下のように定義されます。</p>
 <hr>
-<p>圏の2つの対象 <code>A</code> と <code>B</code> に対して、対象 <code>C</code> と射 <code>injA: A =&gt; C</code>、<code>injB: B =&gt; C</code> の三つ組 <code>&lt;C, injA, injB&gt;</code> が <code>A</code> と <code>B</code> の<strong>余積</strong> (coproduct) であるとは、他の同様の三つ組、すなわち任意の対象 <code>X</code> と射 <code>xA: A =&gt; X</code>、<code>xB: B =&gt; X</code> の三つ組 <code>&lt;X, xA, xB&gt;</code> に対して <code>C</code> から <code>X</code> への一意の射 <code>x</code> が存在して</p>
-<pre><code>x compose injA == xA
-x compose injB == xB
-</code></pre><p>が成り立つことを言います。このとき対象 <code>C</code> を <code>A+B</code> と書きます。また、<code>injA: A =&gt; C</code> および <code>injB: B =&gt; C</code> を入射 (injection) と呼びます。</p>
+<p>圏の2つの対象 <code>A</code> と <code>B</code> に対して、対象 <code>C</code> と射 <code>injA: A =&gt; C</code>、<code>injB: B =&gt; C</code> の三つ組 <code>&lt;C, injA, injB&gt;</code> が <code>A</code> と <code>B</code> の<strong>余積</strong> (coproduct) であるとは、任意の対象 <code>X</code> と射 <code>xA: A =&gt; X</code>、<code>xB: B =&gt; X</code> の三つ組 <code>&lt;X, xA, xB&gt;</code> に対して <code>C</code> から <code>X</code> への一意の射 <code>m</code> が存在して <code>m compose injA == xA</code> <code>m compose injB == xB</code> が成り立つことを言います。このとき対象 <code>C</code> を <code>A + B</code> と書きます。また、<code>injA: A =&gt; C</code> および <code>injB: B =&gt; C</code> を入射 (injection) と呼びます。</p>
 <p><img src="images/05_coproduct.png" alt="余積"></p>
+<p>Scala で書くと以下のように表現できます。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// C with injA, injB: A + B</span>
+<span class="hljs-comment">// 型 A, B, C, X に対して以下のような射が存在して</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">injA</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">C</span>]: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">C</span> = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">injB</span></span>[<span class="hljs-type">B</span>, <span class="hljs-type">C</span>]: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">C</span> = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">xA</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">A</span>]: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">X</span> = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">xB</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">B</span>]: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">X</span> = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">m</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">C</span>]: <span class="hljs-type">C</span> =&gt; <span class="hljs-type">X</span> = ???
+
+<span class="hljs-comment">// 以下が成り立つ</span>
+<span class="hljs-keyword">import</span> hamcat.util.<span class="hljs-type">Eq</span>.===
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assertCoproductA</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">A</span>, <span class="hljs-type">C</span>] = m[<span class="hljs-type">X</span>, <span class="hljs-type">C</span>].compose(injA[<span class="hljs-type">A</span>, <span class="hljs-type">C</span>]) === xA[<span class="hljs-type">X</span>, <span class="hljs-type">A</span>]
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assertCoproductB</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">B</span>, <span class="hljs-type">C</span>] = m[<span class="hljs-type">X</span>, <span class="hljs-type">C</span>].compose(injB[<span class="hljs-type">B</span>, <span class="hljs-type">C</span>]) === xB[<span class="hljs-type">X</span>, <span class="hljs-type">B</span>]
+</code></pre>
 <hr>
 <p>積は Scala においてタプルやケースクラスとして表すことができますが、余積は Scala において Either によって表すことができます。</p>
 <p>型 <code>A</code> と <code>B</code> の余積 <code>Either[A, B]</code> について、射 <code>injA</code> と <code>injB</code> は以下のように定義されます。</p>
 <pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">injA</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](a: <span class="hljs-type">A</span>): <span class="hljs-type">Either</span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>] = <span class="hljs-type">Left</span>(a)
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">injB</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](b: <span class="hljs-type">B</span>): <span class="hljs-type">Either</span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>] = <span class="hljs-type">Right</span>(b)
 </code></pre>
-<p>すなわち、余積の入射は <code>Left.apply</code> メソッドと <code>Right.apply</code> メソッドです。そして、ある型 <code>X</code> に対して、<code>Either[A, B]</code> から <code>X</code> への一意の関数 <code>coproductFactorizer</code> が存在します。</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">coproductFactorizer</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](xA: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">X</span>)(xB: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">X</span>): <span class="hljs-type">Either</span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>] =&gt; <span class="hljs-type">X</span> = {
+<p>すなわち、余積の入射は <code>Left.apply</code> メソッドと <code>Right.apply</code> メソッドです。そして、ある型 <code>X</code> に対して、<code>Either[A, B]</code> から <code>X</code> への一意の関数 <code>m</code> が存在します。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">m</span></span>[<span class="hljs-type">X</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](xA: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">X</span>)(xB: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">X</span>): <span class="hljs-type">Either</span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>] =&gt; <span class="hljs-type">X</span> = {
   <span class="hljs-keyword">case</span> <span class="hljs-type">Left</span>(a) =&gt; xA(a)
   <span class="hljs-keyword">case</span> <span class="hljs-type">Right</span>(b) =&gt; xB(b)
 }
+
+m[<span class="hljs-type">Long</span>, <span class="hljs-type">String</span>, <span class="hljs-type">Int</span>](_.toLongOption.getOrElse(<span class="hljs-number">0</span>))(_.toLong)(<span class="hljs-type">Right</span>(<span class="hljs-number">3</span>))
+<span class="hljs-comment">// res14: Long = 3L</span>
+m[<span class="hljs-type">Long</span>, <span class="hljs-type">String</span>, <span class="hljs-type">Int</span>](_.toLongOption.getOrElse(<span class="hljs-number">0</span>))(_.toLong)(<span class="hljs-type">Left</span>(<span class="hljs-string">&quot;abcdefg&quot;</span>))
+<span class="hljs-comment">// res15: Long = 0L</span>
 </code></pre>
 <h3 id="552-余積の例">5.5.2 余積の例</h3>
 <p>余積の例として、対象 <code>A</code> を型 <code>String</code> とし、対象 <code>B</code> を型 <code>Int</code> とし、対象 <code>X</code> を型 <code>Boolean</code> とします。</p>
 <p>そして、<code>String</code> から <code>Boolean</code> への入射と、<code>Int</code> からの入射をそれぞれ以下のように定義します：</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">val</span> strToBool: <span class="hljs-type">String</span> =&gt; <span class="hljs-type">Boolean</span> = _.contains(<span class="hljs-string">&quot;a&quot;</span>)
-<span class="hljs-comment">// strToBool: Function1[String, Boolean] = repl.MdocSession$MdocApp$$Lambda/0x00007feaae2585d8@507b9f67</span>
-<span class="hljs-keyword">val</span> isEven: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Boolean</span> = _ % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>
-<span class="hljs-comment">// isEven: Function1[Int, Boolean] = repl.MdocSession$MdocApp$$Lambda/0x00007feaae258bb8@5f8cbde6</span>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">strToBool</span></span>: <span class="hljs-type">String</span> =&gt; <span class="hljs-type">Boolean</span> = _.contains(<span class="hljs-string">&quot;a&quot;</span>)
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isEven</span></span>: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Boolean</span> = _ % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>
 </code></pre>
 <p>このとき、余積 <code>Either[String, Int]</code> から型 <code>Boolean</code> への一意の関数 <code>eitherToBool</code> を構成できます。この関数は、<code>String</code> については文字列 <code>&quot;a&quot;</code> を含むかどうか判定し、<code>Int</code> が偶数かどうかを判定する関数です。</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">val</span> eitherToBool: <span class="hljs-type">Either</span>[<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>] =&gt; <span class="hljs-type">Boolean</span> = coproductFactorizer(strToBool)(isEven)
-<span class="hljs-comment">// eitherToBool: Function1[Either[String, Int], Boolean] = repl.MdocSession$MdocApp$$Lambda/0x00007feaae2591b8@6f0785ec</span>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">eitherToBool</span></span>: <span class="hljs-type">Either</span>[<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>] =&gt; <span class="hljs-type">Boolean</span> = m(strToBool)(isEven)
 </code></pre>
 <p>この関数に対して <code>String</code> および <code>Int</code> を与えると、それぞれに対して関数が適用されます：</p>
 <pre><code class="lang-scala">eitherToBool(<span class="hljs-type">Left</span>(<span class="hljs-string">&quot;abcdefg&quot;</span>))
-<span class="hljs-comment">// res5: Boolean = true</span>
+<span class="hljs-comment">// res16: Boolean = true</span>
 eitherToBool(<span class="hljs-type">Right</span>(<span class="hljs-number">3</span>))
-<span class="hljs-comment">// res6: Boolean = false</span>
+<span class="hljs-comment">// res17: Boolean = false</span>
 </code></pre>
 <p>Either について、以下の図式は可換になります。</p>
 <p><img src="images/05_coproduct_example.png" alt="余積としての Either"></p>
@@ -657,9 +746,9 @@ eitherToBool(<span class="hljs-type">Right</span>(<span class="hljs-number">3</s
 }
 
 isomorCoproductLeft(<span class="hljs-string">&quot;Oh my god!&quot;</span>)
-<span class="hljs-comment">// res7: Either[String, Nothing] = Left(value = &quot;Oh my god!&quot;)</span>
+<span class="hljs-comment">// res18: Either[String, Nothing] = Left(value = &quot;Oh my god!&quot;)</span>
 isomorCoproductLeftInv(<span class="hljs-type">Left</span>(<span class="hljs-string">&quot;Oh my god!&quot;</span>))
-<span class="hljs-comment">// res8: String = &quot;Oh my god!&quot;</span>
+<span class="hljs-comment">// res19: String = &quot;Oh my god!&quot;</span>
 </code></pre>
 <pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isomorCoproductRight</span></span>[<span class="hljs-type">B</span>]: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">Either</span>[<span class="hljs-type">Nothing</span>, <span class="hljs-type">B</span>] = b =&gt; <span class="hljs-type">Right</span>(b)
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isomorCoproductRightInv</span></span>[<span class="hljs-type">B</span>]: <span class="hljs-type">Either</span>[<span class="hljs-type">Nothing</span>, <span class="hljs-type">B</span>] =&gt; <span class="hljs-type">B</span> = {
@@ -667,9 +756,9 @@ isomorCoproductLeftInv(<span class="hljs-type">Left</span>(<span class="hljs-str
   <span class="hljs-keyword">case</span> <span class="hljs-type">Left</span>(_)  =&gt; ??? <span class="hljs-comment">// Left は Nothing なので来ない</span>
 }
 isomorCoproductRight(<span class="hljs-string">&quot;Good&quot;</span>)
-<span class="hljs-comment">// res9: Either[Nothing, String] = Right(value = &quot;Good&quot;)</span>
+<span class="hljs-comment">// res20: Either[Nothing, String] = Right(value = &quot;Good&quot;)</span>
 isomorCoproductRightInv(<span class="hljs-type">Right</span>(<span class="hljs-string">&quot;Good&quot;</span>))
-<span class="hljs-comment">// res10: String = &quot;Good&quot;</span>
+<span class="hljs-comment">// res21: String = &quot;Good&quot;</span>
 </code></pre>
 <h2 id="まとめ">まとめ</h2>
 <ul>
@@ -699,8 +788,7 @@ isomorCoproductRightInv(<span class="hljs-type">Right</span>(<span class="hljs-s
 </li>
 </ul>
 <h2 id="参考文献">参考文献</h2>
-<p>[1] Scalaクラスメモ, <a href="http://www.ne.jp/asahi/hishidama/home/tech/scala/class.html" target="_blank">http://www.ne.jp/asahi/hishidama/home/tech/scala/class.html</a> , 2020年11月13日閲覧.</p>
-<p>[2] 雪田修一, 圏論入門 Haskell で計算する具体例から, 日本評論社, 2020.</p>
+<p>[1] 雪田修一, 圏論入門 Haskell で計算する具体例から, 日本評論社, 2020.</p>
 
                                 
                                 </section>
@@ -740,7 +828,7 @@ isomorCoproductRightInv(<span class="hljs-type">Right</span>(<span class="hljs-s
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、圏に関するいくつかの普遍的な構造について学んでいきます。始対象、終対象、積、そして余積について学びます。","title":"5, 6章 積と余積","level":"1.2.5","depth":2,"next":{"title":"6章 代数的データ型（一部は5章に）","level":"1.2.6","depth":2,"ref":"","articles":[]},"previous":{"title":"4章 Kleisli圏","level":"1.2.4","depth":2,"path":"04_Kleisli_category.md","ref":"04_Kleisli_category.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"05_Products_and_Coproducts.md","mtime":"2024-06-22T15:10:05.484Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-22T15:10:09.796Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、圏に関するいくつかの普遍的な構造について学んでいきます。始対象、終対象、積、そして余積について学びます。","title":"5, 6章 積と余積","level":"1.2.5","depth":2,"next":{"title":"6章 代数的データ型（一部は5章に）","level":"1.2.6","depth":2,"ref":"","articles":[]},"previous":{"title":"4章 Kleisli圏","level":"1.2.4","depth":2,"path":"04_Kleisli_category.md","ref":"04_Kleisli_category.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"05_Products_and_Coproducts.md","mtime":"2024-06-24T00:59:37.122Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-24T00:59:41.597Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
