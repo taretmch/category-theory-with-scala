@@ -415,24 +415,40 @@
 <p><img src="images/07_functor.png" alt="関手"></p>
 <h3 id="711-対象関数">7.1.1 対象関数</h3>
 <p>関手において、ある圏の対象を別のある圏の対象に変換するような対応を対象関数といいます。一般に、圏 <strong>C</strong> から <strong>D</strong> への関手 F は、圏 <strong>C</strong> の対象 a を <strong>D</strong> の対象 F(a) に対応させます。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// 対象関数</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">obj</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">A</span>]: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">F</span>[<span class="hljs-type">A</span>] = ???
+</code></pre>
 <p>Option 関手の例で言うと、Option 関手は型 <code>A</code> を型 <code>Option[A]</code> に対応させています。</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">objOptFunc</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">A</span> =&gt;  <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = <span class="hljs-type">Option</span>(_)
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">objOptFunc</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = <span class="hljs-type">Option</span>(_)
 
 objOptFunc(<span class="hljs-number">3</span>)
-<span class="hljs-comment">// res0: Option[Int] = Some(value = 3)</span>
+<span class="hljs-comment">// res1: Option[Int] = Some(value = 3)</span>
 objOptFunc(<span class="hljs-string">&quot;Hoge&quot;</span>)
-<span class="hljs-comment">// res1: Option[String] = Some(value = &quot;Hoge&quot;)</span>
+<span class="hljs-comment">// res2: Option[String] = Some(value = &quot;Hoge&quot;)</span>
 </code></pre>
 <h3 id="712-射関数">7.1.2 射関数</h3>
-<p>関手において、ある圏の射を別のある圏の射に変換するような対応を射関数といいます。一般に、圏 <strong>C</strong> から <strong>D</strong> への関手 F の射関数は、圏 <strong>C</strong> の射 f: a -&gt; b を <strong>D</strong> の射 F(f): F(a) -&gt; F(b) に対応させます。Hamcat において、射関数は <code>fmap</code> メソッドとして定義しています。</p>
-<p>Option 関手は、例で言うと、射 <code>f: A =&gt; B</code> を <code>fmap(f): Option[A] =&gt; Option[B]</code> に対応させる必要があります。この対応は、標準ライブラリにある <code>Option#map</code> メソッドによって実現されます：</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isEven</span></span>: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Boolean</span> = n =&gt; n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>
+<p>関手において、ある圏の射を別のある圏の射に変換するような対応を射関数といいます。一般に、圏 <strong>C</strong> から <strong>D</strong> への関手 F の射関数 <code>fmap</code> は、圏 <strong>C</strong> の射 f: a -&gt; b を <strong>D</strong> の射 F(f): F(a) -&gt; F(b)  に対応させます。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// 射関数</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmap</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>]: (<span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>) =&gt; (<span class="hljs-type">F</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">F</span>[<span class="hljs-type">B</span>]) = ???
+</code></pre>
+<p>例えば、Option 関手においては、射 <code>f: A =&gt; B</code> を <code>fmap(f): Option[A] =&gt; Option[B]</code> に対応させる必要があります。この対応は、標準ライブラリにある <code>Option#map</code> メソッドによって実現されます：</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapOptFunc</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]: (<span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>) =&gt; (<span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">B</span>]) =
+  f =&gt; optA =&gt; optA.map(f)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isEven</span></span>: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Boolean</span> = n =&gt; n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">negate</span></span>: <span class="hljs-type">Boolean</span> =&gt; <span class="hljs-type">Boolean</span> = b =&gt; !b
 
-<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>).map(isEven)
-<span class="hljs-comment">// res2: Option[Boolean] = Some(value = false)</span>
-<span class="hljs-type">Option</span>(<span class="hljs-literal">true</span>).map(negate)
+fmapOptFunc(isEven)(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
 <span class="hljs-comment">// res3: Option[Boolean] = Some(value = false)</span>
+
+fmapOptFunc(isEven)(<span class="hljs-type">Option</span>(<span class="hljs-number">4</span>))
+<span class="hljs-comment">// res4: Option[Boolean] = Some(value = true)</span>
+
+fmapOptFunc(negate)(<span class="hljs-type">Option</span>(<span class="hljs-literal">true</span>))
+<span class="hljs-comment">// res5: Option[Boolean] = Some(value = false)</span>
+
+fmapOptFunc(negate)(<span class="hljs-type">Option</span>(<span class="hljs-literal">false</span>))
+<span class="hljs-comment">// res6: Option[Boolean] = Some(value = true)</span>
 </code></pre>
 <p><img src="images/07_option_functor.png" alt="Option 関手"></p>
 <p>この射関数が満たすべき性質として、以下の2つがあります：</p>
@@ -441,50 +457,37 @@ objOptFunc(<span class="hljs-string">&quot;Hoge&quot;</span>)
 <li>C の任意の対象 A の恒等射 <code>identity[A]</code> について <code>fmap(identity[A]) === identity[F[A]]</code> が成り立つこと。</li>
 </ol>
 <p>1つ目の性質は、関手が射の合成を保存することを意味します。</p>
-<pre><code class="lang-scala"><span class="hljs-comment">// hamcat における関手のデータ型、インスタンスをインポート</span>
-<span class="hljs-keyword">import</span> hamcat.util.<span class="hljs-type">Eq</span>.===
+<pre><code class="lang-scala"><span class="hljs-keyword">import</span> hamcat.util.<span class="hljs-type">Eq</span>.===
 
-<span class="hljs-comment">// Option 型に対する Functor のインスタンス</span>
-<span class="hljs-keyword">val</span> optionFunctor = summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]]
-<span class="hljs-comment">// optionFunctor: Functor[[A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$20@43100d0b</span>
-
-<span class="hljs-comment">// f: isEven, g: negate とします</span>
-<span class="hljs-comment">// fmap(g compose f)</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">lifted1</span> </span>= optionFunctor.fmap(negate.compose(isEven))
-
-<span class="hljs-comment">// fmap(g) compose fmap(f)</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">lifted2</span> </span>= optionFunctor.fmap(negate).compose(optionFunctor.fmap(isEven))
-
-<span class="hljs-comment">// 射の合成が保存されることの確認</span>
-lifted1 === lifted2
-<span class="hljs-comment">// res4: Eq2[Function1[Option[Int], Option[Boolean]]] = Eq2(</span>
-<span class="hljs-comment">//   lhs = repl.MdocSession$MdocApp$$anon$20$$Lambda/0x00007fcf6e282000@279f96af,</span>
-<span class="hljs-comment">//   rhs = scala.Function1$$Lambda/0x00007fcf6d41b640@23e7e611</span>
-<span class="hljs-comment">// )</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span> = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">g</span></span>[<span class="hljs-type">B</span>, <span class="hljs-type">C</span>]: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">C</span> = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert1</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>, <span class="hljs-type">C</span>] = fmap[<span class="hljs-type">F</span>, <span class="hljs-type">A</span>, <span class="hljs-type">C</span>](g[<span class="hljs-type">B</span>, <span class="hljs-type">C</span>].compose(f[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>])) === fmap[<span class="hljs-type">F</span>, <span class="hljs-type">B</span>, <span class="hljs-type">C</span>](g[<span class="hljs-type">B</span>, <span class="hljs-type">C</span>]).compose(fmap[<span class="hljs-type">F</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]))
 </code></pre>
-<p>例えば、<code>Option(3)</code> に対して以下が成り立ちます。</p>
-<pre><code class="lang-scala">optionFunctor.fmap(negate compose isEven)(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>)) == (optionFunctor.fmap(negate) compose optionFunctor.fmap(isEven))(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
-<span class="hljs-comment">// res5: Boolean = true</span>
+<p>Option 関手の場合、満たされることが確認できます。</p>
+<pre><code class="lang-scala">fmapOptFunc(negate.compose(isEven))(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
+<span class="hljs-comment">// res7: Option[Boolean] = Some(value = true)</span>
+
+(fmapOptFunc(negate).compose(fmapOptFunc(isEven)))(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
+<span class="hljs-comment">// res8: Option[Boolean] = Some(value = true)</span>
+
+fmapOptFunc(negate.compose(isEven))(<span class="hljs-type">Option</span>(<span class="hljs-number">4</span>))
+<span class="hljs-comment">// res9: Option[Boolean] = Some(value = false)</span>
+
+(fmapOptFunc(negate).compose(fmapOptFunc(isEven)))(<span class="hljs-type">Option</span>(<span class="hljs-number">4</span>))
+<span class="hljs-comment">// res10: Option[Boolean] = Some(value = false)</span>
 </code></pre>
 <p><img src="images/07_functor_composition.png" alt="合成の保存"></p>
-<p>2つ目の性質は、関手が恒等射を保存することを意味します。</p>
-<pre><code class="lang-scala"><span class="hljs-comment">// fmap(identity[A])</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">lifted3</span> </span>= optionFunctor.fmap(identity[<span class="hljs-type">Int</span>])
-
-<span class="hljs-comment">// identity[F[A]]</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">lifted4</span> </span>= identity[<span class="hljs-type">Option</span>[<span class="hljs-type">Int</span>]]
-
-lifted3 === lifted4
-<span class="hljs-comment">// res6: Eq2[Function1[Option[Int], Option[Int]]] = Eq2(</span>
-<span class="hljs-comment">//   lhs = repl.MdocSession$MdocApp$$anon$20$$Lambda/0x00007fcf6e282000@fb4a197,</span>
-<span class="hljs-comment">//   rhs = repl.MdocSession$MdocApp$$Lambda/0x00007fcf6e282bd8@51f0a97c</span>
-<span class="hljs-comment">// )</span>
+<p>射関数の2つ目の性質は、関手が恒等射を保存することを意味します。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert2</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">A</span>] = fmap[<span class="hljs-type">F</span>, <span class="hljs-type">A</span>, <span class="hljs-type">A</span>](identity[<span class="hljs-type">A</span>]) === identity[<span class="hljs-type">F</span>[<span class="hljs-type">A</span>]]
 </code></pre>
-<p>例えば、<code>Option(3)</code> に対して以下が成り立ちます。</p>
-<pre><code class="lang-scala">optionFunctor.fmap(identity[<span class="hljs-type">Int</span>])(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>)) == identity[<span class="hljs-type">Option</span>[<span class="hljs-type">Int</span>]](<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
-<span class="hljs-comment">// res7: Boolean = true</span>
+<p>Option 関手の場合、満たされることが確認できます。</p>
+<pre><code class="lang-scala">fmapOptFunc(identity[<span class="hljs-type">Int</span>])(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
+<span class="hljs-comment">// res11: Option[Int] = Some(value = 3)</span>
+
+identity[<span class="hljs-type">Option</span>[<span class="hljs-type">Int</span>]](<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
+<span class="hljs-comment">// res12: Option[Int] = Some(value = 3)</span>
 </code></pre>
-<p>以上の性質は圏の構造を保存する対応を表す性質です。このような2つの性質を<strong>関手性</strong> (functor laws) と呼びます。</p>
+<p>以上の性質は、圏の構造を保存する対応を表す性質です。このような2つの性質を<strong>関手性</strong> (functor laws) と呼びます。</p>
 <h3 id="713-関手の定義">7.1.3 関手の定義</h3>
 <p>では、関手の定義を与えましょう。一般に、関手は以下のように定義されます。</p>
 <hr>
@@ -507,15 +510,17 @@ lifted3 === lifted4
 <p><code>fmap</code> メソッドは関数を<strong>引き上げる</strong> (lift)、とも言われます。関数 <code>A =&gt; B</code> は <code>fmap</code> によって <code>F[_]</code> 上の関数 <code>F[A] =&gt; F[B]</code> に引き上げられます。</p>
 <h3 id="722-option-関手">7.2.2 Option 関手</h3>
 <p>ある型 <code>F[_]</code> に対する <code>Functor</code> のインスタンスを実装してみましょう。ここでは、<code>Option</code> についての <code>Functor</code> のインスタンスを定義します。</p>
-<p>Option 型に対する <code>Functor</code> のインスタンスは、以下のように実装できます。<code>Functor</code> に必要なパラメータは型構築子としての <code>Option</code> です。また、抽象メソッドである射関数 <code>fmap</code> を実装する必要があります。</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">given</span> <span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]:
+<p><code>Option</code> 型に対する <code>Functor</code> のインスタンスは、以下のように実装できます。<code>Functor</code> に必要なパラメータは型構築子としての <code>Option</code> です。また、抽象メソッドである射関数 <code>fmap</code> を実装する必要があります。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">given</span> <span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>] <span class="hljs-keyword">with</span>
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">B</span>] = _.map(f)
 </code></pre>
 <p>Option 関手の <code>fmap</code> メソッドは <code>Option#map</code> メソッドと同じです。実装を見てわかる通り、<code>fmap</code> メソッドが関手性を満たすかどうか、つまり圏の構造を維持する対応かどうかは実装によります。定義だけでは <code>fmap</code> メソッドが必ず関手性を満たすとは言えませんが、関手性を満たすように <code>fmap</code> メソッドを実装しなければいけません。</p>
-<p>実際にこのインスタンスを使ってみましょう。本リポジトリでは、型クラスのインスタンスは <code>hamcat.data.instance</code> パッケージ内においてあります。コンソールにおいて <code>hamcat.data.instance.Implicits.given</code> をインポートすれば、全てのインスタンスが使えるようになります。<code>fmap</code> に <code>Option(3)</code> と <code>isEven</code> (偶数かどうかを判定する関数) を与えると、<code>Option(3)</code> の中の値に <code>isEven</code> を適用した結果 (すなわち <code>Some(false)</code>) が出力されます。</p>
-<pre><code class="lang-scala"><span class="hljs-comment">// import hamcat.data.instance.Implicits.given 実行後</span>
-summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]].fmap(isEven)(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
-<span class="hljs-comment">// res8: Option[Boolean] = Some(value = false)</span>
+<p>実際にこのインスタンスを使ってみましょう。<code>fmap</code> に <code>Option(3)</code> と <code>isEven</code> (偶数かどうかを判定する関数) を与えると、<code>Option(3)</code> の中の値に <code>isEven</code> を適用した結果 (すなわち <code>Some(false)</code>) が出力されます。</p>
+<pre><code class="lang-scala">summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]].fmap(isEven)(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
+<span class="hljs-comment">// res13: Option[Boolean] = Some(value = false)</span>
+
+summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]].fmap(isEven)(<span class="hljs-type">Option</span>(<span class="hljs-number">4</span>))
+<span class="hljs-comment">// res14: Option[Boolean] = Some(value = true)</span>
 </code></pre>
 <p>なお、毎回 <code>summon[Functor[Option]].fmap(...)</code> と書くのは面倒ですし、不便です。この場合、以下のように拡張メソッドを定義することによって <code>Option#fmap</code> メソッドとして呼び出せるようになります。</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">extension</span> [<span class="hljs-type">F</span>[_], <span class="hljs-type">A</span>](fa: <span class="hljs-type">F</span>[<span class="hljs-type">A</span>])
@@ -523,7 +528,10 @@ summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</sp
     functor.fmap[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f)(fa)
 </code></pre>
 <pre><code class="lang-scala"><span class="hljs-type">Option</span>(<span class="hljs-number">3</span>).fmap(isEven)
-<span class="hljs-comment">// res9: Option[Boolean] = Some(value = false)</span>
+<span class="hljs-comment">// res15: Option[Boolean] = Some(value = false)</span>
+
+<span class="hljs-type">Option</span>(<span class="hljs-number">4</span>).fmap(isEven)
+<span class="hljs-comment">// res16: Option[Boolean] = Some(value = true)</span>
 </code></pre>
 <p>では、この Option 関手の <code>fmap</code> メソッドが関手性を満たすかどうかについて調べてみましょう。</p>
 <p>関手性とは、以下が成り立つことでした。</p>
@@ -531,78 +539,108 @@ summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</sp
 <li><strong>C</strong> の射 f, g の合成 <code>g compose f</code> について <code>fmap(g compose f) == fmap(g) compose fmap(f)</code> が成り立つこと。</li>
 <li><strong>C</strong> の任意の対象 A の恒等射 <code>identity[A]</code> について <code>fmap(identity[A]) == identity[F[A]]</code> が成り立つこと。</li>
 </ul>
-<h3 id="723-reader-関手">7.2.3 Reader 関手</h3>
-<p>次の例として、型 <code>A</code> を受け取ったとき、任意の型 <code>X</code> を受け取って <code>A</code> を返すような関数 <code>X =&gt; A</code> に変換するような関手を考えます。この関手は Reader 関手と呼ばれます。</p>
-<p>Reader 関手で重要なことは、関数も関手であるということです。関数が関手であれば、型 <code>R</code> を受け取って <code>A</code> を返すような関数 <code>R =&gt; A</code> があったとき、<code>A</code> を <code>B</code> に変換する関数 <code>f: A =&gt; B</code> を与えれば <code>R</code> から <code>B</code> の関数を取得することができます。</p>
-<p>Reader 関手のインスタンスは、以下のように実装できます。対象関数として型構築子 <code>[X] =&gt;&gt; Function1[R, X]</code> を渡し、射関数 <code>fmap</code> を実装します。ここで、<code>Function1</code> は1変数関数を表す Scala 標準ライブラリの型です。<code>[X] =&gt;&gt; Function1[R, X]</code> は <code>R =&gt; X</code> を表します。</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">given</span> [<span class="hljs-type">R</span>]: <span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Function1</span>[<span class="hljs-type">R</span>, <span class="hljs-type">X</span>]] = <span class="hljs-keyword">new</span> <span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Function1</span>[<span class="hljs-type">R</span>, <span class="hljs-type">X</span>]]:
-  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): (<span class="hljs-type">R</span> =&gt; <span class="hljs-type">A</span>) =&gt; (<span class="hljs-type">R</span> =&gt; <span class="hljs-type">B</span>) = fa =&gt;
-    f.compose(fa)
-</code></pre>
-<p>なお、<code>[X] =&gt;&gt; Function1[R, X]</code> という記法は Scala 3 の Type Lambda というものです。</p>
-<p><code>fmap</code> メソッドは、ただ2つの関数を合成しているだけです。関数 <code>R =&gt; A</code> があったとき、引数として関数 <code>A =&gt; B</code> を受け取ると関数 <code>R =&gt; B</code> が返されます。</p>
-<p>これを使うと、例えば以下のようなことができます。</p>
-<pre><code class="lang-scala"><span class="hljs-comment">// 偶数かどうか判定する関数を奇数かどうか判定する関数に変換する</span>
-isEven.fmap(negate) (<span class="hljs-number">3</span>)
-<span class="hljs-comment">// res10: Boolean = true</span>
-</code></pre>
-<p><code>compose</code> が関手の射関数であるのですね。</p>
-<h2 id="73-関手の合成">7.3 関手の合成</h2>
-<p>圏を対象として関手を射とするような圏を考えるとき、射の合成、すなわち関手の合成を定義する必要があります。</p>
-<p>Scala 圏における関手は全て自己関手なので、自己関手同士を合成することができるのかどうかについて考えてみましょう。</p>
-<p>例えば、2つの関手 Option と List を合成してみるとどうなるでしょうか。まず、List 型の関手としての実装は以下のようになります。</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">given</span> <span class="hljs-type">Functor</span>[<span class="hljs-type">List</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">Functor</span>[<span class="hljs-type">List</span>]:
-  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">B</span>] = _.map(f)
-</code></pre>
-<p>対象関数は、型 <code>Int</code> を Option 関手によって <code>Option[Int]</code> に変換し、List 関手によって <code>List[Option[Int]]</code> に変換するものとします。
-`«§ﬂ</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">val</span> intOptionList: <span class="hljs-type">List</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">Int</span>]] = <span class="hljs-type">List</span>(<span class="hljs-type">Some</span>(<span class="hljs-number">1</span>), <span class="hljs-type">Some</span>(<span class="hljs-number">3</span>), <span class="hljs-type">None</span>, <span class="hljs-type">Some</span>(<span class="hljs-number">4</span>))
-<span class="hljs-comment">// intOptionList: List[Option[Int]] = List(</span>
-<span class="hljs-comment">//   Some(value = 1),</span>
-<span class="hljs-comment">//   Some(value = 3),</span>
-<span class="hljs-comment">//   None,</span>
-<span class="hljs-comment">//   Some(value = 4)</span>
-<span class="hljs-comment">// )</span>
-</code></pre>
-<p>次に、射関数は、List 関手の <code>fmap</code> メソッドと Option 関手の <code>fmap</code> メソッドの合成 <code>fmapC</code> と定義します。</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">val</span> listFunctor = summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">List</span>]]
-<span class="hljs-comment">// listFunctor: Functor[List] = repl.MdocSession$MdocApp$$anon$22@7e4c3f08</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapL</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]: (<span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>) =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">B</span>] = listFunctor.fmap
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapO</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]: (<span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>) =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">B</span>] = optionFunctor.fmap
+<p><code>isEven</code> 関数と <code>negate</code> 関数を使ってこちらを確認してみます。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> optionFunctor = summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]]
+<span class="hljs-comment">// optionFunctor: given_Functor_Option = repl.MdocSession$MdocApp0$given_Functor_Option$@2a881df6</span>
 
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapC</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]: (<span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>) =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]] =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">B</span>]] = fmapL.compose(fmapO[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>])
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">negate</span></span>(b: <span class="hljs-type">Boolean</span>): <span class="hljs-type">Boolean</span> = !b
+
+<span class="hljs-comment">// fmap(g compose f) == fmap(g) compose fmap(f) の確認</span>
+optionFunctor.fmap(negate compose isEven)(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
+<span class="hljs-comment">// res17: Option[Boolean] = Some(value = true)</span>
+
+optionFunctor.fmap(negate).compose(optionFunctor.fmap(isEven))(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
+<span class="hljs-comment">// res18: Option[Boolean] = Some(value = true)</span>
+
+<span class="hljs-comment">// fmap(identity[A]) == identity[F[A]] の確認</span>
+optionFunctor.fmap(identity[<span class="hljs-type">Int</span>])(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
+<span class="hljs-comment">// res19: Option[Int] = Some(value = 3)</span>
+
+identity[<span class="hljs-type">Option</span>[<span class="hljs-type">Int</span>]](<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
+<span class="hljs-comment">// res20: Option[Int] = Some(value = 3)</span>
 </code></pre>
-<p>この <code>fmapC</code> メソッドを用いると、2つの関手によって包まれた型 <code>Int</code> 上の関数</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">val</span> increment: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Int</span> = _ + <span class="hljs-number">1</span>
-<span class="hljs-comment">// increment: Function1[Int, Int] = repl.MdocSession$MdocApp$$Lambda/0x00007fcf6e284c28@45047685</span>
+<h3 id="723-reader-関手">7.2.3 Reader 関手</h3>
+<p>次の例として、型 <code>A</code> を受け取ったとき、任意の型 <code>R</code> を受け取って <code>A</code> を返すような関数 <code>R =&gt; A</code> に変換するような関手を考えます。この関手は Reader 関手と呼ばれます。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>](<span class="hljs-params">run: <span class="hljs-type">R</span> =&gt; <span class="hljs-type">A</span></span>)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">objReaderFunctor</span></span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>](f: <span class="hljs-type">R</span> =&gt; <span class="hljs-type">A</span>): <span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>] = <span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>](f)
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapReaderFunctor</span></span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">B</span>] = fa =&gt;
+  <span class="hljs-type">Reader</span>(fa.run.andThen(f))
 </code></pre>
-<p>を <code>List[Option[Int]]</code> 上の関数として引き上げることができます。</p>
-<pre><code class="lang-scala">fmapC(increment)(intOptionList)
-<span class="hljs-comment">// res11: List[Option[Int]] = List(</span>
-<span class="hljs-comment">//   Some(value = 2),</span>
-<span class="hljs-comment">//   Some(value = 4),</span>
-<span class="hljs-comment">//   None,</span>
-<span class="hljs-comment">//   Some(value = 5)</span>
+<p><code>R =&gt; A</code> という表記は関数であり、Scala においては1変数関数の型 <code>Function1[R, A]</code> であることがわかります。</p>
+<p>すなわち、Reader の対応が関手であるということは、関数も関手であるといえます。関数が関手であれば、型 <code>R</code> を受け取って <code>A</code> を返すような関数 <code>R =&gt; A</code> があったとき、<code>A</code> を <code>B</code> に変換する関数 <code>f: A =&gt; B</code> を与えれば <code>R</code> から <code>B</code> の関数を取得することができます。</p>
+<p>Reader 関手のインスタンスは、以下のように実装できます。対象関数は型構築子 <code>[X] =&gt;&gt; Reader[R, X]</code>、射関数 <code>fmap</code> は関数合成です。ここで、<code>[X] =&gt;&gt; Reader[R, X]</code> の表記は Scala 3 の Type Lambda というもので、<code>R =&gt; X</code> を表します。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">given</span> [<span class="hljs-type">R</span>]: <span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">X</span>]] <span class="hljs-keyword">with</span>
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">B</span>] = fa =&gt;
+    <span class="hljs-type">Reader</span>(fa.run.andThen(f))
+</code></pre>
+<p>これを使うと、例えば以下のようなことができます。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">length</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">Reader</span>[<span class="hljs-type">List</span>[<span class="hljs-type">A</span>], <span class="hljs-type">Int</span>] = <span class="hljs-type">Reader</span>(_.length)
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">greaterThanZero</span></span>: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Boolean</span> = _ &gt; <span class="hljs-number">0</span>
+
+<span class="hljs-comment">// List[A] =&gt; Int を List[A] =&gt; Boolean に変換する</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">nonEmpty</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">Reader</span>[<span class="hljs-type">List</span>[<span class="hljs-type">A</span>], <span class="hljs-type">Boolean</span>] = length.fmap(greaterThanZero)
+
+nonEmpty.run(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>))
+<span class="hljs-comment">// res21: Boolean = true</span>
+
+nonEmpty.run(<span class="hljs-type">List</span>.empty[<span class="hljs-type">Int</span>])
+<span class="hljs-comment">// res22: Boolean = false</span>
+</code></pre>
+<p>関数合成 (<code>andThen</code>, <code>compose</code>) が Reader 関手の射関数であるのですね。</p>
+<h2 id="73-関手の合成">7.3 関手の合成</h2>
+<p>さて、圏を対象として関手を射とするような圏を考えるとき、射の合成、すなわち関手の合成を定義する必要があります。</p>
+<p>Scala 圏における関手は全て自己関手なので、自己関手同士を合成することができるのかどうかについて考えてみましょう。</p>
+<p>例えば、2つの関手 Option 関手と Reader 関手を合成してみるとどうなるでしょうか。関手の合成に関しても、対象関数の合成と射関数の合成を考える必要がありそうです。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// 対象関数の合成</span>
+<span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReaderOption</span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>](<span class="hljs-params">run: <span class="hljs-type">R</span> =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]</span>)</span>
+
+<span class="hljs-keyword">val</span> toIntOption: <span class="hljs-type">ReaderOption</span>[<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>] = <span class="hljs-type">ReaderOption</span>(_.toIntOption)
+<span class="hljs-comment">// toIntOption: ReaderOption[String, Int] = ReaderOption(</span>
+<span class="hljs-comment">//   run = repl.MdocSession$MdocApp0$$Lambda/0x00007fbca1f947f8@42cb5ca5</span>
 <span class="hljs-comment">// )</span>
+
+toIntOption.run(<span class="hljs-string">&quot;12345&quot;</span>)
+<span class="hljs-comment">// res23: Option[Int] = Some(value = 12345)</span>
+
+toIntOption.run(<span class="hljs-string">&quot;hoge&quot;</span>)
+<span class="hljs-comment">// res24: Option[Int] = None</span>
 </code></pre>
-<p>これは、<code>fmap</code> メソッドを2回呼び出すことに等しいです。</p>
-<pre><code class="lang-scala">intOptionList.fmap(_.fmap(increment))
-<span class="hljs-comment">// res12: List[Option[Int]] = List(</span>
-<span class="hljs-comment">//   Some(value = 2),</span>
-<span class="hljs-comment">//   Some(value = 4),</span>
-<span class="hljs-comment">//   None,</span>
-<span class="hljs-comment">//   Some(value = 5)</span>
-<span class="hljs-comment">// )</span>
+<pre><code class="lang-scala"><span class="hljs-comment">// 射関数の合成</span>
+<span class="hljs-keyword">given</span> [<span class="hljs-type">R</span>](<span class="hljs-keyword">using</span> readerF: <span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">X</span>]], optionF: <span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]): <span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">ReaderOption</span>[<span class="hljs-type">R</span>, <span class="hljs-type">X</span>]] <span class="hljs-keyword">with</span>
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">ReaderOption</span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>] =&gt; <span class="hljs-type">ReaderOption</span>[<span class="hljs-type">R</span>, <span class="hljs-type">B</span>] = fa =&gt;
+    <span class="hljs-type">ReaderOption</span>(readerF.fmap(optionF.fmap(f))(<span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]](fa.run)).run)
+
+toIntOption.fmap(_ * <span class="hljs-number">2</span>).run(<span class="hljs-string">&quot;12345&quot;</span>)
+<span class="hljs-comment">// res25: Option[Int] = Some(value = 24690)</span>
+
+toIntOption.fmap(_ * <span class="hljs-number">2</span>).run(<span class="hljs-string">&quot;hoge&quot;</span>)
+<span class="hljs-comment">// res26: Option[Int] = None</span>
 </code></pre>
-<p>外側の <code>fmap</code> は List 関手の射関数で、内側の <code>fmap</code> は Option 関手の射関数です。</p>
-<p>関手の合成によって定義された射関数 <code>fmapC</code> は射の合成を保存しますし、恒等射を保存します。</p>
+<p>自然と関手を定義してしまいましたが、関手の合成によって定義された射関数は、射の合成を保存しています。また、恒等射も保存します。</p>
 <pre><code class="lang-scala"><span class="hljs-comment">// fmap(g compose f) == fmap(g) compose fmap(f)</span>
-fmapC(isEven compose increment)(intOptionList) == (fmapC(isEven) compose fmapC(increment))(intOptionList)
-<span class="hljs-comment">// res13: Boolean = true</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert3</span></span>[<span class="hljs-type">R</span>] =
+  <span class="hljs-keyword">val</span> f = summon[<span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">ReaderOption</span>[<span class="hljs-type">R</span>, <span class="hljs-type">X</span>]]]
+  f.fmap(negate.compose(isEven)) === f.fmap(negate).compose(f.fmap(isEven))
+
+<span class="hljs-keyword">val</span> readerOptionFunctor = summon[<span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">ReaderOption</span>[<span class="hljs-type">String</span>, <span class="hljs-type">X</span>]]]
+<span class="hljs-comment">// readerOptionFunctor: given_Functor_ReaderOption[String] = repl.MdocSession$MdocApp0$given_Functor_ReaderOption@3109ffe6</span>
+
+(readerOptionFunctor.fmap(negate.compose(isEven))(<span class="hljs-type">ReaderOption</span>(_.toIntOption))).run(<span class="hljs-string">&quot;12345&quot;</span>)
+<span class="hljs-comment">// res27: Option[Boolean] = Some(value = true)</span>
+
+(readerOptionFunctor.fmap(negate).compose(readerOptionFunctor.fmap(isEven))(<span class="hljs-type">ReaderOption</span>(_.toIntOption))).run(<span class="hljs-string">&quot;12345&quot;</span>)
+<span class="hljs-comment">// res28: Option[Boolean] = Some(value = true)</span>
 
 <span class="hljs-comment">// fmap(identity[A]) == identity[F[A]]</span>
-fmapC(identity[<span class="hljs-type">Int</span>])(intOptionList) == identity[<span class="hljs-type">List</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">Int</span>]]](intOptionList)
-<span class="hljs-comment">// res14: Boolean = true</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert4</span></span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>] =
+  <span class="hljs-keyword">val</span> f = summon[<span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">ReaderOption</span>[<span class="hljs-type">R</span>, <span class="hljs-type">X</span>]]]
+  f.fmap(identity[<span class="hljs-type">A</span>]) === identity[<span class="hljs-type">ReaderOption</span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>]]
+
+((readerOptionFunctor.fmap(identity[<span class="hljs-type">Int</span>]))(<span class="hljs-type">ReaderOption</span>(_.toIntOption))).run(<span class="hljs-string">&quot;12345&quot;</span>)
+<span class="hljs-comment">// res29: Option[Int] = Some(value = 12345)</span>
+
+(identity[<span class="hljs-type">ReaderOption</span>[<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>]](<span class="hljs-type">ReaderOption</span>(_.toIntOption))).run(<span class="hljs-string">&quot;12345&quot;</span>)
+<span class="hljs-comment">// res30: Option[Int] = Some(value = 12345)</span>
 </code></pre>
 <p>したがって、関手の合成もまた、関手であることがわかります。</p>
 <p>自己関手の場合のみを取り上げましたが、自己関手でない一般の関手に関してもこれは成り立ちます。興味があれば証明してみてください。</p>
@@ -660,7 +698,7 @@ fmapC(identity[<span class="hljs-type">Int</span>])(intOptionList) == identity[<
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、圏から圏への対応である関手について定義し、プログラミングにおける関手の例（Option 関手や Reader 関手）を示します。","title":"7章 関手","level":"1.2.7","depth":2,"next":{"title":"8章 関手性","level":"1.2.8","depth":2,"path":"08_Functoriality.md","ref":"08_Functoriality.md","articles":[]},"previous":{"title":"6章 代数的データ型（一部は5章に）","level":"1.2.6","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"07_Functor.md","mtime":"2024-06-24T00:59:38.122Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-24T00:59:41.597Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、圏から圏への対応である関手について定義し、プログラミングにおける関手の例（Option 関手や Reader 関手）を示します。","title":"7章 関手","level":"1.2.7","depth":2,"next":{"title":"8章 関手性","level":"1.2.8","depth":2,"path":"08_Functoriality.md","ref":"08_Functoriality.md","articles":[]},"previous":{"title":"6章 代数的データ型（一部は5章に）","level":"1.2.6","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"07_Functor.md","mtime":"2024-06-25T15:53:14.493Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-25T15:53:17.958Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
