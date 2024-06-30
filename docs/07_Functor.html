@@ -401,6 +401,7 @@
 <li><a href="#721-functor-型クラス">7.2.1 Functor 型クラス</a></li>
 <li><a href="#722-option-関手">7.2.2 Option 関手</a></li>
 <li><a href="#723-reader-関手">7.2.3 Reader 関手</a></li>
+<li><a href="#724-writer-関手">7.2.4 Writer 関手</a></li>
 </ul>
 </li>
 <li><a href="#73-関手の合成">7.3 関手の合成</a></li>
@@ -541,7 +542,7 @@ summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</sp
 </ul>
 <p><code>isEven</code> 関数と <code>negate</code> 関数を使ってこちらを確認してみます。</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> optionFunctor = summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]]
-<span class="hljs-comment">// optionFunctor: given_Functor_Option = repl.MdocSession$MdocApp0$given_Functor_Option$@2a881df6</span>
+<span class="hljs-comment">// optionFunctor: given_Functor_Option = repl.MdocSession$MdocApp0$given_Functor_Option$@3ecf072c</span>
 
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">negate</span></span>(b: <span class="hljs-type">Boolean</span>): <span class="hljs-type">Boolean</span> = !b
 
@@ -587,6 +588,54 @@ nonEmpty.run(<span class="hljs-type">List</span>.empty[<span class="hljs-type">I
 <span class="hljs-comment">// res22: Boolean = false</span>
 </code></pre>
 <p>関数合成 (<code>andThen</code>, <code>compose</code>) が Reader 関手の射関数であるのですね。</p>
+<h3 id="724-writer-関手">7.2.4 Writer 関手</h3>
+<p>4章で、Kleisli 圏の例として Writer 圏を見ました。Writer 圏において、以下のような型 <code>Writer</code> を導入しました。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">import</span> hamcat.data.<span class="hljs-type">Semigroup</span>
+<span class="hljs-keyword">import</span> hamcat.data.<span class="hljs-type">Monoid</span>
+<span class="hljs-keyword">import</span> hamcat.syntax.<span class="hljs-type">Implicits</span>.|+|
+
+<span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">A</span>](<span class="hljs-params">run: (<span class="hljs-type">L</span>, <span class="hljs-type">A</span></span>))</span>
+
+<span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">Writer</span></span>:
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">pure</span></span>[<span class="hljs-type">L</span>, <span class="hljs-type">A</span>](a: <span class="hljs-type">A</span>)(<span class="hljs-keyword">using</span> m: <span class="hljs-type">Monoid</span>[<span class="hljs-type">L</span>]): <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">A</span>] = <span class="hljs-type">Writer</span>((m.empty, a))
+
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">&gt;=&gt;</span></span>[<span class="hljs-type">L</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>, <span class="hljs-type">C</span>](<span class="hljs-keyword">using</span> <span class="hljs-type">Semigroup</span>[<span class="hljs-type">L</span>]): (<span class="hljs-type">A</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">B</span>]) =&gt; (<span class="hljs-type">B</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">C</span>]) =&gt; (<span class="hljs-type">A</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">C</span>]) = f =&gt; g =&gt; a =&gt;
+    <span class="hljs-keyword">val</span> (logF, b) = f(a).run
+    <span class="hljs-keyword">val</span> (logG, c) = g(b).run
+    <span class="hljs-type">Writer</span>((logF |+| logG), c)
+
+<span class="hljs-keyword">extension</span> [<span class="hljs-type">L</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">B</span>])
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">&gt;=&gt;</span></span>[<span class="hljs-type">C</span>](<span class="hljs-keyword">using</span> <span class="hljs-type">Semigroup</span>[<span class="hljs-type">L</span>])(g: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">C</span>]): <span class="hljs-type">A</span> =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">C</span>] =
+    <span class="hljs-type">Writer</span>.&gt;=&gt;(f)(g)
+</code></pre>
+<p>Writer 圏における対象は任意の型 <code>A</code> で、<code>A</code> から <code>A</code> への射は <code>A =&gt; Writer[L, A]</code> だと定義しました。</p>
+<p>実は、Writer 圏における射の合成をうまく活用することによって、<code>Writer</code> についての <code>fmap</code> メソッドを実装することができます。そのため、<code>Writer</code> は関手であって、Writer 関手と呼ばれます。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">given</span> [<span class="hljs-type">L</span>](<span class="hljs-keyword">using</span> m: <span class="hljs-type">Monoid</span>[<span class="hljs-type">L</span>]): <span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">X</span>]] <span class="hljs-keyword">with</span>
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">B</span>] =
+    identity[<span class="hljs-type">Writer</span>[<span class="hljs-type">L</span>, <span class="hljs-type">A</span>]] &gt;=&gt; (a =&gt; <span class="hljs-type">Writer</span>.pure[<span class="hljs-type">L</span>, <span class="hljs-type">B</span>](f(a)))
+</code></pre>
+<pre><code class="lang-scala"><span class="hljs-keyword">given</span> <span class="hljs-type">Monoid</span>[<span class="hljs-type">String</span>] <span class="hljs-keyword">with</span>
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">combine</span></span>(a: <span class="hljs-type">String</span>, b: <span class="hljs-type">String</span>): <span class="hljs-type">String</span> = a + b
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">empty</span></span>: <span class="hljs-type">String</span> = <span class="hljs-string">&quot;&quot;</span>
+
+<span class="hljs-keyword">val</span> stringWriterFunctor = summon[<span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">String</span>, <span class="hljs-type">X</span>]]]
+<span class="hljs-comment">// stringWriterFunctor: given_Functor_Writer[String] = repl.MdocSession$MdocApp0$given_Functor_Writer@1be22e32</span>
+<span class="hljs-keyword">val</span> intWriter = <span class="hljs-type">Writer</span>[<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>](<span class="hljs-string">&quot;hogehoge. &quot;</span>, <span class="hljs-number">12345</span>)
+<span class="hljs-comment">// intWriter: Writer[String, Int] = Writer(run = (&quot;hogehoge. &quot;, 12345))</span>
+<span class="hljs-keyword">val</span> double: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Int</span> = _ * <span class="hljs-number">2</span>
+<span class="hljs-comment">// double: Function1[Int, Int] = repl.MdocSession$MdocApp0$$Lambda/0x00007f91b1fad458@e94783e</span>
+stringWriterFunctor.fmap(double)(intWriter)
+<span class="hljs-comment">// res23: Writer[String, Int] = Writer(run = (&quot;hogehoge. &quot;, 24690))</span>
+
+<span class="hljs-keyword">val</span> listWriter = <span class="hljs-type">Writer</span>[<span class="hljs-type">String</span>, <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>]](<span class="hljs-string">&quot;hogehoge. &quot;</span>, <span class="hljs-type">List</span>(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>))
+<span class="hljs-comment">// listWriter: Writer[String, List[Int]] = Writer(</span>
+<span class="hljs-comment">//   run = (&quot;hogehoge. &quot;, List(1, 2, 3, 4, 5))</span>
+<span class="hljs-comment">// )</span>
+<span class="hljs-keyword">val</span> listLength: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>] =&gt; <span class="hljs-type">Int</span> = _.length
+<span class="hljs-comment">// listLength: Function1[List[Int], Int] = repl.MdocSession$MdocApp0$$Lambda/0x00007f91b1faf168@454dce2f</span>
+stringWriterFunctor.fmap(listLength)(listWriter)
+<span class="hljs-comment">// res24: Writer[String, Int] = Writer(run = (&quot;hogehoge. &quot;, 5))</span>
+</code></pre>
 <h2 id="73-関手の合成">7.3 関手の合成</h2>
 <p>さて、圏を対象として関手を射とするような圏を考えるとき、射の合成、すなわち関手の合成を定義する必要があります。</p>
 <p>Scala 圏における関手は全て自己関手なので、自己関手同士を合成することができるのかどうかについて考えてみましょう。</p>
@@ -596,14 +645,14 @@ nonEmpty.run(<span class="hljs-type">List</span>.empty[<span class="hljs-type">I
 
 <span class="hljs-keyword">val</span> toIntOption: <span class="hljs-type">ReaderOption</span>[<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>] = <span class="hljs-type">ReaderOption</span>(_.toIntOption)
 <span class="hljs-comment">// toIntOption: ReaderOption[String, Int] = ReaderOption(</span>
-<span class="hljs-comment">//   run = repl.MdocSession$MdocApp0$$Lambda/0x00007fbca1f947f8@42cb5ca5</span>
+<span class="hljs-comment">//   run = repl.MdocSession$MdocApp0$$Lambda/0x00007f91b1faf960@72121423</span>
 <span class="hljs-comment">// )</span>
 
 toIntOption.run(<span class="hljs-string">&quot;12345&quot;</span>)
-<span class="hljs-comment">// res23: Option[Int] = Some(value = 12345)</span>
+<span class="hljs-comment">// res25: Option[Int] = Some(value = 12345)</span>
 
 toIntOption.run(<span class="hljs-string">&quot;hoge&quot;</span>)
-<span class="hljs-comment">// res24: Option[Int] = None</span>
+<span class="hljs-comment">// res26: Option[Int] = None</span>
 </code></pre>
 <pre><code class="lang-scala"><span class="hljs-comment">// 射関数の合成</span>
 <span class="hljs-keyword">given</span> [<span class="hljs-type">R</span>](<span class="hljs-keyword">using</span> readerF: <span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">X</span>]], optionF: <span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]): <span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">ReaderOption</span>[<span class="hljs-type">R</span>, <span class="hljs-type">X</span>]] <span class="hljs-keyword">with</span>
@@ -611,10 +660,10 @@ toIntOption.run(<span class="hljs-string">&quot;hoge&quot;</span>)
     <span class="hljs-type">ReaderOption</span>(readerF.fmap(optionF.fmap(f))(<span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]](fa.run)).run)
 
 toIntOption.fmap(_ * <span class="hljs-number">2</span>).run(<span class="hljs-string">&quot;12345&quot;</span>)
-<span class="hljs-comment">// res25: Option[Int] = Some(value = 24690)</span>
+<span class="hljs-comment">// res27: Option[Int] = Some(value = 24690)</span>
 
 toIntOption.fmap(_ * <span class="hljs-number">2</span>).run(<span class="hljs-string">&quot;hoge&quot;</span>)
-<span class="hljs-comment">// res26: Option[Int] = None</span>
+<span class="hljs-comment">// res28: Option[Int] = None</span>
 </code></pre>
 <p>自然と関手を定義してしまいましたが、関手の合成によって定義された射関数は、射の合成を保存しています。また、恒等射も保存します。</p>
 <pre><code class="lang-scala"><span class="hljs-comment">// fmap(g compose f) == fmap(g) compose fmap(f)</span>
@@ -623,13 +672,13 @@ toIntOption.fmap(_ * <span class="hljs-number">2</span>).run(<span class="hljs-s
   f.fmap(negate.compose(isEven)) === f.fmap(negate).compose(f.fmap(isEven))
 
 <span class="hljs-keyword">val</span> readerOptionFunctor = summon[<span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">ReaderOption</span>[<span class="hljs-type">String</span>, <span class="hljs-type">X</span>]]]
-<span class="hljs-comment">// readerOptionFunctor: given_Functor_ReaderOption[String] = repl.MdocSession$MdocApp0$given_Functor_ReaderOption@3109ffe6</span>
+<span class="hljs-comment">// readerOptionFunctor: given_Functor_ReaderOption[String] = repl.MdocSession$MdocApp0$given_Functor_ReaderOption@4c708866</span>
 
 (readerOptionFunctor.fmap(negate.compose(isEven))(<span class="hljs-type">ReaderOption</span>(_.toIntOption))).run(<span class="hljs-string">&quot;12345&quot;</span>)
-<span class="hljs-comment">// res27: Option[Boolean] = Some(value = true)</span>
+<span class="hljs-comment">// res29: Option[Boolean] = Some(value = true)</span>
 
 (readerOptionFunctor.fmap(negate).compose(readerOptionFunctor.fmap(isEven))(<span class="hljs-type">ReaderOption</span>(_.toIntOption))).run(<span class="hljs-string">&quot;12345&quot;</span>)
-<span class="hljs-comment">// res28: Option[Boolean] = Some(value = true)</span>
+<span class="hljs-comment">// res30: Option[Boolean] = Some(value = true)</span>
 
 <span class="hljs-comment">// fmap(identity[A]) == identity[F[A]]</span>
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert4</span></span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>] =
@@ -637,10 +686,10 @@ toIntOption.fmap(_ * <span class="hljs-number">2</span>).run(<span class="hljs-s
   f.fmap(identity[<span class="hljs-type">A</span>]) === identity[<span class="hljs-type">ReaderOption</span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>]]
 
 ((readerOptionFunctor.fmap(identity[<span class="hljs-type">Int</span>]))(<span class="hljs-type">ReaderOption</span>(_.toIntOption))).run(<span class="hljs-string">&quot;12345&quot;</span>)
-<span class="hljs-comment">// res29: Option[Int] = Some(value = 12345)</span>
+<span class="hljs-comment">// res31: Option[Int] = Some(value = 12345)</span>
 
 (identity[<span class="hljs-type">ReaderOption</span>[<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>]](<span class="hljs-type">ReaderOption</span>(_.toIntOption))).run(<span class="hljs-string">&quot;12345&quot;</span>)
-<span class="hljs-comment">// res30: Option[Int] = Some(value = 12345)</span>
+<span class="hljs-comment">// res32: Option[Int] = Some(value = 12345)</span>
 </code></pre>
 <p>したがって、関手の合成もまた、関手であることがわかります。</p>
 <p>自己関手の場合のみを取り上げましたが、自己関手でない一般の関手に関してもこれは成り立ちます。興味があれば証明してみてください。</p>
@@ -698,7 +747,7 @@ toIntOption.fmap(_ * <span class="hljs-number">2</span>).run(<span class="hljs-s
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、圏から圏への対応である関手について定義し、プログラミングにおける関手の例（Option 関手や Reader 関手）を示します。","title":"7章 関手","level":"1.2.7","depth":2,"next":{"title":"8章 関手性","level":"1.2.8","depth":2,"path":"08_Functoriality.md","ref":"08_Functoriality.md","articles":[]},"previous":{"title":"6章 代数的データ型（一部は5章に）","level":"1.2.6","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"07_Functor.md","mtime":"2024-06-25T15:53:14.493Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-25T15:53:17.958Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、圏から圏への対応である関手について定義し、プログラミングにおける関手の例（Option 関手や Reader 関手）を示します。","title":"7章 関手","level":"1.2.7","depth":2,"next":{"title":"8章 関手性","level":"1.2.8","depth":2,"path":"08_Functoriality.md","ref":"08_Functoriality.md","articles":[]},"previous":{"title":"6章 代数的データ型（一部は5章に）","level":"1.2.6","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"07_Functor.md","mtime":"2024-06-30T02:18:04.317Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-30T02:18:08.192Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
