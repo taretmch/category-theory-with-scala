@@ -542,7 +542,7 @@ summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</sp
 </ul>
 <p><code>isEven</code> 関数と <code>negate</code> 関数を使ってこちらを確認してみます。</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> optionFunctor = summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]]
-<span class="hljs-comment">// optionFunctor: given_Functor_Option = repl.MdocSession$MdocApp0$given_Functor_Option$@3ecf072c</span>
+<span class="hljs-comment">// optionFunctor: given_Functor_Option = repl.MdocSession$MdocApp0$given_Functor_Option$@15dba274</span>
 
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">negate</span></span>(b: <span class="hljs-type">Boolean</span>): <span class="hljs-type">Boolean</span> = !b
 
@@ -619,11 +619,11 @@ nonEmpty.run(<span class="hljs-type">List</span>.empty[<span class="hljs-type">I
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">empty</span></span>: <span class="hljs-type">String</span> = <span class="hljs-string">&quot;&quot;</span>
 
 <span class="hljs-keyword">val</span> stringWriterFunctor = summon[<span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Writer</span>[<span class="hljs-type">String</span>, <span class="hljs-type">X</span>]]]
-<span class="hljs-comment">// stringWriterFunctor: given_Functor_Writer[String] = repl.MdocSession$MdocApp0$given_Functor_Writer@1be22e32</span>
+<span class="hljs-comment">// stringWriterFunctor: given_Functor_Writer[String] = repl.MdocSession$MdocApp0$given_Functor_Writer@2fb0102b</span>
 <span class="hljs-keyword">val</span> intWriter = <span class="hljs-type">Writer</span>[<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>](<span class="hljs-string">&quot;hogehoge. &quot;</span>, <span class="hljs-number">12345</span>)
 <span class="hljs-comment">// intWriter: Writer[String, Int] = Writer(run = (&quot;hogehoge. &quot;, 12345))</span>
 <span class="hljs-keyword">val</span> double: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Int</span> = _ * <span class="hljs-number">2</span>
-<span class="hljs-comment">// double: Function1[Int, Int] = repl.MdocSession$MdocApp0$$Lambda/0x00007f91b1fad458@e94783e</span>
+<span class="hljs-comment">// double: Function1[Int, Int] = repl.MdocSession$MdocApp0$$Lambda/0x00007f4199fbd458@5eae9a8e</span>
 stringWriterFunctor.fmap(double)(intWriter)
 <span class="hljs-comment">// res23: Writer[String, Int] = Writer(run = (&quot;hogehoge. &quot;, 24690))</span>
 
@@ -632,7 +632,7 @@ stringWriterFunctor.fmap(double)(intWriter)
 <span class="hljs-comment">//   run = (&quot;hogehoge. &quot;, List(1, 2, 3, 4, 5))</span>
 <span class="hljs-comment">// )</span>
 <span class="hljs-keyword">val</span> listLength: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>] =&gt; <span class="hljs-type">Int</span> = _.length
-<span class="hljs-comment">// listLength: Function1[List[Int], Int] = repl.MdocSession$MdocApp0$$Lambda/0x00007f91b1faf168@454dce2f</span>
+<span class="hljs-comment">// listLength: Function1[List[Int], Int] = repl.MdocSession$MdocApp0$$Lambda/0x00007f4199fbf168@19dd9b2b</span>
 stringWriterFunctor.fmap(listLength)(listWriter)
 <span class="hljs-comment">// res24: Writer[String, Int] = Writer(run = (&quot;hogehoge. &quot;, 5))</span>
 </code></pre>
@@ -645,7 +645,7 @@ stringWriterFunctor.fmap(listLength)(listWriter)
 
 <span class="hljs-keyword">val</span> toIntOption: <span class="hljs-type">ReaderOption</span>[<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>] = <span class="hljs-type">ReaderOption</span>(_.toIntOption)
 <span class="hljs-comment">// toIntOption: ReaderOption[String, Int] = ReaderOption(</span>
-<span class="hljs-comment">//   run = repl.MdocSession$MdocApp0$$Lambda/0x00007f91b1faf960@72121423</span>
+<span class="hljs-comment">//   run = repl.MdocSession$MdocApp0$$Lambda/0x00007f4199fbf960@4fade1e9</span>
 <span class="hljs-comment">// )</span>
 
 toIntOption.run(<span class="hljs-string">&quot;12345&quot;</span>)
@@ -672,7 +672,7 @@ toIntOption.fmap(_ * <span class="hljs-number">2</span>).run(<span class="hljs-s
   f.fmap(negate.compose(isEven)) === f.fmap(negate).compose(f.fmap(isEven))
 
 <span class="hljs-keyword">val</span> readerOptionFunctor = summon[<span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">ReaderOption</span>[<span class="hljs-type">String</span>, <span class="hljs-type">X</span>]]]
-<span class="hljs-comment">// readerOptionFunctor: given_Functor_ReaderOption[String] = repl.MdocSession$MdocApp0$given_Functor_ReaderOption@4c708866</span>
+<span class="hljs-comment">// readerOptionFunctor: given_Functor_ReaderOption[String] = repl.MdocSession$MdocApp0$given_Functor_ReaderOption@665cc11b</span>
 
 (readerOptionFunctor.fmap(negate.compose(isEven))(<span class="hljs-type">ReaderOption</span>(_.toIntOption))).run(<span class="hljs-string">&quot;12345&quot;</span>)
 <span class="hljs-comment">// res29: Option[Boolean] = Some(value = true)</span>
@@ -747,7 +747,7 @@ toIntOption.fmap(_ * <span class="hljs-number">2</span>).run(<span class="hljs-s
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、圏から圏への対応である関手について定義し、プログラミングにおける関手の例（Option 関手や Reader 関手）を示します。","title":"7章 関手","level":"1.2.7","depth":2,"next":{"title":"8章 関手性","level":"1.2.8","depth":2,"path":"08_Functoriality.md","ref":"08_Functoriality.md","articles":[]},"previous":{"title":"6章 代数的データ型（一部は5章に）","level":"1.2.6","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"07_Functor.md","mtime":"2024-06-30T02:18:04.317Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-30T02:18:08.192Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、圏から圏への対応である関手について定義し、プログラミングにおける関手の例（Option 関手や Reader 関手）を示します。","title":"7章 関手","level":"1.2.7","depth":2,"next":{"title":"8章 関手性","level":"1.2.8","depth":2,"path":"08_Functoriality.md","ref":"08_Functoriality.md","articles":[]},"previous":{"title":"6章 代数的データ型（一部は5章に）","level":"1.2.6","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"07_Functor.md","mtime":"2024-06-30T13:28:03.561Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-30T13:28:08.742Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

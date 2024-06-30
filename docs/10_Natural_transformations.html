@@ -385,9 +385,9 @@
 <h1 id="10-自然変換">10. 自然変換</h1>
 <p>7章と8章で、関手が圏同士の対応であることを見ました。関手には List、Option、Writer、Reader などがあり、2つの圏の間には複数の関手が存在することを学びました。複数の関手が存在するとき、それらの等しさはどのように扱われるでしょうか？</p>
 <p>ここでは、複数の関手の同等性について議論するために、自然変換を導入します。自然変換は、関手の性質を維持しながら関手間を対応させるものです。</p>
-<p>本章ではまず、自然変換のイメージを掴むために、List 関手から Option 関手への自然変換など、具体例を見ていきます。</p>
+<p>本章ではまず、自然変換のイメージを掴むために、List 関手から Option 関手への自然変換という、具体例を見ていきます。</p>
 <p>次に、自然変換の定義を与え、その定義と具体例とを照らし合わせます。</p>
-<p>関手の変換である自然変換を導入すると、関手を対象として自然変換を射とするような圏を考えることができます。そのような圏は関手圏と呼ばれます。関手圏を導入するために、自然変換の合成、合成の結合律、単位律について議論します。</p>
+<p>関手間の対応である自然変換を導入すると、関手を対象として自然変換を射とするような圏を考えることができます。そのような圏は関手圏と呼ばれます。関手圏を導入するために、自然変換の合成、合成の結合律、単位律について議論します。</p>
 <!-- omit in toc -->
 <h1 id="目次">目次</h1>
 <ul>
@@ -396,88 +396,102 @@
 <li><a href="#1012-自然性">10.1.2 自然性</a></li>
 <li><a href="#1013-自然変換の定義">10.1.3 自然変換の定義</a></li>
 <li><a href="#1014-自然変換を表す型クラス">10.1.4 自然変換を表す型クラス</a></li>
-<li><a href="#1015-自然変換の例は自然性を満たすか">10.1.5 自然変換の例は、自然性を満たすか</a><ul>
-<li><a href="#headoption-list--option">headOption: List =&gt; Option</a></li>
-<li><a href="#length-list--const">length: List =&gt; Const</a></li>
-<li><a href="#flattenlistoption-listoption--list">flattenListOption: List[Option] =&gt; List</a></li>
-</ul>
-</li>
+<li><a href="#1015-自然変換の例-list-関手から-const-int-関手への自然変換">10.1.5 自然変換の例: List 関手から Const Int 関手への自然変換</a></li>
+<li><a href="#1016-自然変換の例-reader-関手">10.1.6 自然変換の例: Reader 関手</a></li>
 </ul>
 </li>
 <li><a href="#102-関手圏">10.2 関手圏</a><ul>
 <li><a href="#1021-自然変換の合成">10.2.1 自然変換の合成</a></li>
-<li><a href="#1022-functionk-の合成">10.2.2 FunctionK の合成</a></li>
-<li><a href="#1023-関手圏は単位律を満たすか">10.2.3 関手圏は単位律を満たすか</a></li>
+<li><a href="#1022-関手圏は単位律を満たすか">10.2.2 関手圏は単位律を満たすか</a></li>
 </ul>
 </li>
-<li><a href="#おまけ-先取りモナド">おまけ: 先取り！モナド</a><ul>
-<li><a href="#モナドの定義">モナドの定義</a></li>
-<li><a href="#option-モナドをみてみよう">Option モナドをみてみよう</a></li>
-<li><a href="#モナドの型クラスを作る">モナドの型クラスを作る</a></li>
-<li><a href="#おわり">おわり</a></li>
-</ul>
-</li>
+<li><a href="#終わりに">終わりに</a></li>
 <li><a href="#まとめ">まとめ</a></li>
 </ul>
 <h2 id="101-自然変換とは">10.1 自然変換とは</h2>
 <h3 id="1011-自然変換の例">10.1.1 自然変換の例</h3>
 <p>まずは自然変換の具体例を見ていきましょう。</p>
-<p>自然変換は関手間の変換なので、List 関手と Option 関手を変換させてみます。</p>
-<p>List 関手から Option 関手への自然変換の例として、 <code>headOption</code>、<code>listToNone</code> などがあります。</p>
+<p>自然変換は関手間の対応なので、List 関手と Option 関手の対応について考えてみましょう。</p>
+<p>まずは対象関数の対応を考えます。Scala 圏のある対象 <code>A</code> に対して、List 関手と Option 関手は対象を <code>List[A]</code> と <code>Option[A]</code> に対応させます。対象関数の対応としては、 <code>List[A]</code> から <code>Option[A]</code> への関数を考えれば良い、ということになります。</p>
+<p><code>List[A]</code> から <code>Option[A]</code> への関数をいくつか考えてみましょう。先頭の要素を取得する関数、2番目の要素を取得する関数、末尾の要素を取得する関数、None を返す関数など、さまざまな関数を定義できます。</p>
 <pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">headOption</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = _.headOption
 
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">listToNone</span></span>[<span class="hljs-type">A</span>](list: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = <span class="hljs-type">None</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">secondOption</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = _.slice(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>).headOption
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">lastOption</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = _.lastOption
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">listToNone</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = { <span class="hljs-keyword">case</span> _ =&gt; <span class="hljs-type">None</span> }
+
+<span class="hljs-keyword">val</span> list = <span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)
+<span class="hljs-comment">// list: List[Int] = List(1, 2, 3, 4, 5)</span>
+
+headOption(list)
+<span class="hljs-comment">// res0: Option[Int] = Some(value = 1)</span>
+
+secondOption(list)
+<span class="hljs-comment">// res1: Option[Int] = Some(value = 2)</span>
+
+lastOption(list)
+<span class="hljs-comment">// res2: Option[Int] = Some(value = 5)</span>
+
+listToNone(list)
+<span class="hljs-comment">// res3: Option[Int] = None</span>
 </code></pre>
+<p>Scala 圏から Scala 圏への関手 List, Option と、その間の対応 headOption を図式化すると以下のように書くことができます。</p>
 <p><img src="images/10_natural_transformation_example.png" alt="自然変換としての headOption"></p>
-<p>Option 関手から List 関手への自然変換の例としては <code>toList</code>、<code>optionToNil</code> などがあります。</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">toList</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] = {
-  <span class="hljs-keyword">case</span> <span class="hljs-type">Some</span>(a) =&gt; <span class="hljs-type">List</span>(a)
-  <span class="hljs-keyword">case</span> <span class="hljs-type">None</span>    =&gt; <span class="hljs-type">Nil</span>
-}
+<p>ここで注目したいのが、関手は圏を跨いだ対応ですが、headOption は同じ圏における対応であることです (自己関手なのが若干ややこしいですが)。つまり、headOption は関手によって対応された先の圏 (図では、右側の Scala 圏) における射であることがわかります。</p>
+<p>任意の対象 <code>A</code> について、関手 <code>F[_]</code> と <code>G[_]</code> によって写された対象 <code>F[A]</code> と <code>G[A]</code> の間に射がないならば、自然変換にはならないと言えるでしょう。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// このような関数がなければ、自然変換はない</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">component</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_]]: <span class="hljs-type">F</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">G</span>[<span class="hljs-type">A</span>] = ???
 
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">optionToNil</span></span>[<span class="hljs-type">A</span>](option: <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] = <span class="hljs-type">Nil</span>
+<span class="hljs-comment">// 以下のような関数は、自然変換 headOption の &quot;A における成分 (component)&quot; と呼ばれる</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">componentHeadOption</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = _.headOption
 </code></pre>
-<p>また、関手の合成もまた関手になるので、List[List] 関手や List[Option] 関手から List 関手への自然変換も考えることができます。</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flattenListList</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-type">A</span>]] =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] = _.flatten
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flattenListOption</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">List</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]] =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] = _.flatten
-</code></pre>
-<p>List 関手から Const 関手 (定数を保持する関手) への関数 <code>length</code> もまた、自然変換です。</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">import</span> hamcat.data.<span class="hljs-type">Const</span>
+<p>次に、射関数の対応について考えましょう。List 関手の射関数と Option 関手の射関数は以下の形をしていました。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapList</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">B</span>] = _.map(f)
 
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">length</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">A</span>] = list =&gt; <span class="hljs-type">Const</span>(list.length)
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapOption</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">B</span>] = _.map(f)
 </code></pre>
-<hr>
-<p>Const 関手は以下のように実装されています。</p>
-<pre><code class="lang-scala"><span class="hljs-comment">/** Const data type */</span>
-<span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Const</span>[<span class="hljs-type">C</span>, +<span class="hljs-type">A</span>](<span class="hljs-params">v: <span class="hljs-type">C</span></span>)</span>
+<p>List 関手の射関数から Option 関手の射関数への関数は、以下のようなシグネチャを持ちます。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">signatureOfFmapListToFmapOption</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">B</span>] = ???
+</code></pre>
+<p>このようなシグネチャを持つ関数を定義するにはもう少し制約が必要そうです。そこで、先ほどの <code>headOption</code> を自然変換として使用することを考えます。すると以下のような関数を定義できそうです。ただし、<code>fmapList</code> を使う関数と <code>fmapOption</code> を使う関数のバリエーションが存在します。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// List[A] → Option[A] → Option[B]</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">headOptionFmap1</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">B</span>] =
+  listA =&gt; fmapOption(f)(listA.headOption)
 
-<span class="hljs-comment">/** Const functor */</span>
-<span class="hljs-keyword">implicit</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">ConstFunctor</span></span>[<span class="hljs-type">C</span>]: <span class="hljs-type">Functor</span>[<span class="hljs-type">Const</span>[<span class="hljs-type">C</span>, *]] = <span class="hljs-keyword">new</span> <span class="hljs-type">Functor</span>[<span class="hljs-type">Const</span>[<span class="hljs-type">C</span>, *]] {
-  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">Const</span>[<span class="hljs-type">C</span>, <span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">C</span>, <span class="hljs-type">B</span>] = fa =&gt;
-    <span class="hljs-type">Const</span>(fa.v)
-}
+<span class="hljs-comment">// List[A] → List[B] → Option[B]</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">headOptionFmap2</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">B</span>] =
+  listA =&gt; fmapList(f)(listA).headOption
 </code></pre>
-<hr>
-<p>以上のように、Scala 圏の自己関手に関する自然変換は、ある型構築子からある型構築子への関数であることがわかります。</p>
+<p>先に headOption をして f を実行するのと、f を実行してから headOption をすることは、直感としては同じ関数のように思えます。この2つのバリエーションが等しい、という条件は<strong>自然性</strong> (naturality condition) と呼ばれます。</p>
+<p>さて、<code>headOption</code> や <code>lastOption</code>、<code>listToNone</code> などのような関数は関手の性質を保存します。このような関数たちを List から Option への自然変換と呼びます。</p>
 <h3 id="1012-自然性">10.1.2 自然性</h3>
 <p>では、自然変換の定義を考えていきましょう。自然変換は関手の構造を保つ必要があるので、対象関数と射関数を変換する必要があります。</p>
-<p>圏 <strong>C</strong> から圏 <strong>D</strong> への関手を <code>F</code> と <code>G</code> とし、<code>F</code> から <code>G</code> への変換 <code>alpha</code> を考えます。</p>
+<p>圏 <strong>C</strong> から圏 <strong>D</strong> への関手を <code>F</code> と <code>G</code> とし、<code>F</code> から <code>G</code> への対応 <code>alpha</code> を考えます。</p>
 <p><img src="images/10_natural_transformation.png" alt="自然変換"></p>
-<p>関手の対象関数は、圏 <strong>C</strong> の対象 <code>A</code> を <code>F[A]</code> および <code>G[A]</code> に対応させるものでした。この2つの対象 <code>F[A]</code> と <code>G[A]</code> は圏 <strong>D</strong> の対象であるため、対象関数の変換は <code>D</code> の射 <code>alpha[A]</code> として定義されます：</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">alpha</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">F</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">G</span>[<span class="hljs-type">A</span>]
+<p>関手の対象関数は、圏 <strong>C</strong> の対象 <code>A</code> を <code>F[A]</code> および <code>G[A]</code> に対応させるものでした。この2つの対象 <code>F[A]</code> と <code>G[A]</code> は圏 <strong>D</strong> の対象であるため、対象関数の対応は <code>D</code> の射 <code>alpha[A]</code> として定義されます：</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">alpha</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_], <span class="hljs-type">A</span>]: <span class="hljs-type">F</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">G</span>[<span class="hljs-type">A</span>] = ???
 </code></pre>
 <p>ただし、<code>alpha[A]</code> は特定の対象 <code>A</code> に絞って変換しているので、自然変換 <code>alpha</code> の <strong>A 成分</strong>と呼ばれます。</p>
-<p>次に射関数ですが、これは圏 <code>C</code> の射 <code>f: A =&gt; B</code> を圏 <code>D</code> の射 <code>fmapF(f): F[A] =&gt; F[B]</code> および <code>fmapG(f): G[A] =&gt; G[B]</code> に対応させるものでした。これらの対応は、自然変換の各成分 <code>alpha[A]: F[A] =&gt; G[A]</code> と <code>alpha[B]: F[B] =&gt; G[B]</code> を用いて以下のように与えられます：</p>
-<pre><code class="lang-scala">fmapG(f) compose alpha[<span class="hljs-type">A</span>]: <span class="hljs-type">F</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">G</span>[<span class="hljs-type">B</span>]
-
-alpha[<span class="hljs-type">B</span>] compose fmapF(f): <span class="hljs-type">F</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">G</span>[<span class="hljs-type">B</span>]
+<p>次に射関数ですが、これは圏 <code>C</code> の射 <code>f: A =&gt; B</code> を圏 <code>D</code> の射 <code>fmapF(f): F[A] =&gt; F[B]</code> および <code>fmapG(f): G[A] =&gt; G[B]</code> に対応させるものでした。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapF</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">F</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">F</span>[<span class="hljs-type">B</span>] = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapG</span></span>[<span class="hljs-type">G</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](g: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">G</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">G</span>[<span class="hljs-type">B</span>] = ???
 </code></pre>
-<p><img src="images/10_naturality.png" alt="自然性"></p>
-<p>このように、射関数の変換には2通りの作り方があるため、整合性が保たれるようどちらの作り方でも結果が同じでなければいけません：</p>
-<pre><code class="lang-scala">(fmapG(f) compose alpha[<span class="hljs-type">A</span>])(fa) == (alpha[<span class="hljs-type">B</span>] compose fmapF(f))(fa)
+<p>これらの対応は、自然変換の各成分 <code>alpha[A]: F[A] =&gt; G[A]</code> と <code>alpha[B]: F[B] =&gt; G[B]</code> を用いて以下のように与えられます：</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapFAlpha</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">F</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">G</span>[<span class="hljs-type">B</span>] = fmapG(f).compose(alpha[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>, <span class="hljs-type">A</span>])
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapGAlpha</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">F</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">G</span>[<span class="hljs-type">B</span>] = alpha[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>, <span class="hljs-type">B</span>].compose(fmapF(f))
+</code></pre>
+<p>このように、射関数の対応には2通りの作り方があるため、整合性が保たれるようどちらの作り方でも結果が同じでなければいけません：</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">import</span> hamcat.util.<span class="hljs-type">Eq</span>.===
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert1</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>] = fmapFAlpha[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>] === fmapGAlpha[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>, <span class="hljs-type">A</span>, <span class="hljs-type">B</span>]
 </code></pre>
 <p>圏 <strong>C</strong> の任意の射 <code>f</code> についての上記の条件を、<strong>自然性</strong> (naturality condition) と呼びます。</p>
-<p>関手間の変換が自然変換であるためには、自然性を満たさなければいけません。</p>
+<p>関手間の対応が自然変換であるためには、自然性を満たさなければいけません。</p>
+<p><img src="images/10_naturality.png" alt="自然性"></p>
+<p>自然性が満たされるとは、<strong>C</strong> のすべての射 f に関して、上記の図式が成り立つような対応が存在することを意味します。このような図は可換であると言われます。</p>
 <h3 id="1013-自然変換の定義">10.1.3 自然変換の定義</h3>
 <p>一般に、自然変換の定義は、以下のように与えられます：</p>
 <hr>
@@ -488,249 +502,218 @@ alpha[<span class="hljs-type">B</span>] compose fmapF(f): <span class="hljs-type
 </ol>
 <p>またこのとき、<code>alpha[A]</code> を自然変換 <code>alpha</code> の A 成分といいます。</p>
 <hr>
-<p>定義の1つ目の条件は、関手の対象関数の変換です。</p>
-<p>定義の2つ目の条件は、関手の射関数の変換に関する条件で、自然性と呼ばれるものです。</p>
+<p>定義の1つ目の条件は、関手の対象関数の対応です。</p>
+<p>定義の2つ目の条件は、関手の射関数の対応に関する条件で、自然性と呼ばれるものです。</p>
 <p><img src="images/10_natural_transformation.png" alt="自然変換の定義"></p>
 <h3 id="1014-自然変換を表す型クラス">10.1.4 自然変換を表す型クラス</h3>
 <p>自然変換を表す型クラスとして、以下のような <code>FunctionK</code> 型クラスを導入します。この型クラスは、型パラメータとして型構築子 <code>F[_]</code> と <code>G[_]</code> を持ち、抽象メソッドとして <code>F[A]</code> を受け取ったら <code>G[A]</code> を返すような <code>apply</code> メソッドを持ちます。すなわち、関手 <code>F</code> から <code>G</code> への変換を表します。</p>
-<pre><code class="lang-scala"><span class="hljs-comment">/** FunctionK: typeclass for mapping between first-order-kinded types */</span>
-<span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">FunctionK</span>[<span class="hljs-type">F</span>[_], <span class="hljs-title">G</span>[_]] </span>{ self =&gt;
-  <span class="hljs-comment">/** Apply method */</span>
+<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">FunctionK</span>[<span class="hljs-type">F</span>[_], <span class="hljs-title">G</span>[_]]</span>:
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">F</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">G</span>[<span class="hljs-type">A</span>]
-}
 </code></pre>
-<p>例によって、この型クラスを実装するだけでは自然変換かどうかはわかりません。そのため、FunctionK は単に型構築子 <code>F[_]</code> から <code>G[_]</code> への関数の一般化となります。FunctionK の実装のうち、自然性を満たすような実装のみが自然変換です。</p>
+<p><code>FunctionK</code> は Scala のパラメトリック多相 (parametric polymorphism) の性質から、F と G が <code>Functor</code> のインスタンスであれば自動的に自然性が成り立つことが知られています。</p>
 <p>では先ほどの例から抜粋して、FunctionK のインスタンスを作ってみましょう。</p>
-<p><code>headOption</code> は以下のように定義されますが</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">headOption</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = _.headOption
-</code></pre>
-<p>これの FunctionK のインスタンスを実装すると、以下のようになります。</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">import</span> hamcat.arrow.<span class="hljs-type">FunctionK</span>
-
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">headOptionK</span></span>: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">List</span>, <span class="hljs-type">Option</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[<span class="hljs-type">List</span>, <span class="hljs-type">Option</span>] {
+<p><code>headOption</code> を <code>FunctionK</code> のインスタンスとして定義すると、以下のようになります。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> headOptionK: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">List</span>, <span class="hljs-type">Option</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[<span class="hljs-type">List</span>, <span class="hljs-type">Option</span>]:
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = fa.headOption
+<span class="hljs-comment">// headOptionK: FunctionK[List, [A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$6@3fe6b7c</span>
+
+headOptionK(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>))
+<span class="hljs-comment">// res4: Option[Int] = Some(value = 1)</span>
+
+headOptionK(<span class="hljs-type">Nil</span>: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>])
+<span class="hljs-comment">// res5: Option[Int] = None</span>
+</code></pre>
+<h3 id="1015-自然変換の例-list-関手から-const-int-関手への自然変換">10.1.5 自然変換の例: List 関手から Const Int 関手への自然変換</h3>
+<p>次に、リストの長さを返す <code>length</code> 関数について考えてみましょう。これは単に <code>List[_]</code> から <code>Int</code> への関数のように思えます。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">length</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Int</span> = _.length
+
+length(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>))
+<span class="hljs-comment">// res6: Int = 5</span>
+</code></pre>
+<p>これは、対象 <code>A</code> を定数値 <code>value: C</code> に対応させる Const 関手への自然変換となります。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">import</span> hamcat.data.<span class="hljs-type">Functor</span>
+
+<span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Const</span>[<span class="hljs-type">C</span>, +<span class="hljs-type">A</span>](<span class="hljs-params">value: <span class="hljs-type">C</span></span>)</span>
+
+<span class="hljs-keyword">given</span> [<span class="hljs-type">C</span>]: <span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">C</span>, <span class="hljs-type">X</span>]] <span class="hljs-keyword">with</span>
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">Const</span>[<span class="hljs-type">C</span>, <span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">C</span>, <span class="hljs-type">B</span>] = cnst =&gt;
+    <span class="hljs-type">Const</span>[<span class="hljs-type">C</span>, <span class="hljs-type">B</span>](cnst.value)
+
+<span class="hljs-keyword">val</span> c1 = <span class="hljs-type">Const</span>(<span class="hljs-number">12345</span>)
+<span class="hljs-comment">// c1: Const[Int, Nothing] = Const(value = 12345)</span>
+
+<span class="hljs-keyword">val</span> c2 = <span class="hljs-type">Const</span>(<span class="hljs-number">4</span>)
+<span class="hljs-comment">// c2: Const[Int, Nothing] = Const(value = 4)</span>
+
+<span class="hljs-keyword">val</span> intConstFunctor = summon[<span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">X</span>]]]
+<span class="hljs-comment">// intConstFunctor: given_Functor_Const[Int] = repl.MdocSession$MdocApp$given_Functor_Const@7a815ac9</span>
+
+intConstFunctor.fmap[<span class="hljs-type">List</span>[<span class="hljs-type">Int</span>], <span class="hljs-type">Boolean</span>](_.nonEmpty)(c1)
+<span class="hljs-comment">// res7: Const[Int, Boolean] = Const(value = 12345)</span>
+
+intConstFunctor.fmap[<span class="hljs-type">List</span>[<span class="hljs-type">Int</span>], <span class="hljs-type">Boolean</span>](_.nonEmpty)(c2)
+<span class="hljs-comment">// res8: Const[Int, Boolean] = Const(value = 4)</span>
+</code></pre>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> lengthK: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">List</span>, [<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">X</span>]] = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[<span class="hljs-type">List</span>, [<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">X</span>]] {
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">A</span>] = <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">A</span>](length(fa))
 }
-</code></pre>
-<p>また、FunctionK のエイリアスとして ~&gt; が使われることが多いです。</p>
-<pre><code class="lang-scala"><span class="hljs-comment">/** Alias for FunctionK */</span>
-<span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">~&gt;</span>[<span class="hljs-type">F</span>[_], <span class="hljs-title">G</span>[_]] </span>= <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>]
-</code></pre>
-<h3 id="1015-自然変換の例は、自然性を満たすか">10.1.5 自然変換の例は、自然性を満たすか</h3>
-<p>自然変換の具体例と定義を見ましたので、具体例が実際に自然変換の定義を満たすかどうかについて考えていきます。</p>
-<h4 id="headoption-list--option">headOption: List =&gt; Option</h4>
-<p>headOption 関数は、List 関手から Option 関手への自然変換です。</p>
-<p>実際、<code>List(1, 2, 3, 4, 5)</code> と <code>isEven</code> 関数に対して、自然性を満たします：</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">import</span> hamcat.data.instance.<span class="hljs-type">Implicits</span>.<span class="hljs-keyword">given</span>
-<span class="hljs-keyword">import</span> hamcat.syntax.<span class="hljs-type">Implicits</span>.*
-<span class="hljs-keyword">import</span> hamcat.data.<span class="hljs-type">Functor</span>
+<span class="hljs-comment">// lengthK: FunctionK[List, [X &gt;: Nothing &lt;: Any] =&gt;&gt; Const[Int, X]] = repl.MdocSession$MdocApp$$anon$16@63c66f52</span>
 
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isEven</span></span>: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Boolean</span> = _ % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>
-<span class="hljs-keyword">val</span> list = <span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)
-<span class="hljs-comment">// list: List[Int] = List(1, 2, 3, 4, 5)</span>
+lengthK(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>))
+<span class="hljs-comment">// res9: Const[Int, Int] = Const(value = 5)</span>
 
-<span class="hljs-comment">// 自然性</span>
-<span class="hljs-keyword">val</span> listToOption1 = (summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]].fmap(isEven) compose headOptionK[<span class="hljs-type">Int</span>])(list)
-<span class="hljs-comment">// listToOption1: Option[Boolean] = Some(value = false)</span>
-<span class="hljs-keyword">val</span> listToOption2 = (headOptionK[<span class="hljs-type">Boolean</span>] compose summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">List</span>]].fmap(isEven))(list)
-<span class="hljs-comment">// listToOption2: Option[Boolean] = Some(value = false)</span>
-listToOption1 == listToOption2
-<span class="hljs-comment">// res0: Boolean = true</span>
+lengthK(<span class="hljs-type">List</span>.empty[<span class="hljs-type">String</span>])
+<span class="hljs-comment">// res10: Const[Int, String] = Const(value = 0)</span>
 </code></pre>
-<p><img src="images/10_headOption.png" alt="headOption の可換図式"></p>
-<h4 id="length-list--const">length: List =&gt; Const</h4>
-<p>length 関数は、List 関手から Const 関手への自然変換です：</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">length</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">A</span>] = list =&gt; <span class="hljs-type">Const</span>(list.length)
+<p>List と Const は Functor のインスタンスを持つので <code>lengthK</code> は List から Const への自然変換となります。</p>
+<h3 id="1016-自然変換の例-reader-関手">10.1.6 自然変換の例: Reader 関手</h3>
+<p>Reader 関手もまた自然変換において重要な役割を果たします。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>](<span class="hljs-params">run: (<span class="hljs-type">R</span> =&gt; <span class="hljs-type">A</span></span>))</span>
+
+<span class="hljs-keyword">given</span> [<span class="hljs-type">R</span>]: <span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">X</span>]] <span class="hljs-keyword">with</span>
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>): <span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">A</span>] =&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">R</span>, <span class="hljs-type">B</span>] = ra =&gt;
+    <span class="hljs-type">Reader</span>(f.compose(ra.run))
 </code></pre>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">lengthK</span></span>: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">List</span>, [<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">X</span>]] = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[<span class="hljs-type">List</span>, [<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">X</span>]]:
-  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">A</span>] = <span class="hljs-type">Const</span>(fa.length)
+<p>実は、任意の型 <code>R</code> について、 <code>[X] =&gt;&gt; Reader[R, X]</code> から他の任意の関手 <code>F</code> への自然変換の族を定義することができます。この族の要素が <code>F[R]</code> の要素と1対1で対応していることを「米田の補題」において説明します。</p>
+<p>ここでは1つの例として、<code>[X] =&gt;&gt; Reader[Unit, X]</code> を考えてみましょう。この関手は、任意の型 <code>A</code> をとり、それを関数型 <code>Unit =&gt; A</code> に写すものです。このような関数は、型 <code>A</code> から1つの値を選択する関数です。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">readerUnit</span></span>[<span class="hljs-type">A</span>](a: <span class="hljs-type">A</span>): <span class="hljs-type">Reader</span>[<span class="hljs-type">Unit</span>, <span class="hljs-type">A</span>] = <span class="hljs-type">Reader</span>(<span class="hljs-type">Unit</span> =&gt; a)
+
+<span class="hljs-keyword">val</span> reader12345 = readerUnit(<span class="hljs-number">12345</span>)
+<span class="hljs-comment">// reader12345: Reader[Unit, Int] = Reader(</span>
+<span class="hljs-comment">//   run = repl.MdocSession$MdocApp$$Lambda/0x00007f4199fe2900@70c6c577</span>
+<span class="hljs-comment">// )</span>
+
+reader12345.run(())
+<span class="hljs-comment">// res11: Int = 12345</span>
+
+<span class="hljs-keyword">val</span> readerHogeHoge = readerUnit(<span class="hljs-string">&quot;hogehoge&quot;</span>)
+<span class="hljs-comment">// readerHogeHoge: Reader[Unit, String] = Reader(</span>
+<span class="hljs-comment">//   run = repl.MdocSession$MdocApp$$Lambda/0x00007f4199fe2900@51938950</span>
+<span class="hljs-comment">// )</span>
+
+readerHogeHoge.run(())
+<span class="hljs-comment">// res12: String = &quot;hogehoge&quot;</span>
 </code></pre>
-<p>length もまた、<code>List(1, 2, 3, 4, 5)</code> と <code>isEven</code> 関数に対して、自然性を満たします：</p>
-<pre><code class="lang-scala"><span class="hljs-comment">// 自然性</span>
-<span class="hljs-keyword">val</span> listToConst1 = (summon[<span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">X</span>]]].fmap(isEven) compose lengthK[<span class="hljs-type">Int</span>])(list)
-<span class="hljs-comment">// listToConst1: Const[Int, Boolean] = Const(v = 5)</span>
-<span class="hljs-keyword">val</span> listToConst2 = (lengthK[<span class="hljs-type">Boolean</span>] compose summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">List</span>]].fmap(isEven))(list)
-<span class="hljs-comment">// listToConst2: Const[Int, Boolean] = Const(v = 5)</span>
-listToConst1 == listToConst2
-<span class="hljs-comment">// res1: Boolean = true</span>
-</code></pre>
-<p><img src="images/10_length.png" alt="length の可換図式"></p>
-<h4 id="flattenlistoption-listoption--list">flattenListOption: List[Option] =&gt; List</h4>
-<p>flattenListOption 関数は、List[Option] 関手から List 関手への自然変換です：</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flattenListOption</span></span>[<span class="hljs-type">A</span>]: <span class="hljs-type">List</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]] =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] = _.flatten
-</code></pre>
-<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">ListOption</span>[<span class="hljs-type">A</span>] </span>= <span class="hljs-type">List</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]]
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flattenListOptionK</span> </span>= <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[<span class="hljs-type">ListOption</span>, <span class="hljs-type">List</span>] {
-  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">List</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]]): <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] = fa.flatten
+<p>この関手から Option 関手への自然変換を考えてみましょう。自然変換は2種類しかありません。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> readerUnitToSome: <span class="hljs-type">FunctionK</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">Unit</span>, <span class="hljs-type">X</span>], <span class="hljs-type">Option</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">Unit</span>, <span class="hljs-type">X</span>], <span class="hljs-type">Option</span>] {
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">Reader</span>[<span class="hljs-type">Unit</span>, <span class="hljs-type">A</span>]): <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = <span class="hljs-type">Some</span>(fa.run(()))
 }
-</code></pre>
-<p><code>List(Some(1), Some(2), None, Some(3))</code> と <code>isEven</code> 関数に対して、自然性を満たします：</p>
-<pre><code class="lang-scala"><span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> Fix syntax instance of fmap</span>
-<span class="hljs-keyword">val</span> listOption = <span class="hljs-type">List</span>(<span class="hljs-type">Some</span>(<span class="hljs-number">1</span>), <span class="hljs-type">Some</span>(<span class="hljs-number">2</span>), <span class="hljs-type">None</span>, <span class="hljs-type">Some</span>(<span class="hljs-number">3</span>))
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fmapLO</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>]: (<span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>) =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]] =&gt; <span class="hljs-type">List</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">B</span>]] = f =&gt; listA =&gt;
-  listA.fmap(_.fmap(f))
+<span class="hljs-comment">// readerUnitToSome: FunctionK[[X &gt;: Nothing &lt;: Any] =&gt;&gt; Reader[Unit, X], [A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$24@7d21ad63</span>
 
-<span class="hljs-comment">// 自然性</span>
-<span class="hljs-keyword">val</span> listOptionToList1 = (summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">List</span>]].fmap(isEven) compose flattenListOptionK[<span class="hljs-type">Int</span>])(listOption)
-<span class="hljs-keyword">val</span> listOptionToList2 = (flattenListOptionK[<span class="hljs-type">Boolean</span>] _ compose fmapLO(isEven))(listOption)
-listOptionToList1 == listOptionToList2
+<span class="hljs-keyword">val</span> readerUnitToNone: <span class="hljs-type">FunctionK</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">Unit</span>, <span class="hljs-type">X</span>], <span class="hljs-type">Option</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">Unit</span>, <span class="hljs-type">X</span>], <span class="hljs-type">Option</span>] {
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">Reader</span>[<span class="hljs-type">Unit</span>, <span class="hljs-type">A</span>]): <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = <span class="hljs-type">None</span>
+}
+<span class="hljs-comment">// readerUnitToNone: FunctionK[[X &gt;: Nothing &lt;: Any] =&gt;&gt; Reader[Unit, X], [A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$26@3c79d04e</span>
+
+readerUnitToSome(reader12345)
+<span class="hljs-comment">// res13: Option[Int] = Some(value = 12345)</span>
+
+readerUnitToNone(reader12345)
+<span class="hljs-comment">// res14: Option[Int] = None</span>
 </code></pre>
-<p><img src="images/10_flatten.png" alt="flattenListOption の可換図式"></p>
 <h2 id="102-関手圏">10.2 関手圏</h2>
-<p>自然変換は関手間の対応であるので、関手を対象として自然変換を射とするような圏を考えることができます。そのような圏は関手圏と呼ばれます。</p>
+<p>自然変換は関手間の対応であるので、関手を対象として自然変換を射とするような圏を考えることができます。そのような圏は<strong>関手圏</strong>と呼ばれます。</p>
 <hr>
-<p>一般に、（小さい）圏 <strong>C</strong> から（局所的に小さい）圏 <strong>D</strong> への関手を対象とし、その間の自然変換を射とする圏を圏 <strong>C</strong> から圏 <strong>D</strong> への<strong>関手圏</strong> (functor category) と呼び、<strong>Fun(C, D)</strong> と書きます。</p>
+<p>一般に、(小さい) 圏 <strong>C</strong> から (局所的に小さい) 圏 <strong>D</strong> への関手を対象とし、その間の自然変換を射とする圏を圏 <strong>C</strong> から圏 <strong>D</strong> への<strong>関手圏</strong> (functor category) と呼び、<strong>Fun(C, D)</strong> と書きます。</p>
 <hr>
 <p>また、圏 <strong>C</strong> から圏 <strong>D</strong> への反変関手を対象とし、その間の自然変換を射とする圏は <strong>Fun(oppC, D)</strong> と書きます。</p>
 <p>関手圏は、圏の圏についての Hom 集合 (圏の圏の射は関手であり、Hom 集合はその圏における全ての射の集まりです) に自然変換を与えたものです。</p>
 <p>のちに、米田埋め込みによって任意の圏を関手圏に埋め込める (表現できる) ことを学びます。</p>
 <h3 id="1021-自然変換の合成">10.2.1 自然変換の合成</h3>
-<p>関手圏が圏であるためには、射の合成と結合律、単位律が定義されている必要があります。まずは射の合成、すなわち自然変換の合成について考えてみましょう。</p>
-<p>自然変換は単に自然性を満たす射であるので、自然変換を合成するには自然性を満たすように射を合成すれば良さそうです。</p>
+<p>関手圏が圏であるためには、射の合成と結合律、単位律が定義されている必要があります。まずは射の合成ですが、自然変換は単に射なので、自然変換の合成は簡単に行えます。</p>
 <p>圏 <strong>C</strong> から圏 <strong>D</strong> への3つの関手を <code>F</code> と <code>G</code>、<code>H</code> とし、<code>F</code> から <code>G</code> への自然変換を <code>alpha</code>、<code>G</code> から <code>H</code> への自然変換を <code>beta</code> としましょう。</p>
-<p>このとき、圏 <strong>C</strong> の対象 <code>A</code> に対して、各自然変換の A 成分は以下のようになるはずです。</p>
-<pre><code>alpha[A]: F[A] -&gt; G[A]
-beta[A]: G[A] -&gt; H[A]
-</code></pre><p><img src="images/10_natural_transformation_composition1.png" alt="自然変換の合成"></p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">alpha</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_]]: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>] = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">beta</span></span>[<span class="hljs-type">G</span>[_], <span class="hljs-type">H</span>[_]]: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">G</span>, <span class="hljs-type">H</span>] = ???
+</code></pre>
+<p>このとき、圏 <strong>C</strong> の対象 <code>A</code> に対して、各自然変換の A 成分は以下のようなシグネチャを持ちます。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">alphaA</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_], <span class="hljs-type">A</span>]: <span class="hljs-type">F</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">G</span>[<span class="hljs-type">A</span>] = ???
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">betaA</span></span>[<span class="hljs-type">G</span>[_], <span class="hljs-type">H</span>[_], <span class="hljs-type">A</span>]: <span class="hljs-type">G</span>[<span class="hljs-type">A</span>] =&gt; <span class="hljs-type">H</span>[<span class="hljs-type">A</span>] = ???
+</code></pre>
+<p><img src="images/10_natural_transformation_composition1.png" alt="自然変換の合成"></p>
 <p>これらは圏 <strong>D</strong> の射であるので、合成することができます。</p>
-<pre><code>beta[A] compose alpha[A]: F[A] -&gt; H[A]
-</code></pre><p>そして、この射の合成を自然変換の A 成分に関する合成として以下のように定義します。</p>
-<pre><code>(beta compose alpha)[A] := beta[A] compose alpha[A]
-</code></pre><p><img src="images/10_natural_transformation_composition2.png" alt="自然変換の合成2"></p>
+<pre><code class="lang-scala"><span class="hljs-keyword">extension</span> [<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_]](fk: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>])
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">compose</span></span>[<span class="hljs-type">H</span>[_]](hk: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">H</span>, <span class="hljs-type">F</span>]): <span class="hljs-type">FunctionK</span>[<span class="hljs-type">H</span>, <span class="hljs-type">G</span>] =
+    <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[<span class="hljs-type">H</span>, <span class="hljs-type">G</span>]:
+      <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">H</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">G</span>[<span class="hljs-type">A</span>] = fk(hk(fa))
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">betaAfterAlpha</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_], <span class="hljs-type">H</span>[_]](alpha: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>], beta: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">G</span>, <span class="hljs-type">H</span>]): <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">H</span>] =
+  beta.compose(alpha)
+</code></pre>
+<p><img src="images/10_natural_transformation_composition2.png" alt="自然変換の合成2"></p>
 <p>この合成 <code>beta compose alpha</code> は自然性を満たすでしょうか？</p>
 <p>満たされるべき自然性は</p>
-<pre><code>fmapH compose (beta compose alpha)[A] == (beta compose alpha)[B] compose fmapF
-</code></pre><p>です。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert2</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_], <span class="hljs-type">H</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](alpha: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>], beta: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">G</span>, <span class="hljs-type">H</span>], f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>)(<span class="hljs-keyword">using</span> fh: <span class="hljs-type">Functor</span>[<span class="hljs-type">H</span>], ff: <span class="hljs-type">Functor</span>[<span class="hljs-type">F</span>]) =
+  fh.fmap(f).compose((beta.compose(alpha))[<span class="hljs-type">A</span>]) === ((beta.compose(alpha))[<span class="hljs-type">B</span>]).compose(ff.fmap(f))
+</code></pre>
+<p>です。</p>
 <p><img src="images/10_natural_transformation_composition3.png" alt="自然変換の合成が満たすべき自然性"></p>
 <p>まず、<code>alpha</code> と <code>beta</code> は自然変換であるので、以下の2つが成り立ちます：</p>
-<pre><code>1) fmapG compose alpha[A] == alpha[B] compose fmapF
-2) fmapH compose beta[A] == beta[B] compose fmapG
-</code></pre><p><img src="images/10_natural_transformation_composition4.png" alt="自然変換の合成: 前提条件"></p>
-<p>射の合成により、1) の両辺に <code>beta[B]</code> を適用することができます：</p>
-<pre><code>3) beta[B] compose fmapG compose alpha[A] == beta[B] compose alpha[B] compose fmapF
-</code></pre><p><img src="images/10_natural_transformation_composition5.png" alt="自然変換の合成: 証明1"></p>
-<p>2) と 3) より、以下が成り立ちます：</p>
-<pre><code>4) fmapH compose beta[A] compose alpha[A] == beta[B] compose alpha[B] compose fmapF
-</code></pre><p><img src="images/10_natural_transformation_composition6.png" alt="自然変換の合成: 証明2"></p>
+<pre><code class="lang-scala"><span class="hljs-comment">// (1)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert3</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](alpha: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>], f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>)(<span class="hljs-keyword">using</span> ff: <span class="hljs-type">Functor</span>[<span class="hljs-type">F</span>], fg: <span class="hljs-type">Functor</span>[<span class="hljs-type">G</span>]) =
+  fg.fmap(f).compose(alpha[<span class="hljs-type">A</span>]) === alpha[<span class="hljs-type">B</span>].compose(ff.fmap(f))
+
+<span class="hljs-comment">// (2)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert4</span></span>[<span class="hljs-type">G</span>[_], <span class="hljs-type">H</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](beta: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">G</span>, <span class="hljs-type">H</span>], f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>)(<span class="hljs-keyword">using</span> fg: <span class="hljs-type">Functor</span>[<span class="hljs-type">G</span>], fh: <span class="hljs-type">Functor</span>[<span class="hljs-type">H</span>]) =
+  fh.fmap(f).compose(beta[<span class="hljs-type">A</span>]) === beta[<span class="hljs-type">B</span>].compose(fg.fmap(f))
+</code></pre>
+<p><img src="images/10_natural_transformation_composition4.png" alt="自然変換の合成: 前提条件"></p>
+<p>射の合成により、(1) の両辺に <code>beta[B]</code> を適用することができます：</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// (3)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert5</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_], <span class="hljs-type">H</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](alpha: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>], beta: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">G</span>, <span class="hljs-type">H</span>], f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>)(<span class="hljs-keyword">using</span> ff: <span class="hljs-type">Functor</span>[<span class="hljs-type">F</span>], fg: <span class="hljs-type">Functor</span>[<span class="hljs-type">G</span>]) =
+  beta[<span class="hljs-type">B</span>].compose(fg.fmap(f).compose(alpha[<span class="hljs-type">A</span>])) === beta[<span class="hljs-type">B</span>].compose(alpha[<span class="hljs-type">B</span>].compose(ff.fmap(f)))
+</code></pre>
+<p><img src="images/10_natural_transformation_composition5.png" alt="自然変換の合成: 証明1"></p>
+<p>(2) と (3) より、以下が成り立ちます：</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// (4)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert6</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_], <span class="hljs-type">H</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](alpha: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>], beta: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">G</span>, <span class="hljs-type">H</span>], f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>)(<span class="hljs-keyword">using</span> ff: <span class="hljs-type">Functor</span>[<span class="hljs-type">F</span>], fh: <span class="hljs-type">Functor</span>[<span class="hljs-type">H</span>]) =
+  fh.fmap(f).compose(beta[<span class="hljs-type">A</span>]).compose(alpha[<span class="hljs-type">A</span>]) === beta[<span class="hljs-type">B</span>].compose(alpha[<span class="hljs-type">B</span>].compose(ff.fmap(f)))
+</code></pre>
+<p><img src="images/10_natural_transformation_composition6.png" alt="自然変換の合成: 証明2"></p>
 <p>射の合成は結合律を満たすので、以下のように書け：</p>
-<pre><code>fmapH compose (beta[A] compose alpha[A]) == (beta[B] compose alpha[B]) compose fmapF
-</code></pre><p>自然変換の各成分の合成の定義により、求めたい自然性が導かれます：</p>
-<pre><code>fmapH compose (beta compose alpha)[A] == (beta compose alpha)[B] compose fmapF
-</code></pre><p>したがって、自然変換の合成は単にその射の合成であると言えます。</p>
+<pre><code class="lang-scala"><span class="hljs-comment">// (5)</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert7</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_], <span class="hljs-type">H</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](alpha: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>], beta: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">G</span>, <span class="hljs-type">H</span>], f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>)(<span class="hljs-keyword">using</span> ff: <span class="hljs-type">Functor</span>[<span class="hljs-type">F</span>], fh: <span class="hljs-type">Functor</span>[<span class="hljs-type">H</span>]) =
+  fh.fmap(f).compose(beta[<span class="hljs-type">A</span>].compose(alpha[<span class="hljs-type">A</span>])) === (beta[<span class="hljs-type">B</span>].compose(alpha[<span class="hljs-type">B</span>])).compose(ff.fmap(f))
+</code></pre>
+<p>自然変換の各成分の合成の定義により、求めたい自然性が導かれます：</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">assert8</span></span>[<span class="hljs-type">F</span>[_], <span class="hljs-type">G</span>[_], <span class="hljs-type">H</span>[_], <span class="hljs-type">A</span>, <span class="hljs-type">B</span>](alpha: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">G</span>], beta: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">G</span>, <span class="hljs-type">H</span>], f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">B</span>)(<span class="hljs-keyword">using</span> ff: <span class="hljs-type">Functor</span>[<span class="hljs-type">F</span>], fh: <span class="hljs-type">Functor</span>[<span class="hljs-type">H</span>]) =
+  fh.fmap(f).compose((beta.compose(alpha))[<span class="hljs-type">A</span>]) === (beta.compose(alpha))[<span class="hljs-type">B</span>].compose(ff.fmap(f))
+</code></pre>
+<p>したがって、自然変換の合成は単にその射の合成であると言えます。</p>
 <p>また、自然変換の合成は射の合成であるので、合成に関して結合律が成り立ちます。</p>
-<h3 id="1022-functionk-の合成">10.2.2 FunctionK の合成</h3>
-<p>FunctionK に関する合成は、単に射の合成をするだけなので以下のように定義できます：</p>
-<pre><code class="lang-scala"><span class="hljs-comment">/** Composition of natural transformation */</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">andThen</span></span>[<span class="hljs-type">H</span>[_]](v: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">G</span>, <span class="hljs-type">H</span>]): <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">H</span>] =
-  <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">H</span>] {
-    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">F</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">H</span>[<span class="hljs-type">A</span>] = v(self(fa))
-  }
+<p>実際に自然変換を合成してみましょう。<code>flattenK: FunctionK[[X] =&gt;&gt; List[List[X]], List]</code> と <code>headOptionK: FunctionK[List, Option]</code> とを合成することができます。</p>
+<pre><code class="lang-scala"><span class="hljs-keyword">val</span> flattenK = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-type">X</span>]], <span class="hljs-type">List</span>]:
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-type">A</span>]]): <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] = fa.flatten
+<span class="hljs-comment">// flattenK: FunctionK[[X &gt;: Nothing &lt;: Any] =&gt;&gt; List[List[X]], List] = repl.MdocSession$MdocApp$$anon$30@391a7b82</span>
 
-<span class="hljs-comment">/** Composition of natural transformation */</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">compose</span></span>[<span class="hljs-type">H</span>[_]](v: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">H</span>, <span class="hljs-type">F</span>]): <span class="hljs-type">FunctionK</span>[<span class="hljs-type">H</span>, <span class="hljs-type">G</span>] =
-  v andThen self
-</code></pre>
-<p>例えば、<code>flattenK: ListList ~&gt; List</code> と <code>headOptionK: List ~&gt; Option</code> とを合成することができます。</p>
-<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">ListList</span>[<span class="hljs-type">A</span>] </span>= <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-type">A</span>]]
+<span class="hljs-keyword">val</span> headOptionKAfterFlattenK: <span class="hljs-type">FunctionK</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-type">X</span>]], <span class="hljs-type">Option</span>] = headOptionK.compose(flattenK)
+<span class="hljs-comment">// headOptionKAfterFlattenK: FunctionK[[X &gt;: Nothing &lt;: Any] =&gt;&gt; List[List[X]], [A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$38@67038c84</span>
 
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flattenK</span></span>: <span class="hljs-type">ListList</span> ~&gt; <span class="hljs-type">List</span> = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[<span class="hljs-type">ListList</span>, <span class="hljs-type">List</span>] {
-  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">ListList</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] = fa.flatten
-}
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flattenThenHeadOption</span> </span>= headOptionK.compose(flattenK)
-flattenThenHeadOption(<span class="hljs-type">List</span>(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>), <span class="hljs-type">List</span>(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>), <span class="hljs-type">Nil</span>, <span class="hljs-type">List</span>(<span class="hljs-number">6</span>)))
-<span class="hljs-comment">// res2: Option[Int] = Some(value = 1)</span>
+headOptionKAfterFlattenK(<span class="hljs-type">List</span>(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>), <span class="hljs-type">Nil</span>, <span class="hljs-type">List</span>(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>)))
+<span class="hljs-comment">// res15: Option[Int] = Some(value = 1)</span>
 </code></pre>
-<h3 id="1023-関手圏は単位律を満たすか">10.2.3 関手圏は単位律を満たすか</h3>
-<p>関手圏における恒等射について考えていきましょう。</p>
-<p>恒等射 <code>identityK</code> は、関手の対象関数 <code>F[_]</code> を <code>F[_] ⇒ F[_]</code> に対応させ、この変換が自然性を満たすことを見ればよさそうです。</p>
+<h3 id="1022-関手圏は単位律を満たすか">10.2.2 関手圏は単位律を満たすか</h3>
+<p>次に、関手圏における恒等射について考えていきましょう。</p>
+<p>関手圏における恒等射は以下のように定義できます。</p>
+<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">identityK</span></span>[<span class="hljs-type">F</span>[_]] = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">F</span>]:
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">F</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">F</span>[<span class="hljs-type">A</span>] = fa
+
+identityK(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>))
+<span class="hljs-comment">// res16: List[Int] = List(1, 2, 3)</span>
+
+identityK(<span class="hljs-type">Option</span>(<span class="hljs-string">&quot;hoge&quot;</span>))
+<span class="hljs-comment">// res17: Option[String] = Some(value = &quot;hoge&quot;)</span>
+</code></pre>
+<p>恒等射 <code>identityK</code> は、関手の対象関数 <code>F[_]</code> を <code>F[_] =&gt; F[_]</code> に対応させ、射関数 <code>(A =&gt; B) =&gt; (F[A] =&gt; F[B])</code> をそれ自身に対応させれば良さそうです。</p>
 <p>実際、この対応は自然性を満たします：</p>
-<pre><code>fmapF(f) compose identityK[A] == identityK[B] compose fmapF(f)
-</code></pre><p>Scala においては、<code>FunctionK.identityK</code> として実装できます。</p>
-<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">FunctionK</span> </span>{
-  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">identityK</span></span>[<span class="hljs-type">F</span>[_]]: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">F</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[<span class="hljs-type">F</span>, <span class="hljs-type">F</span>] {
-    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">F</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">F</span>[<span class="hljs-type">A</span>] = fa
-  }
-}
-</code></pre>
-<p><code>FunctionK.identityK</code> は、恒等射の性質 <code>f . idA = idB . f</code> を満たします。</p>
-<pre><code class="lang-scala"><span class="hljs-keyword">import</span> hamcat.arrow.<span class="hljs-type">FunctionK</span>.identityK
+<pre><code class="lang-scala">headOptionK.compose(identityK)(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>))
+<span class="hljs-comment">// res18: Option[Int] = Some(value = 1)</span>
 
-(headOptionK.compose(identityK[<span class="hljs-type">List</span>]))(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)) == headOptionK(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>))
-(identityK[<span class="hljs-type">Option</span>].compose(headOptionK))(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)) == headOptionK(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>))
-<span class="hljs-comment">// res3: Boolean = true</span>
+identityK.compose(headOptionK)(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>))
+<span class="hljs-comment">// res19: Option[Int] = Some(value = 1)</span>
 </code></pre>
-<h2 id="おまけ-先取り！モナド">おまけ: 先取り！モナド</h2>
-<p>実は、関手と自然変換さえ学べば、モナドの定義を読むことができます。</p>
-<p>実際にモナドを使うのはだいぶ後になりますが、ここでモナドの定義をサクッと読んでみましょう！</p>
-<h3 id="モナドの定義">モナドの定義</h3>
-<p>モナドは、以下のように定義されます：</p>
-<hr>
-<p>圏 <strong>C</strong> 上のモナドとは、自己関手 <code>T[_]</code>、自然変換 <code>eta: Id ~&gt; T</code> と <code>mu: T[T] ~&gt; T</code> の三つ組 <code>&lt;T, eta, mu&gt;</code> であって、以下が成り立つもののことです。</p>
-<ol>
-<li><code>mu[A] compose T[eta[A]] == identity[T[A]]</code></li>
-<li><code>mu[A] compose eta[T[A]] == identity[T[A]]</code></li>
-<li><code>mu[A] compose mu[T[A]] == mu[A] compose T[mu[A]]</code></li>
-</ol>
-<p>この3つの条件をモナドの公理と呼びます。</p>
-<hr>
-<p>何言ってるかわからねーと思うので、Option モナドについて考えてみましょう。</p>
-<h3 id="option-モナドをみてみよう">Option モナドをみてみよう</h3>
-<p>Scala 圏における Option モナドは、自己関手 <code>Option[_]</code>、自然変換 <code>eta: Id ~&gt; Option</code>、<code>mu: Option[Option] ~&gt; Option</code> の三つ組です。<code>eta</code> と <code>mu</code> はそれぞれ <code>Option.apply</code> メソッドおよび <code>flatten</code> メソッドとします。つまり、<code>eta</code> が <code>T</code> で型を包む操作で、<code>mu</code> が <code>T</code> のネストを平滑化する操作です。</p>
-<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">Id</span>[<span class="hljs-type">A</span>] </span>= <span class="hljs-type">A</span>
-<span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">OptionOption</span>[<span class="hljs-type">A</span>] </span>= <span class="hljs-type">Option</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]]
-
-<span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">eta</span> <span class="hljs-keyword">extends</span> (<span class="hljs-params"><span class="hljs-type">Id</span> ~&gt; <span class="hljs-type">Option</span></span>) </span>{ <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">Id</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = <span class="hljs-type">Option</span>(fa) }
-<span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">mu</span> <span class="hljs-keyword">extends</span> (<span class="hljs-params"><span class="hljs-type">OptionOption</span> ~&gt; <span class="hljs-type">Option</span></span>) </span>{ <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">Option</span>[<span class="hljs-type">Option</span>[<span class="hljs-type">A</span>]]): <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = fa.flatten }
-</code></pre>
-<p>これらがモナドの公理を満たすか確認してみます。</p>
-<p>まず1つ目。</p>
-<ol>
-<li><code>mu[A] compose T[eta[A]] == identity[T[A]]</code></li>
-</ol>
-<pre><code class="lang-scala">(mu[<span class="hljs-type">Int</span>] compose summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]].fmap(eta[<span class="hljs-type">Int</span>]))(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>)) == identity[<span class="hljs-type">Option</span>[<span class="hljs-type">Int</span>]](<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
-<span class="hljs-comment">// res4: Boolean = true</span>
-</code></pre>
-<p>T[A] を T[T[A]] にしたあと flatten すると T[A] になる、という条件みたいですね。</p>
-<p>次に2つ目。</p>
-<ol>
-<li><code>mu[A] compose eta[T[A]] == identity[T[A]]</code></li>
-</ol>
-<pre><code class="lang-scala">(mu[<span class="hljs-type">Int</span>] compose eta[<span class="hljs-type">Option</span>[<span class="hljs-type">Int</span>]])(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>)) == identity[<span class="hljs-type">Option</span>[<span class="hljs-type">Int</span>]](<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))
-<span class="hljs-comment">// res5: Boolean = true</span>
-</code></pre>
-<p>これも T[A] ~&gt; T[T[A]] ~&gt; T[A] についての条件ですね。結合律みたいなもんでしょうか。</p>
-<p>最後に3つ目。</p>
-<ol>
-<li><code>mu[A] compose mu[T[A]] == mu[A] compose T[mu[A]]</code></li>
-</ol>
-<pre><code class="lang-scala">(mu[<span class="hljs-type">Int</span>] compose mu[<span class="hljs-type">Option</span>[<span class="hljs-type">Int</span>]])(<span class="hljs-type">Option</span>(<span class="hljs-type">Option</span>(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>)))) == (mu[<span class="hljs-type">Int</span>] compose summon[<span class="hljs-type">Functor</span>[<span class="hljs-type">Option</span>]].fmap(mu[<span class="hljs-type">Int</span>]))(<span class="hljs-type">Option</span>(<span class="hljs-type">Option</span>(<span class="hljs-type">Option</span>(<span class="hljs-number">3</span>))))
-<span class="hljs-comment">// res6: Boolean = true</span>
-</code></pre>
-<p>これは、どれだけネストされても平滑化できるという条件ですね。</p>
-<p>Option はモナドの公理を満たすので、モナドであると言えます！</p>
-<h3 id="モナドの型クラスを作る">モナドの型クラスを作る</h3>
-<p>さて、モナドは関手に加えて、平滑化のメソッドを備えたものであることがわかりました。モナドの型クラス <code>Monad</code> は、以下のように実装できます。自己関手 <code>T</code> に対して、平滑化の自然変換 <code>mu</code> を抽象メソッド <code>flatten</code> にし、自然変換 <code>eta</code> を抽象メソッド <code>pure</code> としています。</p>
-<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Monad</span>[<span class="hljs-type">T</span>[_]] </span>{
-  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flatten</span></span>[<span class="hljs-type">A</span>](tta: <span class="hljs-type">T</span>[<span class="hljs-type">T</span>[<span class="hljs-type">A</span>]]): <span class="hljs-type">T</span>[<span class="hljs-type">A</span>]
-  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">pure</span></span>[<span class="hljs-type">A</span>](a: <span class="hljs-type">A</span>): <span class="hljs-type">T</span>[<span class="hljs-type">A</span>]
-}
-</code></pre>
-<p>なお、<code>flatten</code> があると <code>flatMap</code> メソッドを作ることができます。</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flatMap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">T</span>[<span class="hljs-type">B</span>])(ta: <span class="hljs-type">T</span>[<span class="hljs-type">A</span>])(<span class="hljs-keyword">implicit</span> functor: <span class="hljs-type">Functor</span>[<span class="hljs-type">T</span>]): <span class="hljs-type">T</span>[<span class="hljs-type">B</span>] =
-  flatten(ta.fmap(f))
-</code></pre>
-<p>逆に、<code>flatMap</code> から <code>flatten</code> を作ることもできます。</p>
-<pre><code class="lang-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flatten</span></span>[<span class="hljs-type">A</span>](tta: <span class="hljs-type">T</span>[<span class="hljs-type">T</span>[<span class="hljs-type">A</span>]]): <span class="hljs-type">T</span>[<span class="hljs-type">A</span>] = flatMap(identity[<span class="hljs-type">T</span>[<span class="hljs-type">A</span>]])(tta)
-</code></pre>
-<p>したがって、<code>Monad</code> 型クラスの抽象メソッド <code>flatMap</code> と <code>pure</code> でも良いです。</p>
-<pre><code class="lang-scala"><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Monad</span>[<span class="hljs-type">T</span>[_]] </span>{
-  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flatMap</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">T</span>[<span class="hljs-type">B</span>])(ta: <span class="hljs-type">T</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">T</span>[<span class="hljs-type">B</span>]
-  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">pure</span></span>[<span class="hljs-type">A</span>](a: <span class="hljs-type">A</span>): <span class="hljs-type">T</span>[<span class="hljs-type">A</span>]
-}
-</code></pre>
-<p>また、Writer 圏のところで学んだ fish 演算子 <code>&gt;=&gt;</code> と <code>pure</code> でも良いです。</p>
-<h3 id="おわり">おわり</h3>
-<p>モナドの定義を見て、型クラスを定義してみました。関手と自然変換がわかれば、モナドを定義することができるのですね。</p>
-<p>計算効果をラップするといった実用的な性質については、モナドを学ぶ章に改めて学んでいきましょう。</p>
+<p>上記のことから、関手を対象として自然変換を射とするような関手圏は、圏の公理を満たすことを確認できました。</p>
+<h2 id="終わりに">終わりに</h2>
+<p>この章で第1部を締めくくります。第1部において、圏論におけるき本的な概念を学びました。対象、圏、射、関手、自然変換を抑えて、次の2部に進みましょう。</p>
 <h2 id="まとめ">まとめ</h2>
 <ul>
 <li>自然変換は、圏 <code>C</code> から圏 <code>D</code> への2つの関手 <code>F</code> と <code>G</code> の間の変換であって、<code>C</code> の各対象 <code>A</code> に対して <code>F[A] =&gt; G[A]</code> を対応させる。<ul>
@@ -742,11 +725,7 @@ flattenThenHeadOption(<span class="hljs-type">List</span>(<span class="hljs-type
 <li><code>(fmapG(f) compose alpha[A])(fa) == (alpha[B] compose fmapF(f))(fa)</code></li>
 </ul>
 </li>
-<li>自然変換は Scala において、型クラス <code>FunctionK</code> によって表現される。<ul>
-<li><code>FunctionK</code> が自然変換になるかは実装によるので、厳密には <code>FunctionK</code> は first-order-kinded 型間の関数を表現している。</li>
-<li><code>FunctionK[F, G]</code> は <code>F ~&gt; G</code> とも書くことができる。こちらの記法の方が直感的である。</li>
-</ul>
-</li>
+<li>自然変換は Scala において、型クラス <code>FunctionK</code> によって表現される。</li>
 <li>圏 <code>C</code> から圏 <code>D</code> への関手を対象とし、その間の自然変換を射とする圏を圏 <code>C</code> から圏 <code>D</code> への関手圏と呼び、<code>Fun(C, D)</code> と書く。<ul>
 <li>自然変換の合成は、単に射の合成である。</li>
 <li>自然変換の合成は結合律を満たす。</li>
@@ -756,7 +735,6 @@ flattenThenHeadOption(<span class="hljs-type">List</span>(<span class="hljs-type
 <li>反変関手間の自然変換は自然性を満たさないが、反自然性？ (opposite naturality condition) は満たす。</li>
 </ul>
 </li>
-<li>圏 <code>C</code> 上のモナドとは、型の引き上げと平滑化の機能を持つ関手のことを表す。Scala 圏においては、<code>pure</code> メソッドと <code>flatten</code> メソッドによって表現される。</li>
 </ul>
 
                                 
@@ -793,7 +771,7 @@ flattenThenHeadOption(<span class="hljs-type">List</span>(<span class="hljs-type
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、関手から関手へのへ変換である自然変換について学びます。まず、自然変換のイメージを掴むために、List 関手から Option 関手への自然変換など、具体例を見ます。次に、自然変換の定義を与え、その定義と具体例とを照らし合わせていきます。","title":"10章 自然変換","level":"1.2.10","depth":2,"next":{"title":"第2部","level":"1.3","depth":1,"ref":"","articles":[{"title":"（工事中）11章 宣言型プログラミング","level":"1.3.1","depth":2,"ref":"","articles":[]},{"title":"12章 極限と余極限","level":"1.3.2","depth":2,"path":"12_Limits_and_Colimits.md","ref":"12_Limits_and_Colimits.md","articles":[]}]},"previous":{"title":"（工事中）9章 関数型","level":"1.2.9","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"10_Natural_transformations.md","mtime":"2024-06-30T02:18:06.445Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-30T02:18:08.192Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、関手から関手へのへ変換である自然変換について学びます。まず、自然変換のイメージを掴むために、List 関手から Option 関手への自然変換など、具体例を見ます。次に、自然変換の定義を与え、その定義と具体例とを照らし合わせていきます。","title":"10章 自然変換","level":"1.2.10","depth":2,"next":{"title":"第2部","level":"1.3","depth":1,"ref":"","articles":[{"title":"（工事中）11章 宣言型プログラミング","level":"1.3.1","depth":2,"ref":"","articles":[]},{"title":"12章 極限と余極限","level":"1.3.2","depth":2,"path":"12_Limits_and_Colimits.md","ref":"12_Limits_and_Colimits.md","articles":[]}]},"previous":{"title":"（工事中）9章 関数型","level":"1.2.9","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"10_Natural_transformations.md","mtime":"2024-06-30T13:28:06.920Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-30T13:28:08.742Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
