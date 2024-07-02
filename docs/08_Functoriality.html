@@ -438,7 +438,7 @@
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fTuple</span></span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>, <span class="hljs-type">C</span>, <span class="hljs-type">D</span>](f: <span class="hljs-type">A</span> =&gt; <span class="hljs-type">C</span>, g: <span class="hljs-type">B</span> =&gt; <span class="hljs-type">D</span>): <span class="hljs-type">Tuple2</span>[<span class="hljs-type">A</span>, <span class="hljs-type">B</span>] =&gt; <span class="hljs-type">Tuple2</span>[<span class="hljs-type">C</span>, <span class="hljs-type">D</span>] = { <span class="hljs-keyword">case</span> (a, b) =&gt; (f(a), g(b)) }
 
 <span class="hljs-keyword">val</span> lengthAndIsEven = fTuple[<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>, <span class="hljs-type">Int</span>, <span class="hljs-type">Boolean</span>](_.length, _ % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>)
-<span class="hljs-comment">// lengthAndIsEven: Function1[Tuple2[String, Int], Tuple2[Int, Boolean]] = repl.MdocSession$MdocApp$$Lambda/0x00007fc9b9fad000@61947303</span>
+<span class="hljs-comment">// lengthAndIsEven: Function1[Tuple2[String, Int], Tuple2[Int, Boolean]] = repl.MdocSession$MdocApp$$Lambda/0x00007fa39e25d000@26f19adc</span>
 
 lengthAndIsEven(<span class="hljs-string">&quot;hogehoge&quot;</span> -&gt; <span class="hljs-number">3</span>)
 <span class="hljs-comment">// res0: Tuple2[Int, Boolean] = (8, false)</span>
@@ -456,7 +456,7 @@ lengthAndIsEven(<span class="hljs-string">&quot;&quot;</span> -&gt; <span class=
   lengthAndIsEven,
   fTuple[<span class="hljs-type">Int</span>, <span class="hljs-type">Boolean</span>, <span class="hljs-type">Boolean</span>, <span class="hljs-type">Boolean</span>](_ &gt; <span class="hljs-number">0</span>, b =&gt; !b)
 )
-<span class="hljs-comment">// nonEmptyAndIsOdd: Function1[Tuple2[String, Int], Tuple2[Boolean, Boolean]] = scala.Function1$$Lambda/0x00007fc9b9e549b8@346f6103</span>
+<span class="hljs-comment">// nonEmptyAndIsOdd: Function1[Tuple2[String, Int], Tuple2[Boolean, Boolean]] = scala.Function1$$Lambda/0x00007fa39e10c9b8@734daa58</span>
 
 nonEmptyAndIsOdd(<span class="hljs-string">&quot;hogehoge&quot;</span> -&gt; <span class="hljs-number">3</span>)
 <span class="hljs-comment">// res2: Tuple2[Boolean, Boolean] = (true, true)</span>
@@ -495,9 +495,9 @@ identityTuple(<span class="hljs-string">&quot;&quot;</span> -&gt; <span class="h
 </code></pre>
 <pre><code class="lang-scala"><span class="hljs-comment">// 例によって、これらの関数を f, g として利用してみます</span>
 <span class="hljs-keyword">val</span> length: <span class="hljs-type">String</span> =&gt; <span class="hljs-type">Int</span> = _.length
-<span class="hljs-comment">// length: Function1[String, Int] = repl.MdocSession$MdocApp$$Lambda/0x00007fc9b9faf200@7099b47b</span>
+<span class="hljs-comment">// length: Function1[String, Int] = repl.MdocSession$MdocApp$$Lambda/0x00007fa39e25f200@7f335713</span>
 <span class="hljs-keyword">val</span> isEven: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Boolean</span> = _ % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>
-<span class="hljs-comment">// isEven: Function1[Int, Boolean] = repl.MdocSession$MdocApp$$Lambda/0x00007fc9b9faf7e0@47377fa5</span>
+<span class="hljs-comment">// isEven: Function1[Int, Boolean] = repl.MdocSession$MdocApp$$Lambda/0x00007fa39e25f7e0@7b811cd6</span>
 
 summon[<span class="hljs-type">Bifunctor</span>[<span class="hljs-type">Tuple2</span>]].bimap[<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>, <span class="hljs-type">Int</span>, <span class="hljs-type">Boolean</span>](length, isEven)((<span class="hljs-string">&quot;hogehoge&quot;</span>, <span class="hljs-number">12345</span>))
 <span class="hljs-comment">// res6: Tuple2[Int, Boolean] = (8, false)</span>
@@ -664,7 +664,7 @@ left.bimap(length, isEven)
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、関手についてさらに深掘ります。Writer 関手や双関手、Reader 関手、反変関手、Profunctor、Hom 関手について学びます。","title":"8章 関手性","level":"1.2.8","depth":2,"next":{"title":"（工事中）9章 関数型","level":"1.2.9","depth":2,"ref":"","articles":[]},"previous":{"title":"7章 関手","level":"1.2.7","depth":2,"path":"07_Functor.md","ref":"07_Functor.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"08_Functoriality.md","mtime":"2024-06-30T23:52:05.729Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-06-30T23:52:09.671Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、関手についてさらに深掘ります。Writer 関手や双関手、Reader 関手、反変関手、Profunctor、Hom 関手について学びます。","title":"8章 関手性","level":"1.2.8","depth":2,"next":{"title":"（工事中）9章 関数型","level":"1.2.9","depth":2,"ref":"","articles":[]},"previous":{"title":"7章 関手","level":"1.2.7","depth":2,"path":"07_Functor.md","ref":"07_Functor.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"08_Functoriality.md","mtime":"2024-07-02T15:02:47.573Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-07-02T15:02:51.360Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
