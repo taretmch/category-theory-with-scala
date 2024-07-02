@@ -515,7 +515,7 @@ listToNone(list)
 <p><code>headOption</code> を <code>FunctionK</code> のインスタンスとして定義すると、以下のようになります。</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> headOptionK: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">List</span>, <span class="hljs-type">Option</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[<span class="hljs-type">List</span>, <span class="hljs-type">Option</span>]:
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = fa.headOption
-<span class="hljs-comment">// headOptionK: FunctionK[List, [A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$6@432c8450</span>
+<span class="hljs-comment">// headOptionK: FunctionK[List, [A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$6@df290ee</span>
 
 headOptionK(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>))
 <span class="hljs-comment">// res4: Option[Int] = Some(value = 1)</span>
@@ -546,7 +546,7 @@ length(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <
 <span class="hljs-comment">// c2: Const[Int, Nothing] = Const(value = 4)</span>
 
 <span class="hljs-keyword">val</span> intConstFunctor = summon[<span class="hljs-type">Functor</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">X</span>]]]
-<span class="hljs-comment">// intConstFunctor: given_Functor_Const[Int] = repl.MdocSession$MdocApp$given_Functor_Const@24321c5c</span>
+<span class="hljs-comment">// intConstFunctor: given_Functor_Const[Int] = repl.MdocSession$MdocApp$given_Functor_Const@7bf8085</span>
 
 intConstFunctor.fmap[<span class="hljs-type">List</span>[<span class="hljs-type">Int</span>], <span class="hljs-type">Boolean</span>](_.nonEmpty)(c1)
 <span class="hljs-comment">// res7: Const[Int, Boolean] = Const(value = 12345)</span>
@@ -557,7 +557,7 @@ intConstFunctor.fmap[<span class="hljs-type">List</span>[<span class="hljs-type"
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> lengthK: <span class="hljs-type">FunctionK</span>[<span class="hljs-type">List</span>, [<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">X</span>]] = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[<span class="hljs-type">List</span>, [<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">X</span>]] {
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">List</span>[<span class="hljs-type">A</span>]): <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">A</span>] = <span class="hljs-type">Const</span>[<span class="hljs-type">Int</span>, <span class="hljs-type">A</span>](length(fa))
 }
-<span class="hljs-comment">// lengthK: FunctionK[List, [X &gt;: Nothing &lt;: Any] =&gt;&gt; Const[Int, X]] = repl.MdocSession$MdocApp$$anon$16@2ac3aeca</span>
+<span class="hljs-comment">// lengthK: FunctionK[List, [X &gt;: Nothing &lt;: Any] =&gt;&gt; Const[Int, X]] = repl.MdocSession$MdocApp$$anon$16@6f3e2a5d</span>
 
 lengthK(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>))
 <span class="hljs-comment">// res9: Const[Int, Int] = Const(value = 5)</span>
@@ -580,7 +580,7 @@ lengthK(<span class="hljs-type">List</span>.empty[<span class="hljs-type">String
 
 <span class="hljs-keyword">val</span> reader12345 = readerUnit(<span class="hljs-number">12345</span>)
 <span class="hljs-comment">// reader12345: Reader[Unit, Int] = Reader(</span>
-<span class="hljs-comment">//   run = repl.MdocSession$MdocApp$$Lambda/0x00007f73a62e1a08@56adb300</span>
+<span class="hljs-comment">//   run = repl.MdocSession$MdocApp$$Lambda/0x00007f3c4a302910@773f3e07</span>
 <span class="hljs-comment">// )</span>
 
 reader12345.run(())
@@ -588,7 +588,7 @@ reader12345.run(())
 
 <span class="hljs-keyword">val</span> readerHogeHoge = readerUnit(<span class="hljs-string">&quot;hogehoge&quot;</span>)
 <span class="hljs-comment">// readerHogeHoge: Reader[Unit, String] = Reader(</span>
-<span class="hljs-comment">//   run = repl.MdocSession$MdocApp$$Lambda/0x00007f73a62e1a08@74337a71</span>
+<span class="hljs-comment">//   run = repl.MdocSession$MdocApp$$Lambda/0x00007f3c4a302910@1320656d</span>
 <span class="hljs-comment">// )</span>
 
 readerHogeHoge.run(())
@@ -598,12 +598,12 @@ readerHogeHoge.run(())
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> readerUnitToSome: <span class="hljs-type">FunctionK</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">Unit</span>, <span class="hljs-type">X</span>], <span class="hljs-type">Option</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">Unit</span>, <span class="hljs-type">X</span>], <span class="hljs-type">Option</span>] {
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">Reader</span>[<span class="hljs-type">Unit</span>, <span class="hljs-type">A</span>]): <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = <span class="hljs-type">Some</span>(fa.run(()))
 }
-<span class="hljs-comment">// readerUnitToSome: FunctionK[[X &gt;: Nothing &lt;: Any] =&gt;&gt; Reader[Unit, X], [A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$24@3d2ebb6f</span>
+<span class="hljs-comment">// readerUnitToSome: FunctionK[[X &gt;: Nothing &lt;: Any] =&gt;&gt; Reader[Unit, X], [A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$24@208a6282</span>
 
 <span class="hljs-keyword">val</span> readerUnitToNone: <span class="hljs-type">FunctionK</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">Unit</span>, <span class="hljs-type">X</span>], <span class="hljs-type">Option</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">Reader</span>[<span class="hljs-type">Unit</span>, <span class="hljs-type">X</span>], <span class="hljs-type">Option</span>] {
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">Reader</span>[<span class="hljs-type">Unit</span>, <span class="hljs-type">A</span>]): <span class="hljs-type">Option</span>[<span class="hljs-type">A</span>] = <span class="hljs-type">None</span>
 }
-<span class="hljs-comment">// readerUnitToNone: FunctionK[[X &gt;: Nothing &lt;: Any] =&gt;&gt; Reader[Unit, X], [A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$26@30b910ba</span>
+<span class="hljs-comment">// readerUnitToNone: FunctionK[[X &gt;: Nothing &lt;: Any] =&gt;&gt; Reader[Unit, X], [A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$26@6b6bced8</span>
 
 readerUnitToSome(reader12345)
 <span class="hljs-comment">// res13: Option[Int] = Some(value = 12345)</span>
@@ -683,10 +683,10 @@ readerUnitToNone(reader12345)
 <p>実際に自然変換を合成してみましょう。<code>flattenK: FunctionK[[X] =&gt;&gt; List[List[X]], List]</code> と <code>headOptionK: FunctionK[List, Option]</code> とを合成することができます。</p>
 <pre><code class="lang-scala"><span class="hljs-keyword">val</span> flattenK = <span class="hljs-keyword">new</span> <span class="hljs-type">FunctionK</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-type">X</span>]], <span class="hljs-type">List</span>]:
   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>[<span class="hljs-type">A</span>](fa: <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-type">A</span>]]): <span class="hljs-type">List</span>[<span class="hljs-type">A</span>] = fa.flatten
-<span class="hljs-comment">// flattenK: FunctionK[[X &gt;: Nothing &lt;: Any] =&gt;&gt; List[List[X]], List] = repl.MdocSession$MdocApp$$anon$30@73d6afc8</span>
+<span class="hljs-comment">// flattenK: FunctionK[[X &gt;: Nothing &lt;: Any] =&gt;&gt; List[List[X]], List] = repl.MdocSession$MdocApp$$anon$30@d62ddd5</span>
 
 <span class="hljs-keyword">val</span> headOptionKAfterFlattenK: <span class="hljs-type">FunctionK</span>[[<span class="hljs-type">X</span>] =&gt;&gt; <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-type">X</span>]], <span class="hljs-type">Option</span>] = headOptionK.compose(flattenK)
-<span class="hljs-comment">// headOptionKAfterFlattenK: FunctionK[[X &gt;: Nothing &lt;: Any] =&gt;&gt; List[List[X]], [A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$38@2265ed7a</span>
+<span class="hljs-comment">// headOptionKAfterFlattenK: FunctionK[[X &gt;: Nothing &lt;: Any] =&gt;&gt; List[List[X]], [A &gt;: Nothing &lt;: Any] =&gt;&gt; Option[A]] = repl.MdocSession$MdocApp$$anon$38@7e74c8fc</span>
 
 headOptionKAfterFlattenK(<span class="hljs-type">List</span>(<span class="hljs-type">List</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>), <span class="hljs-type">Nil</span>, <span class="hljs-type">List</span>(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>)))
 <span class="hljs-comment">// res15: Option[Int] = Some(value = 1)</span>
@@ -771,7 +771,7 @@ identityK.compose(headOptionK)(<span class="hljs-type">List</span>(<span class="
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、関手から関手へのへ変換である自然変換について学びます。まず、自然変換のイメージを掴むために、List 関手から Option 関手への自然変換など、具体例を見ます。次に、自然変換の定義を与え、その定義と具体例とを照らし合わせていきます。","title":"10章 自然変換","level":"1.2.10","depth":2,"next":{"title":"第2部","level":"1.3","depth":1,"ref":"","articles":[{"title":"（工事中）11章 宣言型プログラミング","level":"1.3.1","depth":2,"ref":"","articles":[]},{"title":"12章 極限と余極限","level":"1.3.2","depth":2,"path":"12_Limits_and_Colimits.md","ref":"12_Limits_and_Colimits.md","articles":[]}]},"previous":{"title":"（工事中）9章 関数型","level":"1.2.9","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"10_Natural_transformations.md","mtime":"2024-07-02T15:57:26.586Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-07-02T15:57:28.516Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"description":"圏論の勉強記録です。本章では、関手から関手へのへ変換である自然変換について学びます。まず、自然変換のイメージを掴むために、List 関手から Option 関手への自然変換など、具体例を見ます。次に、自然変換の定義を与え、その定義と具体例とを照らし合わせていきます。","title":"10章 自然変換","level":"1.2.10","depth":2,"next":{"title":"第2部","level":"1.3","depth":1,"ref":"","articles":[{"title":"（工事中）11章 宣言型プログラミング","level":"1.3.1","depth":2,"ref":"","articles":[]},{"title":"12章 極限と余極限","level":"1.3.2","depth":2,"path":"12_Limits_and_Colimits.md","ref":"12_Limits_and_Colimits.md","articles":[]}]},"previous":{"title":"（工事中）9章 関数型","level":"1.2.9","depth":2,"ref":"","articles":[]},"dir":"ltr"},"config":{"plugins":[],"root":"./mdoc-output","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"taretmch","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"Scala で始める圏論入門","language":"ja","gitbook":"*","description":"本サイトは、圏論初心者が圏論について学びながら作成した、Scala プログラマのための入門書です。教科書は Bartosz Milewski 氏著の Category Theory for Programmers の Scala Edition で、構成も原則これに沿っています。Scala をやっていて、圏論について知りたい・学ぶ土台を作りたいという方の参考になれば幸いです。"},"file":{"path":"10_Natural_transformations.md","mtime":"2024-07-02T16:37:54.190Z","type":"markdown"},"gitbook":{"version":"5.1.4","time":"2024-07-02T16:37:56.086Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
